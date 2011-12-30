@@ -1,0 +1,328 @@
+body {
+    margin: 0px;
+    font-family: "LatoWebSymbol", Lato, Verdana, sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 0;
+    padding: 0;
+    height: 100%; /* this is the key! */
+}
+h2 {
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+h3 {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.floatBar {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+	z-index: 100;
+	opacity: 0.5;	
+}
+
+.floatBar .active {
+	background-color: #D3E5EC;
+
+}
+
+.floatBar > div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.floatTab {
+	text-align: center;
+	width: 70px;
+	height: 20px;
+	padding-bottom: 3px;
+	border-radius: 2px;
+	border: 1px solid #D3E5EC;
+	cursor: pointer;
+}
+
+.mainText {
+    margin-left: 15px;
+    margin-top: 15px;
+}
+.mainText h3 {
+    position: relative;
+    top: -15px;
+}
+.header {
+    width: 100%;
+    background-color: #414042;
+    height: 45px;
+}
+.header > div {
+    display: inline-block;
+}
+.logo {
+    background-image: url("images/logo.png");
+    width: 80px;
+    height: 30px;
+    position: relative;
+    top: 13px;
+    left: 14px;
+}
+#shareBtn {
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    width: 55px;
+    margin-left: -1px;
+}
+#shareBtn:hover {
+}
+#resetBtn {
+    width: 55px;
+}
+.toolbar {
+    position: relative;
+    left: 50px;
+    height: 100%;
+    vertical-align: top;
+}
+.toolbar > div {
+    display: inline-block;
+}
+.toolbar .button {
+    padding: 10px;
+    height: 100%;
+    cursor: pointer;
+    background-color: #414042;
+}
+.toolbar .button:hover {
+    background-color: #58595B;
+}
+.toolbar .button > div {
+    display: inline-block;
+}
+.button .img {
+    vertical-align: middle;
+    margin-right: 2px;
+}
+.button .caption {
+    font-weight: 400;
+    color: white;
+    vertical-align: middle;
+}
+.button.play .img {
+    background-image: url("images/playbtn.png");
+    width: 23px;
+    height: 23px;
+}
+.button.reset .img {
+    background-image: url("images/resetbtn.png");
+    width: 13px;
+    height: 13px;
+}
+.button.save .img {
+    background-image: url("images/savebtn.png");
+    width: 21px;
+    height: 12px;
+}
+.dropdown {
+    background: url("images/buttons.png") -37px -117px;
+    width: 13px;
+    height: 8px;
+}
+#optionsBtn {
+    cursor: pointer;
+    position: relative;
+    left: 10px;
+    top: 12px;
+}
+.canvas {
+    left: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+.ui-layout-pane {
+    border: none !important;
+    overflow: hidden !important;
+    padding: 0px !important;
+}
+.ui-layout-resizer {
+    background: #E6E7E8 !important;
+}
+
+body .code-center, body .code-south, body .server-center {
+    padding-top: 10px !important;
+}
+.CodeMirror-scroll {
+    width: auto;
+    height: auto;
+    overflow: visible;
+}
+.CodeMirror {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+}
+.CodeMirror-gutter {
+    background-color: white !important;
+}
+.tabs {
+    width: 500px;
+    margin-top: 25px;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+.tabs > div {
+    display: inline-block;
+}
+.tab {
+    border-radius: 1px;
+    width: 100px;
+    vertical-align: bottom;
+    text-align: center;
+    padding: 5px;
+    margin: 1px;
+    border-bottom: 3px solid #B5DBEB;
+    cursor: pointer;
+    -webkit-transition: background-color 0.2s;
+}
+.tab.active {
+    background-color: #B5DBEB;
+    border-bottom: 3px solid #B5DBEB;
+}
+.tab.active:hover {
+    border-bottom: 3px solid #B5DBEB;
+}
+.tab:hover {
+    border-bottom: 3px solid #62C5E8;
+}
+#codeArea {
+    height: 100%;
+    width: 100%;
+}
+#serverArea {
+    height: 100%;
+    width: 100%;
+}
+input {
+    border: 1px solid #B5DBEB;
+    color: #A7A9AC;
+    padding: 2px 2px 2px 8px;
+    width: 200px;
+    margin-right: 5px;
+}
+.browserBar {
+    margin-left: 10px;
+    margin-top: 10px;
+    min-width: 400px;
+}
+.browserBar > * {
+    vertical-align: middle;
+    display: inline-block;
+}
+.btnRefresh {
+    background-image: url("images/refreshbtn.png");
+    width: 18px;
+    height: 18px;
+    opacity: 0.50;
+    cursor: pointer;
+}
+.btnRefresh:hover {
+    opacity: 1;
+}
+.popBtn {
+    cursor: pointer;
+    margin-right: 10px;
+    float: right;
+}
+.popBtn:hover .img {
+    opacity: 1;
+}
+.popBtn > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+.popBtn .img {
+    background-image: url("images/popbtn.png");
+    width: 22px;
+    height: 20px;
+    opacity: 0.50;
+    margin-right: 5px;
+}
+.popBtn .caption {
+    position: relative;
+    top: -1px;
+    font-size: 14px;
+}
+.npm {
+    min-width: 580px;
+    border-top: 1px solid #E6E7E8;
+    padding-top: 5px;
+    padding-left: 15px;
+    padding-bottom: 5px;
+}
+.npm .caption {
+    font-weight: 400;
+}
+.npm > div {
+    display: inline-block;
+    vertical-align: middle;
+}
+.npm .subCaption {
+    position: relative;
+    top: -3px;
+}
+.npm .toggler {
+    background-image: url("images/open.png");
+    width: 12px;
+    height: 10px;
+    margin-right: 7px;
+}
+.npmInstall {
+    margin-top: 8px;
+    margin-right: 10px;
+    float: right;
+    vertical-align: middle;
+}
+.npmInstall > div {
+    display: inline-block;
+}
+.npm input {
+    border: 1px solid #E6E7E8;
+}
+.editor {
+    width: 100%;
+    height: 100%
+}
+
+.logBar {
+	width: 100%;
+	height: 30px;
+	padding-bottom: 5px;
+}
+
+.logBar .icon {
+	margin-left: 10px;
+}
+
+.logBar .icon.check {
+	background-image: url("images/checkmark.png");
+	width: 30px;
+	height: 25px;
+}
+
+.logBar .logText {
+	margin-top: 4px;
+	margin-left: 5px;
+}
+
+.logBar .logTime {
+	margin-right: 10px;
+	float: right;
+}
+
+.logBar > div {
+	display: inline-block;
+	vertical-align: middle;
+}

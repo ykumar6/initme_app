@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html [%offlineManifest%] xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>initMe - Login/Register</title>
+        <link rel="stylesheet" type="text/css" href="/static/style/main.css" />
+	    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+	    <script type="text/javascript" src="/static/jqueryui/js/jquery-ui-1.8.16.custom.min.js"></script>
+        <script type="text/javascript">
+                $(function() {
+                    
+                    //TODO collapse duplicate code with inheritance
+                    
+                    var isNamespaceValid = [%isNamespaceValid%];
+                    var isPassValid = false;
+                    var isNameValid = [%isNameValid%];
+                    var isEmailValid = [%isEmailValid%];
+                    var passConfirmed = false;
+                    
+                    
+                    
+                    $("#register div.namespace input").keyup(function() {
+                        var isValidRegex = true;
+                        var isValidLength = true;
+                        var errTimer;
+                        var inputBox = $("#register div.namespace input");
+                        var subCaption = $("#register div.namespace div.subcaption");
+                        
+                        function isLenValid(text) {
+                            if (text.length > 3 && text.length < 16) {
+                                return true;
+                            } 
+                            else if (isValidLength ) {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.addClass("error");
+                                    subCaption.text("Must contain 4 to 15 characters");
+                                    isNamespaceValid = false; 
+                                 }, 1000);
+                            }
+                            return false;
+                        };
+                        
+                        return (function() {
+                            var text = inputBox.val() || "";
+                            
+                            if (errTimer) {
+                                clearTimeout(errTimer);
+                                errTimer = null;
+                            }
+                            
+                            if (text.match(/^[\w]*$/)) {
+                                 if (isLenValid(text)) {
+                                    subCaption.removeClass("error");
+                                    subCaption.text("init.me/" + text.toLowerCase());
+                                    isNamespaceValid = true;
+                                 } 
+                            }       
+                            else {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.addClass("error");
+                                    subCaption.text("Only characters/numbers allowed");
+                                    isNamespaceValid = false;
+                                 }, 1000);
+                            }  
+                        });
+                     }());
+                     
+                     
+                     $("#register div.namespace input").change(function(e) {
+                         $("#register div.namespace input").trigger("keyup", e);
+                     });
+                     
+                    $("#register div.name input").keyup(function() {
+                        var isValidRegex = true;
+                        var isValidLength = true;
+                        var isFirstTouch = true; //first time input box being typed into
+                        var errTimer = null;
+                        var inputBox = $("#register div.name input");
+                        var subCaption = $("#register div.name div.subcaption");
+                        
+                        function isLenValid(text) {
+                            if (text.length > 3 && text.length < 51) {
+                                return true;
+                            } 
+                            else if (isValidLength) {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.addClass("error");
+                                    subCaption.text("Must contain 4 to 50 characters");
+                                    isNameValid = false; 
+                                 }, 1000);
+                            }
+                            return false;
+                        };
+                        
+                        return (function() {
+                            var text = inputBox.val() || "";
+                            
+                            if (errTimer) {
+                                clearTimeout(errTimer);
+                                errTimer = null;
+                            }
+
+                            if (text.match(/^([&'\s]*[A-Z]\S+)+$/i)) {
+                                 if (isLenValid(text)) {
+                                    subCaption.removeClass("error");
+                                    subCaption.text("Hello " + (text.length > 13 ? text.substring(0, 13) + " ..." : text));
+                                    isNameValid = true;
+                                 } 
+                            }       
+                            else {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.addClass("error");
+                                    subCaption.text("Invalid name");
+                                    isNameValid = false;
+                                 }, 1000);
+                            }  
+                        });
+                     }());
+                     
+                     $("#register div.name input").change(function(e) {
+                         $("#register div.name input").trigger("keyup", e);
+                     });
+                 
+                    $("#register div.email input").keyup(function() {
+                        var isValidRegex = true;
+                        var isValidLength = true;
+                        var isFirstTouch = true; //first time input box being typed into
+                        var errTimer = null;
+                        var inputBox = $("#register div.email input");
+                        var subCaption = $("#register div.email div.subcaption");
+                        
+                        return (function() {
+                            var text = inputBox.val() || "";
+                            
+                            if (errTimer) {
+                                clearTimeout(errTimer);
+                                errTimer = null;
+                            }
+
+                            if (text.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i)) {
+                                 subCaption.removeClass("error");
+                                 subCaption.text("Looks good!");
+                                 isEmailValid = true;
+                            }       
+                            else {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.removeClass("error").addClass("error");
+                                    subCaption.text("Invalid email address");
+                                    isEmailValid = false;
+                                 }, 1000);
+                            }  
+                        });
+                     }());
+                     
+                     $("#register div.email input").change(function(e) {
+                         $("#register div.email input").trigger("keyup", e);
+                     });
+                     
+
+                    $("#register div.password input").keyup(function() {
+                        var isValidRegex = true;
+                        var isValidLength = true;
+                        var errTimer = null;
+                        var inputBox = $("#register div.password input");
+                        var subCaption = $("#register div.password div.subcaption");
+                        
+                        var strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
+                        var mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+                        var enoughRegex = new RegExp("(?=.{6,}).*", "g");
+
+                        var passOK = function(text) {
+                             subCaption.removeClass("error");
+                             subCaption.text(text);
+                             $("#register div.confirmpass input").trigger("keyup", {});
+                             isPassValid = true;
+                        }
+                        
+                        return (function() {
+                            var text = inputBox.val() || "";
+                            
+                            if (errTimer) {
+                                clearTimeout(errTimer);
+                                errTimer = null;
+                            }
+
+                            if (text.match(strongRegex)) {
+                                 passOK("Strong password, great!");
+                            } 
+                            else if (text.match(mediumRegex)) {
+                                 passOK("Password is good");
+                            }   
+                            else if (text.match(enoughRegex)) {
+                                passOK("Weak password, but ok");
+                            }  
+                            else {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.addClass("error");
+                                    subCaption.text("Insuffiently strong password");
+                                    isPassValid = false;
+                                 }, 1000);
+                            }  
+                        });
+                     }());
+                     
+                     $("#register div.confirmpass input").change(function(e) {
+                         $("#register div.confirmpass input").trigger("keyup", e);
+                     });
+                     
+                    $("#register div.confirmpass input").keyup(function() {
+                        var isValidRegex = true;
+                        var isValidLength = true;
+                        var errTimer = null;
+                        var inputBox = $("#register div.confirmpass input");
+                        var password = $("#register div.password input");
+                        var subCaption = $("#register div.confirmpass div.subcaption");
+                        
+
+                        return (function() {
+                            var text = inputBox.val() || "";
+                            
+                            if (errTimer) {
+                                clearTimeout(errTimer);
+                                errTimer = null;
+                            }
+
+                            if (text === password.val()) {
+                                subCaption.removeClass("error");
+                                subCaption.text("Password matches");
+                                passConfirmed = true;
+                            }
+                            else {
+                                 errTimer = setTimeout(function() {
+                                    subCaption.addClass("error");
+                                    subCaption.text("Password doesn't match");
+                                    passConfirmed = false;
+                                 }, 1000);
+                            }  
+                        });
+                     }());
+                     
+                     $("#register div.confirmpass input").change(function(e) {
+                         $("#register div.confirmpass input").trigger("keyup", e);
+                     });
+                     
+                     setInterval(function() {
+                         if (isNamespaceValid && isNameValid && isEmailValid && isPassValid && passConfirmed) {
+                             $( "#register input:submit" ).button( "option", "disabled", false );
+                         } else
+                         {
+                             $( "#register input:submit" ).button( "option", "disabled", true );
+                         }
+                     }, 300);
+                     
+                 });
+        </script>
+    </head>
+    <body>
+        <div id="top">
+            <div id="header">
+                <div class="logo"></div>
+                <div class="navigation">
+                    
+                    <a href="/support">Explore</a>
+                    <a href="/support">Blog</a>
+                    <a href="/support">Login</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div id="register" class="register_form">
+            <div class="register">
+                <form action="/user/register" method="post">
+                    <h1> Signup, it's free! <a href="/user/login">(login here)</a></h1>
+                    <div class="formbody">
+                    <div class="intro">
+                        <img src="/static/style/images/star.png"></img>
+                        <div class="text">
+                            <div class="mainText">Star treatment, for our beta testers </div>
+                            <div class="subText">10 projects, FTP access and MongoDB or MySQL</div>
+                        </div>
+                        
+                    </div>
+                    <div class="field namespace">
+                        <div class="caption">Namespace</div><div class="subcaption [%namespaceErrorClass%]">[%namespaceSubCaption%]</div>
+                        <input type="text" name="namespace" value="[%namespace%]"/>
+                    </div>
+                    <div class="divider">
+                    </div>
+                    <div class="field name">
+                        <div class="caption">Name</div> <div class="subcaption [%nameErrorClass%]">[%nameSubCaption%]</div>
+                        <input type="text" name="name" value="[%name%]"/>
+                    </div>  
+                    <div class="field email">
+                        <div class="caption">Email Address</div> <div class="subcaption [%emailErrorClass%]">[%emailSubCaption%]</div>
+                        <input type="text" name="email" value="[%email%]"/>
+                    </div>  
+                    <div class="divider">
+                    </div>
+                    <div class="field password">
+                        <div class="caption">Password</div><div class="subcaption [%passErrorClass%]">[%passSubCaption%]</div>
+                        <input type="password" name="password"/>
+                    </div>
+                    <div class="field confirmpass">
+                        <div class="caption">Confirm Password</div><div class="subcaption"></div>
+                        <input type="password" name="confirmpassword"/>
+                    </div>
+                    
+                    <div class="tou">
+                        <p>By clicking on "Register" below, you are agreeing to our
+                        <a href="http://init.me/terms/" target="_blank">Terms of Service</a></p>
+                    </div>
+                        
+                        <div class="registerBtn">
+                        <label class="submit_btn">
+                            <input name="commit" tabindex="3" type="submit" value="Register">
+                        </label>   
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+            <div id="register" style="display:none;">
+                
+                <form action="/user/register" method="post">
+                    <div class="field namespace">
+                        <div class="caption">Namespace</div><div class="subcaption [%namespaceErrorClass%]">[%namespaceSubCaption%]</div>
+                        <input type="text" name="namespace" value="[%namespace%]"/>
+                    </div>
+                    <div class="divider">
+                    </div>
+                    <div class="field name">
+                        <div class="caption">Name</div> <div class="subcaption [%nameErrorClass%]">[%nameSubCaption%]</div>
+                        <input type="text" name="name" value="[%name%]"/>
+                    </div>  
+                    <div class="field email">
+                        <div class="caption">Email Address</div> <div class="subcaption [%emailErrorClass%]">[%emailSubCaption%]</div>
+                        <input type="text" name="email" value="[%email%]"/>
+                    </div>  
+                    <div class="divider">
+                    </div>
+                    <div class="field password">
+                        <div class="caption">Password</div><div class="subcaption [%passErrorClass%]">[%passSubCaption%]</div>
+                        <input type="password" name="password"/>
+                    </div>
+                    <div class="field confirmpass">
+                        <div class="caption">Confirm Password</div><div class="subcaption"></div>
+                        <input type="password" name="confirmpassword"/>
+                    </div>
+                    <input class="registerBtn" type="submit" value="Register"><div class="statusMsg"></div>
+                </form>
+            </div>
+        
+        <div id="bottom">
+            <div id="footer">
+                <div class="copyright">© 2011 initMe. All rights reserved</div>
+                <div class="terms">
+                    <a href="/tou">Terms Of Use</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+        <script  type="text/javascript" src="scripts/layout.js"></script>
+        <script  type="text/javascript" src="scripts/tabs.js"></script>
+        <script  type="text/javascript" src="scripts/logger.js"></script>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <link href='scripts/layout.css' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="scripts/codemirror/lib/codemirror.css">
+        <script src="scripts/codemirror/lib/codemirror.js"></script>
+        <link rel="stylesheet" href="main.css">
+        <link rel="stylesheet" href="scripts/codemirror/theme/default.css">
+        <script src="scripts/codemirror/mode/xml/xml.js"></script>
+        <script src="scripts/codemirror/mode/php/php.js"></script>
+        <script src="scripts/codemirror/mode/clike/clike.js"></script>
+        <script src="scripts/codemirror/mode/javascript/javascript.js"></script>
+        <script src="scripts/codemirror/mode/css/css.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="scripts/codemirror/css/docs.css">
+        <script type="text/javascript">
+            
+            document.projectId = "{projId}";
+            $(function() {
+                var tabsHandler = tabsModule($(".tabs").children(), $(".editor"));
+                var logHandler = new Logger();
+                var socketMain = io.connect('/');
+                
+                socketMain.on('connect', function () {
+                    socketMain.emit("attach", {"projectId": document.projectId});
+                });
+
+                
+                logHandler.addSocket(socketMain); //handle socket messages
+
+
+                $('body').layout({
+                    north__resizable : false,
+                    north__closable : false,
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false,
+                    east__size : "50%",
+                    east__closable : false,
+                });
+
+                $(".ui-layout-center").layout({
+                    north__resizable : false,
+                    north__closable : false,
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false,
+                    north__paneSelector : ".codearea-north",
+                    center__paneSelector : ".codearea-center",
+                    center__onresize : function() {
+                        //codeEditor.refresh();
+                    }
+                })
+
+                $(".ui-layout-east").layout({
+                    north__resizable : false,
+                    north__closable : false,
+                    center__paneSelector : ".server-center",
+                    south__paneSelector : ".server-south",
+                    south__size : "70%",
+                    south__closable : false,
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false
+                })
+
+                $(".codearea-center").layout({
+
+                    south__closable : false,
+                    south__paneSelector : ".code-south",
+                    south__size : "50%",
+                    center__paneSelector : ".code-center",
+                })
+
+                $(".server-south").layout({
+                    north__paneSelector : ".browser-north",
+                    center__paneSelector : ".browser-center",
+                    south__paneSelector : ".browser-south",
+
+                    north__resizable : false,
+                    north__closable : false,
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false,
+
+                    south__resizable : false,
+                    south__closable : false,
+                    south__spacing_open : 0,
+                    south__spacing_closed : 0,
+                    south__slidable : false
+
+                });
+
+            });
+
+        </script>
+    </head>
+    <body>
+        <div class="ui-layout-center">
+            <div class="codearea-center">
+                <div class="code-center">
+                    <div class="editor html active">
+                        <textarea class="code" mode="application/x-httpd-php"">
+{index.php}
+</textarea>
+                    </div>
+                    <div class="floatBar">
+                        <div class="floatTab active">
+                            PHP
+                        </div>
+                    </div>
+                    </div>
+                    <div class="code-south">
+                        <div class="editor javascript active">
+                            <textarea class="code" mode="javascript">
+{javascript.php}
+</textarea>
+                    </div>
+                    <div class="floatBar">
+                        <div class="floatTab active">
+                            Javascript
+                        </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    <div class="ui-layout-north">
+                        <div class="header">
+                            <div class="logo"></div>
+                            <div class="toolbar">
+                                <div class="button play">
+                                    <div class="img"></div>
+                                    <div class="caption">
+                                        Run
+                                    </div>
+                                </div>
+                                <div class="button save">
+                                    <div class="img"></div>
+                                    <div class="caption">
+                                        Save
+                                    </div>
+                                </div>
+                                <div class="button reset">
+                                    <div class="img"></div>
+                                    <div class="caption">
+                                        Reset
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui-layout-east">
+                        <div class="server-center">
+                            <div class="editor css active">
+                                <textarea class="code" mode="css">
+{css.php}
+</textarea>
+                    </div>
+                    <div class="floatBar">
+                        <div class="floatTab active">
+                            CSS
+                        </div>
+                    </div>
+                    </div>
+                    <div class="server-south">
+                        <div class="browser-north">
+                            <div class="browserBar">
+                                <input type="text" value="/">
+                                </input> <div class="btnRefresh"></div>
+                                <div class="popBtn">
+                                    <div class="img"></div>
+                                    <div class="caption">
+                                        Pop-out
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="browser-center"></div>
+                        <div class="browser-south">
+                            <div class="logBar" style="display:none">
+                                <div class="icon check"></div>
+                                <div class="logText">
+                                    Your server is running at
+                                </div>
+                                <div class="logTime">
+                                    2 minutes ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    </body>
+                    </html> 

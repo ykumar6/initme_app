@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html [%offlineManifest%] xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>initMe - Login/Register</title>
+        <link rel="stylesheet" type="text/css" href="/static/style/main.css" />
+    </head>
+    <body>
+        <div id="top">
+            <div id="header">
+                <div class="logo"></div>
+                <div class="navigation">
+                    <a href="/support">Explore</a>
+                    <a href="/support">Blog</a>
+                    <a href="/support">Login</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="login" class="login_form">
+            <div class="login">
+                <form action="/user/login" method="post">
+                    <h1> Log in <a href="/user/register">(Register, its free)</a></h1>
+                    <div class="formbody">
+                        <label for="login"> Namespace or Email
+                            <br>
+                            <input class="text" id="login_field" name="login" style="width: 21em;" tabindex="1" type="text">
+                        </label>
+                        <label for="password"> Password
+                            <br>
+                            <input class="text" id="password" name="password" style="width: 21em;" tabindex="2" type="password" value="">
+                        </label>
+                        <label class="submit_btn">
+                            <input name="commit" tabindex="3" type="submit" value="Log in">
+                        </label>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="bottom">
+            <div id="footer">
+                <div class="copyright">© 2011 initMe. All rights reserved</div>
+                <div class="terms">
+                    <a href="/tou">Terms Of Use</a>
+                    <a href="/privacy">Privacy Policy</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

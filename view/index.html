@@ -1,0 +1,156 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	 <title>initMe - Instant web applications</title>
+        <style>
+        
+            body {
+                background-color: #F8F8F8   ;
+                margin: 0px;
+                text-rendering: optimizelegibility;
+
+            }
+            
+            #logo {
+                position: relative;
+                top: 6px;
+            }
+            #wrapper {
+                margin: auto;
+                width: 1150px;
+            }
+            #content {
+                position: relative;
+                top: 50px;
+                margin: auto;
+                text-align:center;
+            }
+
+	     #mainView {
+			-webkit-transition: opacity 0.3s;
+	     }
+
+            
+            .hover {
+			opacity: 0.2;
+	     }            
+
+            h1 {
+              font: 400 20px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+              font-weight:bold;
+              color: #003333;
+            }
+            h2 {
+              font: 400 14px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+            }
+            .spacer {
+                height: 100px;
+            }
+            .header .wrapper {
+                margin: auto;
+                width: 1050px;
+            }
+            
+            .header {
+                background-color: #595959;
+                background-image: -moz-linear-gradient(0% 100%,0% 70%,#4a4a4a,#595959);
+                background-image: -o-gradient(linear,0% 100%,0% 70%,from(#4a4a4a),to(#595959));
+                background-image: -webkit-gradient(linear,0% 100%,0% 70%,from(#4a4a4a),to(#595959));
+                background-image: gradient(linear,0% 100%,0% 70%,from(#4a4a4a),to(#595959));
+                color: #AAA;
+                display: block;
+                height: 60px;
+            }
+            
+            .nav > a {
+                font: 400 18px/18px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+                color: #AAA;
+                text-decoration: none;
+                display: inline-block;
+                padding: 10px;
+            }
+            .nav {
+                position: relative;
+                top: 12px;  
+            }
+            .nav {
+                float:right;
+            }
+
+	     .comingSoon {
+		 display: none;
+		 font: 400 36px/36px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+	     }
+            
+            h1 {
+              font: 400 20px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+              font-weight:bold;
+              color: #003333;
+            }
+        </style>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27720942-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+        <script type="text/javascript">
+		jQuery.fn.center = function () {
+    			this.css("position","absolute");
+    			this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
+    			this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
+    			return this;
+		}
+
+		
+		$(function() {
+			$("#mainView").hover(function() {
+				
+			},
+			function() {
+				$("#mainView").removeClass("hover");
+				$(".comingSoon").hide();
+			});
+
+			$(document).scroll(function() {
+				$(".comingSoon").center();
+			});
+
+			$("#mainView").click(function() {
+				$("#mainView").addClass("hover");
+				$(".comingSoon").center().show();
+
+			});
+			
+		});
+        </script>
+    </head>
+    <body>
+        <div class="header">
+            <div class="wrapper">
+                <img id="logo" src="images/logoinit.png"/>
+                <div class="nav">
+                    <a>Coming soon ...</a>
+                </div>
+            </div>
+        </div>
+        
+        <div id="content">
+            <img id="mainView" src="images/homeview.png"></img>
+        </div>
+	 <div class="comingSoon">
+		Coming Soon ...
+	 </div>
+        <div class="spacer">
+            
+        </div>
+    </body>
+</html>

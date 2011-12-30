@@ -1,0 +1,35 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <style>
+            #content {
+                position: relative;
+                top: 250px;
+                margin: auto;
+                text-align:center;
+            }
+            
+            h1 {
+              font: 400 20px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+              font-weight:bold;
+              color: #003333;
+            }
+            h2 {
+              font: 400 14px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
+            }
+        </style>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
+        <script type="text/javascript">
+                setInterval(function() {
+                    $("#init").text($("#init").text() + ".");
+                }, 1000);
+        </script>
+    </head>
+    <body>
+        <div id="content">
+            <img src="/images/logoinit2.png"></img>
+            <h1 id="init">Initializing a project </h1>
+            <h2>Just for you!</h2>
+        </div>
+    </body>
+</html>
