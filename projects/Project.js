@@ -17,28 +17,28 @@ var logger = loggly.createClient({
 var Project = function(args) {
 
     this.clients = [];
+    var self = this;
     
-    if(args.projectId) {
-        _ExistingProject.apply(this, arguments);
+    if (args.projectId) {
+        async.waterfall(
+            [
+                self._projectTasks.projectMustExist.bind(self, args.projectId, null, null)
+            ], 
+        function(err) {
+            args.ready(err);
+        });
     } else {
-        _NewProject.apply(this, arguments);
+        async.waterfall(
+            [
+                self._projectTasks.createUniqueProject.bind(self, args.namespace || "", args.framework, args.clone || args.framework),
+                self._projectTasks.cloneProjectFiles.bind(self),
+                self._projectTasks.pushProject.bind(self)
+            ], 
+        function(err) {
+            args.ready(err);
+        });
     }
 
-};
-//existing project constructor
-var _ExistingProject = function(args) {
-    var self = this;
-    async.waterfall([self._projectTasks.projectMustExist.bind(self, args.projectId, null, null)], function(err) {
-        args.ready(err);
-    })
-};
-//new project constructor
-var _NewProject = function(args) {
-
-    var self = this;
-    async.waterfall([self._projectTasks.createUniqueProject.bind(self, args.namespace || "", args.framework, args.clone || args.framework), self._projectTasks.cloneProjectFiles.bind(self), self._projectTasks.pushProject.bind(self)], function(err) {
-        args.ready(err);
-    })
 };
 
 (function() {
@@ -50,10 +50,33 @@ var _NewProject = function(args) {
     
     this.addClientConnection = function(client) {
         this.clients.push(client);
+        if (this.clients.length === 1) {
+            //start app
+            this._projectTasks.startProject.call(this);
+        }
+        
+        if (this.killTimer) {
+            clearTimeout(this.killTimer);
+            this.killTimer = null;
+        }
     };
     
     this.removeClientConnection = function(client) {
-        
+        var self = this;
+        var idx = this.clients.indexOf(client);
+        if (idx >= 0) {
+            this.clients.splice(idx, 1);
+        }
+        if (this.clients.length === 0) {
+            
+            if (this.killTimer) {
+                clearTimeout(this.killTimer);
+            }
+            self.killTimer = setTimeout(function() {
+                self._projectTasks.stopProject.call(self);
+                if (self.killProject) self.killProject(self); //removes reference from checkapps
+            }, 10000);            
+        }
     };
 
     this.getId = function() {
@@ -86,7 +109,7 @@ var _NewProject = function(args) {
     //workspace tasks to be used by async waterfall
     this._projectTasks = {
 
-        createUniqueProject : function(namespace, framework, root, callback) {
+      createUniqueProject : function(namespace, framework, root, callback) {
             console.log("Creating project");
             var _self = this;
             var proj = new model({
@@ -104,6 +127,7 @@ var _NewProject = function(args) {
                 }
             })
         },
+        
         projectMustExist : function(projectId, namespace, projectTitle, callback) {
             var _self = this;
             var searchParams = {};
@@ -119,7 +143,7 @@ var _NewProject = function(args) {
             }
 
             model.findOne(searchParams, function(err, doc) {
-                if(err || !doc) {
+                if (err || !doc) {
                     callback("Project doesn't exist", searchParams);
                 } else {
                     _self.model = doc;
@@ -127,6 +151,8 @@ var _NewProject = function(args) {
                 }
             });
         },
+        
+
         addWorkspaceFS : function(callback) {
             var self = this;
             fs.mkdir(self.getPath(), FILEMODE, function(err) {
@@ -149,85 +175,25 @@ var _NewProject = function(args) {
                 callback(err);
             });
         },
+        
+        stopProject : function(callback) {
+            var self = this;
+            global.cloudFoundry.stopApp(self.getId(), callback);
+        },
+        
         startProject : function(callback) {
             var self = this;
-            var pingAttempts = 0;
-            function waitForStart(err) {
-                if(err) {
-                    callback(err);
-                    logger.log(config.logger.errors, JSON.stringify({
-                        action : "startApp",
-                        "appUrl" : self.model.url,
-                        error : err
-                    }));
-                } else {
-                    setTimeout(appPing, 500);
-                    //ping app
-                }
-            };
-
-            function appPing() {
-                global.cloudFoundry.getAppStatus(self.getId(), function(obj) {
-                    if(obj.status === "RUNNING") {
-                        callback(null);
-                        //success
-                    } else {
-                        if(pingAttempts > 5) {
-                            callback("Could not start app");
-                        } else {
-                            pingAttempts++;
-                            setTimeout(appPing, 500);
-                        }
-                    }
-                });
-            };
-
-
-            global.cloudFoundry.startApp(self.getId(), waitForStart);
+            global.cloudFoundry.startApp(self.getId(), callback);
         },
+
         pushProject : function(callback) {
             var self = this;
-            var pingAttempts = 0;
-            function waitForStart(err) {
-                console.log("project started");
-                console.log(err);
-                if(err) {
-                    callback(err);
-                    logger.log(config.logger.errors, JSON.stringify({
-                        action : "startApp",
-                        "appUrl" : self.model.url,
-                        error : err
-                    }));
-                } else {
-                    callback(null);
-                    setTimeout(appPing, 500);
-                }
-            };
-
-            function appPing() {
-                global.cloudFoundry.getAppStatus(self.getId(), function(obj) {
-                    if(obj.status === "RUNNING") {
-                        self.isRunning = true;
-                        //success
-                    } else {
-                        if(pingAttempts > 5) {
-                            self.isRunning = false;
-                        } else {
-                            pingAttempts++;
-                            setTimeout(appPing, 500);
-                        }
-                    }
-                });
-            };
-
-
-            console.log("pushing app");
             global.cloudFoundry.pushNewApp({
                 "appName" : self.getId(),
                 "appUrl" : self.getUrl(),
                 "appDir" : self.getPath(),
                 "framework" : self.getFramework()
-            }, waitForStart);
+            }, callback);
         }
     }
 }).call(Project.prototype);

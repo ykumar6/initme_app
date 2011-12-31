@@ -91,9 +91,10 @@ var CloudFoundry = function() {
 
     };
 
-    this.pushNewApp = function(args, callback) {
+    this.pushNewApp = function(args, callback) {        
         var _self = this;
-        async.waterfall([_tasks.adminTokenMustBeValid.bind(_self), _tasks.createApp.bind(_self, args.appName, args.appUrl, args.framework), _self.startApp.bind(_self, args.appName)], callback);
+        callback = callback || function() {};
+        async.waterfall([_tasks.adminTokenMustBeValid.bind(_self), _tasks.createApp.bind(_self, args.appName, args.appUrl, args.framework)], callback);
 
     };
 
@@ -105,30 +106,39 @@ var CloudFoundry = function() {
     };
 
     this.startApp = function(appName, callback) {
-        _tasks.getAppManifest(appName, function(err, manifest) {
-            if(err) {
-                callback(err);
-            } else {
-                manifest["state"] = "STARTED";
-                //yes, this is how you start an app?!?
-                _tasks.setAppManifest(appName, manifest, function(err) {
-                    if(err) {
-                        callback(err);
-                    } else {
-                        callback(null);
-                    }
-                });
-            }
-        });
+        var self = this;
+        callback = callback || function() {};
+        
+        async.waterfall([
+            _tasks.adminTokenMustBeValid.bind(self),
+            _tasks.getAppManifest.bind(self, appName),
+            function(manifest, callback) {
+                if (manifest["state"] === "STOPPED") {
+                    manifest["state"] = "STARTED";
+                    //yes, this is how you start an app?!?
+                    _tasks.setAppManifest(appName, manifest, function(err) {
+                        if(err) {
+                            callback(err);
+                        } else {
+                            callback(null);
+                        }
+                    });
+                }
+            },
+        ], callback)
+        
     };
 
     this.stopApp = function(appName, callback) {
-        _tasks.getAppManifest(appName, function(err, manifest) {
-            if(err) {
-                callback(err);
-            } else {
+
+        var self = this;
+        callback = callback || function() {};
+        
+        async.waterfall([
+            _tasks.adminTokenMustBeValid.bind(self),
+            _tasks.getAppManifest.bind(self, appName),
+            function(manifest, callback) {
                 manifest["state"] = "STOPPED";
-                //yes, this is how you stop an app?!?
                 _tasks.setAppManifest(appName, manifest, function(err) {
                     if(err) {
                         callback(err);
@@ -136,8 +146,9 @@ var CloudFoundry = function() {
                         callback(null);
                     }
                 });
-            }
-        });
+            },
+        ], callback);
+                
     };
 
     this.addServicesToWorkspace = function() {

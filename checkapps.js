@@ -4,30 +4,36 @@ var Project = require("./projects/Project");
 
 var activeApps = [];
 
-global.cloudFoundry.getRunningApps(function(err, apps) {
-    if(err) {
-        console.log("Error initializing state " + err);
-        process.exit(1);
-        return;
-    }
 
-    for (var i=0; i<apps.length; i++) {
-        if (global.find(apps[i], activeApps) < 0) {
-            console.log("kicking app " + apps[i])
-            global.cloudFoundry.stopApp(apps[i], function(){});
+function checkInitialState() {
+    global.cloudFoundry.getRunningApps(function(err, apps) {
+        if(err) {
+            console.log("Error initializing state " + err);
+            process.exit(1);
+            return;
         }
-    }
-});
+    
+        for (var i=0; i<apps.length; i++) {
+            if (global.find(apps[i], activeApps) < 0) {
+                console.log("kicking app " + apps[i])
+                global.cloudFoundry.stopApp(apps[i], function(){});
+            }
+        }
+    });
+}
+
+setTimeout(checkInitialState, 600000);
 
 module.exports = {
     
 
     addActiveApp: function(proj) {
+        proj.killProject = this.removeApp;
         activeApps.push(proj);
     },
 
     activateApp: function(appName, cb) {
-        
+        var self = this;
         var projIdx = global.find(appName, activeApps);
         if (projIdx >= 0) {
             cb(activeApps[projIdx]);
@@ -40,7 +46,7 @@ module.exports = {
                         cb(null);
                     }
                     else {
-                        activeApps.push(proj);
+                        self.addActiveApp(proj);
                         cb(proj);  
                     }
                 }
@@ -52,8 +58,6 @@ module.exports = {
         var idx;
         if ((idx = activeApps.indexOf(proj)) >= 0) {
             activeApps.splice(idx, 1);
-            console.log("kicking app " + item)
-            global.cloudFoundry.stopApp(proj.getId(), function(){});
         }
     }
     

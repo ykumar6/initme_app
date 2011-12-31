@@ -34,18 +34,15 @@ io.sockets.on("connection", function(client) {
     client.on("attach", function(data) {
         
         var projId = data.projectId;
-        console.log("attach command");
         if  (client.handshake.projList.indexOf(projId) >= 0) {
             //this client owns this project
         
             AppChecker.activateApp(projId, function(proj) {
                 
                 client.on('disconnect', function () {
-                    console.log("client removed");
                     proj.removeClientConnection(client);
                 });
                 
-                console.log("client connection added");
                 proj.addClientConnection(client);
             });
         }

@@ -22,20 +22,55 @@
         <script src="/socket.io/socket.io.js"></script>
         <link rel="stylesheet" href="scripts/codemirror/css/docs.css">
         <script type="text/javascript">
+
+ 	io.util.uniqueUri = function (uri) {
+    		var protocol = uri.protocol
+      		, host = uri.host
+      		, port = uri.port;
+
+     		host = host || document.domain;
+      		port = port || (protocol == 'https'
+        	&& document.location.protocol !== 'https:' ? 443 : document.location.port);
+
+    		return (protocol || 'http') + '://' + host + "/" + uri.directory;
+  	 };
             
             document.projectId = "{projId}";
             $(function() {
                 var tabsHandler = tabsModule($(".tabs").children(), $(".editor"));
                 var logHandler = new Logger();
-                var socketMain = io.connect('/');
-                
-                socketMain.on('connect', function () {
-                    socketMain.emit("attach", {"projectId": document.projectId});
-                });
 
-                
-                logHandler.addSocket(socketMain); //handle socket messages
+		  var socketVM, socketMain;
 
+		  var tryVMConnect = function() {
+		  	socketVM = io.connect("/" + document.projectId + "-portal", {
+				resource: "" + document.projectId + "-portal",
+				"force new connection": true
+		  	});
+			socketVM.on("error", function(err) {
+				setTimeout(tryVMConnect, 1000);
+		  	});	
+		  	socketVM.on('connect', function() {
+                	
+			});
+			logHandler.addSocket(socketVM);
+		  };
+
+		  var tryMainConnect = function() {
+		  	socketMain = io.connect("/", {
+				"force new connection": true
+			});
+                	socketMain.on('connect', function () {
+                    		socketMain.emit("attach", {"projectId": document.projectId});
+                	});
+			socketMain.on("error", function(err) {
+				setTimeout(tryMainConnect, 1000);
+		  	});
+			logHandler.addSocket(socketMain);
+		  };
+
+		  tryMainConnect();
+		  setTimeout(tryVMConnect, 1000); //give VM a second to boot
 
                 $('body').layout({
                     north__resizable : false,
