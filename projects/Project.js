@@ -19,10 +19,10 @@ var Project = function(args) {
     this.clients = [];
     var self = this;
     
-    if (args.projectId) {
+    if (args.projectId || args.projectTitle) {
         async.waterfall(
             [
-                self._projectTasks.projectMustExist.bind(self, args.projectId, null, null)
+                self._projectTasks.projectMustExist.bind(self, args.projectId, args.projectTitle)
             ], 
         function(err) {
             args.ready(err);
@@ -30,8 +30,8 @@ var Project = function(args) {
     } else {
         async.waterfall(
             [
-                self._projectTasks.createUniqueProject.bind(self, args.namespace || "", args.framework, args.clone || args.framework),
-                self._projectTasks.cloneProjectFiles.bind(self),
+                self._projectTasks.createUniqueProject.bind(self, args),
+                self._projectTasks.cloneProjectFiles.bind(self, args.copyFrom || null),
                 self._projectTasks.pushProject.bind(self)
             ], 
         function(err) {
@@ -52,6 +52,7 @@ var Project = function(args) {
         this.clients.push(client);
         if (this.clients.length === 1) {
             //start app
+	     console.log("starting project");
             this._projectTasks.startProject.call(this);
         }
         
@@ -67,7 +68,7 @@ var Project = function(args) {
         if (idx >= 0) {
             this.clients.splice(idx, 1);
         }
-        if (this.clients.length === 0) {
+        if (this.clients.length === 0 && !this.isKeepAlive) {
             
             if (this.killTimer) {
                 clearTimeout(this.killTimer);
@@ -88,8 +89,12 @@ var Project = function(args) {
     };
 
     this.getTitle = function() {
-        return this.model.projectTitle || "Untitled-Project";
+        return this.model.projectTitle;
     };
+    
+    this.isKeepAlive = function() {
+        return this.model.keepAlive;
+    }
 
     this.getFramework = function() {
         return this.model.framework;
@@ -109,13 +114,14 @@ var Project = function(args) {
     //workspace tasks to be used by async waterfall
     this._projectTasks = {
 
-      createUniqueProject : function(namespace, framework, root, callback) {
+      createUniqueProject : function(args, callback) {
             console.log("Creating project");
             var _self = this;
             var proj = new model({
-                "namespace" : namespace,
-                "root" : root,
-                "framework" : framework
+                "projectTitle" : args.proposedTitle || null,
+                "root" : args.clone || args.framework,
+                "framework" : args.framework,
+		  "keepAlive": args.keepAlive || false
             });
             proj.save(function(err, doc) {
                 console.log(err);
@@ -128,7 +134,7 @@ var Project = function(args) {
             })
         },
         
-        projectMustExist : function(projectId, namespace, projectTitle, callback) {
+        projectMustExist : function(projectId, projectTitle, callback) {
             var _self = this;
             var searchParams = {};
             if(projectId) {
@@ -137,7 +143,6 @@ var Project = function(args) {
                 };
             } else {
                 searchParams = {
-                    "namespace" : namespace,
                     "projectTitle" : projectTitle
                 };
             }
@@ -160,8 +165,9 @@ var Project = function(args) {
                 callback(res);
             });
         },
-        cloneProjectFiles : function(callback) {
-            var clone = new Clone(config.workspaceDir + this.getRoot() + "", this.getPath());
+        cloneProjectFiles : function(cloneFrom, callback) {
+	     console.log(cloneFrom);
+            var clone = new Clone(cloneFrom || (config.workspaceDir + this.getRoot() + ""), this.getPath());
             console.log("cloning to: " + this.getPath());
             var self = this;
             clone.on("complete", function() {

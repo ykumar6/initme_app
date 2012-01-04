@@ -2,7 +2,7 @@ var global = require("./global");
 var Project = require("./projects/Project");
 
 
-var activeApps = [];
+var activeApps = {};
 
 
 function checkInitialState() {
@@ -14,7 +14,7 @@ function checkInitialState() {
         }
     
         for (var i=0; i<apps.length; i++) {
-            if (global.find(apps[i], activeApps) < 0) {
+            if (!activeApps[apps[i]]) {
                 console.log("kicking app " + apps[i])
                 global.cloudFoundry.stopApp(apps[i], function(){});
             }
@@ -22,43 +22,51 @@ function checkInitialState() {
     });
 }
 
-setTimeout(checkInitialState, 600000);
+setTimeout(checkInitialState, 10000);
 
 module.exports = {
     
 
     addActiveApp: function(proj) {
         proj.killProject = this.removeApp;
-        activeApps.push(proj);
+        activeApps[proj.getId()] = proj;
+        if (proj.getId() !== proj.getTitle()) {
+            activeApps[proj.getTitle()] = proj;
+        }
     },
 
     activateApp: function(appName, cb) {
         var self = this;
-        var projIdx = global.find(appName, activeApps);
-        if (projIdx >= 0) {
-            cb(activeApps[projIdx]);
+        if (activeApps[appName]) {
+            cb(activeApps[appName]);
         }
         else {
-            var proj = new Project({
-                projectId : appName,
-                ready : function(err, model) {
-                    if(err) {
-                        cb(null);
-                    }
-                    else {
-                        self.addActiveApp(proj);
-                        cb(proj);  
-                    }
+            var params = {};
+            if (appName.length <= 5) {//id
+                params.projectId = appName;
+            } else {
+                params.projectTitle = appName;
+            }
+            params.ready = function(err, model) {
+                if(err) {
+                    cb(null);
                 }
-            });
+                else {
+                    self.addActiveApp(proj);
+                    cb(proj);  
+                }
+            };
+            var proj = new Project(params);
         }
     },
     
     removeApp: function(proj) {
-        var idx;
-        if ((idx = activeApps.indexOf(proj)) >= 0) {
-            activeApps.splice(idx, 1);
-        }
+        if (activeApps[proj.getId()]) {
+		delete activeApps[proj.getId()];
+	 }
+        if (activeApps[proj.getTitle()]) {
+		delete activeApps[proj.getTitle()];
+	 }
     }
     
 };

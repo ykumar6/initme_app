@@ -3,74 +3,60 @@
     <head profile="http://www.w3.org/2005/10/profile">
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
-        <script  type="text/javascript" src="scripts/layout.js"></script>
-        <script  type="text/javascript" src="scripts/tabs.js"></script>
-        <script  type="text/javascript" src="scripts/logger.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/layout.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/tabs.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/logger.js"></script>
 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <link href='scripts/layout.css' rel='stylesheet' type='text/css'>
+        <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="scripts/codemirror/lib/codemirror.css">
-        <script src="scripts/codemirror/lib/codemirror.js"></script>
-        <link rel="stylesheet" href="main.css">
-        <link rel="stylesheet" href="scripts/codemirror/theme/default.css">
-        <script src="scripts/codemirror/mode/xml/xml.js"></script>
-        <script src="scripts/codemirror/mode/php/php.js"></script>
-        <script src="scripts/codemirror/mode/clike/clike.js"></script>
-        <script src="scripts/codemirror/mode/javascript/javascript.js"></script>
-        <script src="scripts/codemirror/mode/css/css.js"></script>
-        <script src="/socket.io/socket.io.js"></script>
-        <link rel="stylesheet" href="scripts/codemirror/css/docs.css">
+        <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
+        <script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
+        <link rel="stylesheet" href="{static}/main.css">
+        <link rel="stylesheet" href="{static}/scripts/codemirror/theme/default.css">
+        <script src="{static}/scripts/codemirror/mode/xml/xml.js"></script>
+        <script src="{static}/scripts/codemirror/mode/php/php.js"></script>
+        <script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
+        <script src="{static}/scripts/codemirror/mode/javascript/javascript.js"></script>
+        <script src="{static}/scripts/codemirror/mode/css/css.js"></script>
+        <script src="{static}/scripts/async/lib/async.js"></script>
+
+        <script src="{static}/socket.io/socket.io.js"></script>
+        <link rel="stylesheet" href="{static}/scripts/codemirror/css/docs.css">
         <script type="text/javascript">
+            io.util.uniqueUri = function(uri) {
+                var protocol = uri.protocol, host = uri.host, port = uri.port;
+                host = host || document.domain;
+                port = port || (protocol == 'https' && document.location.protocol !== 'https:' ? 443 : document.location.port);
 
- 	io.util.uniqueUri = function (uri) {
-    		var protocol = uri.protocol
-      		, host = uri.host
-      		, port = uri.port;
+                return (protocol || 'http') + '://' + host + "/" + uri.directory;
+            };
 
-     		host = host || document.domain;
-      		port = port || (protocol == 'https'
-        	&& document.location.protocol !== 'https:' ? 443 : document.location.port);
-
-    		return (protocol || 'http') + '://' + host + "/" + uri.directory;
-  	 };
-            
             document.projectId = "{projId}";
+            document.appUrl = "{appUrl}";
+	        document.isOwner = {isOwner};
             $(function() {
-                var tabsHandler = tabsModule($(".tabs").children(), $(".editor"));
-                var logHandler = new Logger();
+                document.CodeCommands = CodeModule($(".editor"));
 
-		  var socketVM, socketMain;
+$(document).keydown(function(e) {
+    var doPrevent;
+    if (window.event.ctrlKey && e.keyCode == 83) {
+	doPrevent = true;
+    }
+    else if (e.keyCode == 8) {
+        var d = e.srcElement || e.target;
+        if (d.tagName.toUpperCase() == 'INPUT' || d.tagName.toUpperCase() == 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else
+            doPrevent = true;
+    }
+    else
+        doPrevent = false;
 
-		  var tryVMConnect = function() {
-		  	socketVM = io.connect("/" + document.projectId + "-portal", {
-				resource: "" + document.projectId + "-portal",
-				"force new connection": true
-		  	});
-			socketVM.on("error", function(err) {
-				setTimeout(tryVMConnect, 1000);
-		  	});	
-		  	socketVM.on('connect', function() {
-                	
-			});
-			logHandler.addSocket(socketVM);
-		  };
-
-		  var tryMainConnect = function() {
-		  	socketMain = io.connect("/", {
-				"force new connection": true
-			});
-                	socketMain.on('connect', function () {
-                    		socketMain.emit("attach", {"projectId": document.projectId});
-                	});
-			socketMain.on("error", function(err) {
-				setTimeout(tryMainConnect, 1000);
-		  	});
-			logHandler.addSocket(socketMain);
-		  };
-
-		  tryMainConnect();
-		  setTimeout(tryVMConnect, 1000); //give VM a second to boot
+    if (doPrevent)
+        e.preventDefault();
+});
 
                 $('body').layout({
                     north__resizable : false,
@@ -104,7 +90,7 @@
                     south__closable : false,
                     north__spacing_open : 0,
                     north__spacing_closed : 0,
-                    north__slidable : false
+                    north__slidable : false,
                 })
 
                 $(".codearea-center").layout({
@@ -115,17 +101,12 @@
                     center__paneSelector : ".code-center",
                 })
 
-                $(".server-south").layout({
-                    north__paneSelector : ".browser-north",
+                var southPane = $(".server-south").layout({
                     center__paneSelector : ".browser-center",
                     south__paneSelector : ".browser-south",
-
-                    north__resizable : false,
-                    north__closable : false,
-                    north__spacing_open : 0,
-                    north__spacing_closed : 0,
-                    north__slidable : false,
-
+                    center__onresize : function() {
+                        positionLoading();
+                    },
                     south__resizable : false,
                     south__closable : false,
                     south__spacing_open : 0,
@@ -133,18 +114,151 @@
                     south__slidable : false
 
                 });
+                
+                var positionLoading = function() {
+                    setTimeout(function() {
+                        $(".loading").position({
+                            of : $(".browser-center"),
+                            my : "center center",
+                            at : "center center"
+                        });
+                    }, 10);
+                };
+                positionLoading();
+		  $("body").bind("save", function(e, state) {
+			if (!$(".button.save").hasClass("disabled")) {
+				$(".button.save").addClass("disabled");
+			}
+		  });
+		  $("body").bind("push", function(e, state) {
+			if (!$(".button.save").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
+				$(".button.save").addClass("disabled");
+			}
+			var iframe = document.getElementById("appFrame");
+			iframe.src = iframe.src;
+		  });
+
+
+                
+                
+                var logHandler = new Logger(southPane);
+                var socketVM, socketMain;
+                var loadProject = function(cb) {
+                    
+                    var tryVMConnect = function() {
+                        socketVM = socketVM = io.connect("/", {
+                            resource : "" + document.projectId + "-portal/socket.io",
+                            "force new connection" : true
+                        });
+    
+                        socketVM.on("error", function(err) {
+                            console.log("error");
+                            setTimeout(tryVMConnect, 1000);
+                        });
+                        socketVM.on("connect", function(err) {
+				if (cb) 
+					cb();
+                        });
+                        logHandler.addSocket(socketVM);
+                    };
+                    var tryMainConnect = function() {
+                        socketMain = io.connect("/", {
+                            "force new connection" : true
+                        });
+                        socketMain.on('connect', function() {
+                            socketMain.emit("attach", {
+                                "projectId" : document.projectId
+                            });
+                        });
+                        socketMain.on("error", function(err) {
+                            setTimeout(tryMainConnect, 1000);
+                        });
+                    };
+                    tryMainConnect();
+                    tryVMConnect();
+                }
+
+                loadProject();
+
+			var createProject = function(cb) {
+                    			if (socketVM) {
+                        			socketVM.disconnect();
+                    			}
+                    			if (socketMain) {
+                        			socketMain.disconnect();
+                    			}
+        				$.ajax({
+        					type: "GET",
+        					url: "http://init.me/fork/" + document.projectId,
+        					success: function(data) {
+        					    	data = JSON.parse(data);
+        					       document.isOwner = true
+        						document.projectId = data.projectId;
+        						document.appUrl = data.appUrl;
+        						loadProject(cb); //reload project connections
+        					},
+        					error: function() {
+        						logHandler.handleMsg({
+        							type: "warn",
+        							text: "Unable to run your code. Please try again",
+        							time: new Date()
+        						});
+        					}
+        				});
+			};
+
+        		$(".button.save").mouseup(function() {
+				if (!$(".button.save").hasClass("disabled")) {
+        		   		if (!document.isOwner) {
+						createProject(function() {
+							document.CodeCommands.save(function(err) {
+								if (!err) {
+									window.history.pushState( {}, "", "http://init.me/" + document.projectId);
+								}
+							});
+						});
+					}
+					else if (document.isOwner && document.URL.indexOf(document.projectId) < 0) {
+        		       		window.history.pushState( {}, "", "http://init.me/" + document.projectId);
+						document.CodeCommands.save();
+        		   		} else {
+						document.CodeCommands.save();
+					}
+				}
+			});
+
+        		$(".button.play").mouseup(function() {
+				if (!socketVM || !socketVM.socket.connected) return;
+        			if (document.isOwner) {
+        			    document.CodeCommands.push();
+        			} else {
+					createProject(function() {
+						document.CodeCommands.push();
+					});
+        			}
+        		});
+
+        		$(".button.reset").mouseup(function() {
+				if (!$(".button.reset").hasClass("disabled")) {
+					document.CodeCommands.reset();
+					$(".button.reset").addClass("disabled");
+					if ($(".button.save").hasClass("disabled")) {
+						$(".button.save").removeClass("disabled");
+					}
+				}
+        		});        		
 
             });
 
         </script>
     </head>
-    <body>
+    <body class="inactive">
         <div class="ui-layout-center">
             <div class="codearea-center">
                 <div class="code-center">
-                    <div class="editor html active">
+                    <div class="editor html active" fileName="main.php">
                         <textarea class="code" mode="application/x-httpd-php"">
-{index.php}
+{main.php}
 </textarea>
                     </div>
                     <div class="floatBar">
@@ -154,7 +268,7 @@
                     </div>
                     </div>
                     <div class="code-south">
-                        <div class="editor javascript active">
+                        <div class="editor javascript active" fileName="javascript.php">
                             <textarea class="code" mode="javascript">
 {javascript.php}
 </textarea>
@@ -177,13 +291,13 @@
                                         Run
                                     </div>
                                 </div>
-                                <div class="button save">
+                                <div class="button save disabled">
                                     <div class="img"></div>
                                     <div class="caption">
                                         Save
                                     </div>
                                 </div>
-                                <div class="button reset">
+                                <div class="button reset disabled">
                                     <div class="img"></div>
                                     <div class="caption">
                                         Reset
@@ -194,7 +308,7 @@
                     </div>
                     <div class="ui-layout-east">
                         <div class="server-center">
-                            <div class="editor css active">
+                            <div class="editor css active" fileName="css.php">
                                 <textarea class="code" mode="css">
 {css.php}
 </textarea>
@@ -206,21 +320,18 @@
                     </div>
                     </div>
                     <div class="server-south">
-                        <div class="browser-north">
-                            <div class="browserBar">
-                                <input type="text" value="/">
-                                </input> <div class="btnRefresh"></div>
-                                <div class="popBtn">
-                                    <div class="img"></div>
-                                    <div class="caption">
-                                        Pop-out
-                                    </div>
+                        <div class="browser-center">
+                    		<div class="floatBar">
+                       		   <div class="floatTab active">
+                            		Output
                                 </div>
                             </div>
-                        </div>
-                        <div class="browser-center"></div>
+                            
+                            <iframe id="appFrame" width="100%" height="100%" frameBorder="0">
+                            </iframe>
+                   		</div>
                         <div class="browser-south">
-                            <div class="logBar" style="display:none">
+                            <div class="logBar">
                                 <div class="icon check"></div>
                                 <div class="logText">
                                     Your server is running at
@@ -232,5 +343,7 @@
                         </div>
                     </div>
                     </div>
+				<div class="loading">
+				</div>
                     </body>
                     </html> 

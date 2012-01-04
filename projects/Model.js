@@ -17,19 +17,20 @@ function randomString(string_length, chars) {
 }
 
 Project = new Schema({
-  'projectId': {type: String, unique: true}, 
-  'projectTitle': String, 
+  'projectId': {type: String, index: { unique: true }}, 
+  'projectTitle': {type: String, index: { unique: true }}, 
   'root': String, //where was this project cloned from?
   'namespace': String, //either null or userId
   'framework': String,
   'restricted': Boolean, 
+  'keepAlive': Boolean,
   'userId': {type: String, index: true},
   'url': {type: String, index: true}
 });
 
 
 Project.virtual('path').get(function() {
-  return config.workspaceDir + this.projectId;
+  return config.workspaceDir + (this.projectId);
 });
 
 
@@ -39,8 +40,11 @@ Project.virtual('ideBase').get(function() {
 
 Project.pre('save', function(next) {
     if (!this.projectId) {
-        this.projectId = randomString(5, "abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"); //TODO check for collisions
-	 this.url = "mango-" + randomString(5, "abcdefghiklmnopqrstuvwxyz") + "-app." + config.appDomain;
+        this.projectId = randomString(2, "abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") +  randomString(2, "abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"); //TODO check for collisions
+	 this.url = this.projectId + "-app." + config.appDomain;
+    }
+    if (!this.projectTitle) {
+	 this.projectTitle = this.projectId;
     }
     next();
 });

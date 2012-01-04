@@ -17,6 +17,120 @@ h3 {
     font-weight: 300;
 }
 
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  25% { 
+    -webkit-transform: rotate(180deg);
+  }
+  50% { 
+    -webkit-transform: rotate(180deg);
+  }
+  75% { 
+    -webkit-transform: rotate(360deg);
+  }
+  100% { 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframe rotate {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  25% { 
+    -moz-transform: rotate(180deg);
+  }
+  50% { 
+    -moz-transform: rotate(180deg);
+  }
+  75% { 
+    -moz-transform: rotate(360deg);
+  }
+  100% { 
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-ms-keyframe rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% { 
+    transform: rotate(180deg);
+  }
+  50% { 
+    transform: rotate(180deg);
+  }
+  75% { 
+    transform: rotate(360deg);
+  }
+  100% { 
+    transform: rotate(360deg);
+  }
+}
+
+
+body .browser-center, body .browser-south {
+	background: none !important;
+}
+
+body .server-south {
+	background: #FFFFFF;
+	-webkit-transition: background 0.2s;
+}
+
+
+body.inactive .server-south {
+	background: #F1F2F2;
+}
+
+
+
+body.inactive .loading
+{
+    
+    -webkit-animation-name:             rotate; 
+    -webkit-animation-duration:         3s; 
+    -webkit-animation-iteration-count:  infinite;
+    -webkit-animation-timing-function: linear;
+
+    -moz-animation-name:             rotate; 
+    -moz-animation-duration:         3s; 
+    -moz-animation-iteration-count:  infinite;
+    -moz-animation-timing-function: linear;
+
+    -ms-animation-name:             rotate; 
+    -ms-animation-duration:         3s; 
+    -ms-animation-iteration-count:  infinite;
+    -ms-animation-timing-function: linear;
+
+
+}
+
+body.inactive iframe {
+	opacity: 0;
+}
+
+body iframe {
+	-webkit-transition: opacity 0.2s;
+	opacity: 1;
+}
+
+.loading {
+	z-index: 100;
+	-webkit-transition: opacity 0.2s;
+	opacity: 0;
+	background-image: url("images/loading.png");
+	width: 120px;
+	height: 117px;
+}
+
+body.inactive .loading {
+	opacity: 1.0;
+}
+
 .floatBar {
 	position: absolute;
 	right: 5px;
@@ -90,14 +204,32 @@ h3 {
     display: inline-block;
 }
 .toolbar .button {
+    position: relative;
     padding: 10px;
     height: 100%;
     cursor: pointer;
     background-color: #414042;
+
 }
 .toolbar .button:hover {
     background-color: #58595B;
 }
+
+.toolbar .button.disabled > div {
+	opacity: 0.2;
+}
+
+.toolbar .button.disabled:hover {
+    background-color: #414042;
+}
+
+
+.toolbar .button:active {
+	top: 2px;
+	left: 2px;
+
+}
+
 .toolbar .button > div {
     display: inline-block;
 }
@@ -312,12 +444,24 @@ input {
 	height: 25px;
 }
 
+.logBar .icon.info {
+	background-image: url("images/infomark.png");
+	width: 26px;
+	height: 25px;
+}
+.logBar .icon.warn {
+	background-image: url("images/warnmark.png");
+	width: 30px;
+	height: 25px;
+}
+
 .logBar .logText {
-	margin-top: 4px;
+	margin-top: 2px;
 	margin-left: 5px;
 }
 
 .logBar .logTime {
+	margin-top: 2px;
 	margin-right: 10px;
 	float: right;
 }

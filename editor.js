@@ -3,13 +3,13 @@ var async = require("async");
 
 
 var frameworkFiles = {
-    "php": ["index.php", "css.php", "javascript.php"]
+    "php": ["main.php", "css.php", "javascript.php"]
 }
 
 
 module.exports = {
     
-    getIndex: function(path, framework, projId, callback) {        
+    getIndex: function(proj, isOwner, callback) {        
         fs.readFile(__dirname + "/view/editor.html", "utf8", function(err, index) {
             
             if (err) {
@@ -18,10 +18,13 @@ module.exports = {
             }
             
             index = index.toString();
-            index = index.replace(/{projId}/mig, projId);
-            
+            index = index.replace(/{projId}/mig, proj.getId());
+            index = index.replace(/{appUrl}/mig, proj.getUrl());
+            index = index.replace(/{static}/mig, "http://init.me");
+	     index = index.replace(/{isOwner}/mig, isOwner ? "true" : "false");            
+
             var getFile = function(fileName, callback) {
-                  fs.readFile(path + "/" + fileName, function(err, fileData) {
+                  fs.readFile(proj.getPath() + "/" + fileName, function(err, fileData) {
                         if (!err) {
                             index = index.replace(new RegExp("{" + fileName + "}", "mig"), fileData.toString());   
                         }                        
@@ -29,7 +32,7 @@ module.exports = {
                   });
             };
             
-            async.forEach(frameworkFiles[framework], getFile, function(err) {
+            async.forEach(frameworkFiles[proj.getFramework()], getFile, function(err) {
                 callback(err, index);
             })
             
