@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
         <script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
         <link rel="stylesheet" href="{static}/main.css">
-        <link rel="stylesheet" href="{static}/scripts/codemirror/theme/default.css">
         <script src="{static}/scripts/codemirror/mode/xml/xml.js"></script>
         <script src="{static}/scripts/codemirror/mode/php/php.js"></script>
         <script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
@@ -22,7 +21,6 @@
         <script src="{static}/scripts/async/lib/async.js"></script>
 
         <script src="{static}/socket.io/socket.io.js"></script>
-        <link rel="stylesheet" href="{static}/scripts/codemirror/css/docs.css">
         <script type="text/javascript">
             io.util.uniqueUri = function(uri) {
                 var protocol = uri.protocol, host = uri.host, port = uri.port;
@@ -86,7 +84,7 @@ $(document).keydown(function(e) {
                     north__closable : false,
                     center__paneSelector : ".server-center",
                     south__paneSelector : ".server-south",
-                    south__size : "70%",
+                    south__size : "50%",
                     south__closable : false,
                     north__spacing_open : 0,
                     north__spacing_closed : 0,
@@ -94,10 +92,6 @@ $(document).keydown(function(e) {
                 })
 
                 $(".codearea-center").layout({
-
-                    south__closable : false,
-                    south__paneSelector : ".code-south",
-                    south__size : "50%",
                     center__paneSelector : ".code-center",
                 })
 
@@ -209,6 +203,7 @@ $(document).keydown(function(e) {
 
         		$(".button.save").mouseup(function() {
 				if (!$(".button.save").hasClass("disabled")) {
+					logHandler.clear();
         		   		if (!document.isOwner) {
 						createProject(function() {
 							document.CodeCommands.save(function(err) {
@@ -229,6 +224,7 @@ $(document).keydown(function(e) {
 
         		$(".button.play").mouseup(function() {
 				if (!socketVM || !socketVM.socket.connected) return;
+				logHandler.clear();
         			if (document.isOwner) {
         			    document.CodeCommands.push();
         			} else {
@@ -246,8 +242,12 @@ $(document).keydown(function(e) {
 						$(".button.save").removeClass("disabled");
 					}
 				}
-        		});        		
-
+        		});  
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/plusone.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
             });
 
         </script>
@@ -266,25 +266,15 @@ $(document).keydown(function(e) {
                             PHP
                         </div>
                     </div>
+                    
                     </div>
-                    <div class="code-south">
-                        <div class="editor javascript active" fileName="javascript.php">
-                            <textarea class="code" mode="javascript">
-{javascript.php}
-</textarea>
-                    </div>
-                    <div class="floatBar">
-                        <div class="floatTab active">
-                            Javascript
-                        </div>
-                    </div>
-                    </div>
-                    </div>
-                    </div>
+                    
+                </div>
+         </div>
                     <div class="ui-layout-north">
                         <div class="header">
                             <div class="logo"></div>
-                            <div class="toolbar">
+                            <div class="toolbar leftBar">
                                 <div class="button play">
                                     <div class="img"></div>
                                     <div class="caption">
@@ -304,6 +294,34 @@ $(document).keydown(function(e) {
                                     </div>
                                 </div>
                             </div>
+                            <div class="projBox">
+                                <div class="tag">
+                                    php
+                                </div>
+                                <div class="titleBox">
+                                    <div class="projTitle">Simple File Uploader</div>
+                                    <div class="author">ykumar6</div>
+                                </div>
+				    <div class="gPlus">
+				    	<g:plusone size="small" annotation="none" href="http://init.me"></g:plusone>
+				    </div>
+                            </div>
+                            <div class="toolbar rightBar">
+                                <div class="button share">
+                                    <div class="img"></div>
+                                    <div class="caption">
+                                        Share
+                                    </div>
+                                    <div class="drop"></div>
+                                </div>
+                                <div class="button new">
+                                    <div class="img"></div>
+                                    <div class="caption">
+                                        New
+                                    </div>
+                                    <div class="drop"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ui-layout-east">
@@ -313,8 +331,16 @@ $(document).keydown(function(e) {
 {css.php}
 </textarea>
                     </div>
+                            <div class="editor javascript" fileName="javascript.php">
+                                <textarea class="code" mode="javascript">
+{javascript.php}
+</textarea>
+                    </div>
                     <div class="floatBar">
-                        <div class="floatTab active">
+                        <div class="floatTab javascript">
+                            Javascript
+                        </div>
+                        <div class="floatTab active css">
                             CSS
                         </div>
                     </div>

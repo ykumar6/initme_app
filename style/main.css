@@ -17,6 +17,61 @@ h3 {
     font-weight: 300;
 }
 
+.projBox {
+	position: relative;
+	left: 60px;
+	overflow: hidden;
+	padding-left: 20px;
+	border-left: 1px solid #6D6E71;
+	color: #F1F2F2;
+}
+
+
+.leftBar {
+    position: relative;
+    left: 50px;
+}
+
+.rightBar {
+	float: right;
+	margin-right: 15px;
+}
+
+.projBox .tag {
+	padding-top: 3px;
+	text-align: center;
+	width: 35px;
+	height: 20px;
+	background-color: #6D6E71;
+	border-radius: 3px;
+	margin-right: 10px;
+       font-family: "Courier New";
+       font-size: 12px;
+       font-weight: bold;
+}
+
+.gPlus {
+	margin-top: 4px;
+	margin-left: 15px;
+}
+
+.projBox > div {
+	display: inline-block;
+	vertical-align: middle;
+}
+.titleBox .projTitle {
+	font-weight: 400;
+	position: relative;
+       font-size: 14px;
+}
+
+.titleBox .author {
+	font-weight: 300;
+	position: relative;
+	font-size: 12px;
+	top: -2px;
+}
+
 @-webkit-keyframes rotate {
   0% {
     -webkit-transform: rotate(0deg);
@@ -109,11 +164,11 @@ body.inactive .loading
 
 }
 
-body.inactive iframe {
+body.inactive #appFrame {
 	opacity: 0;
 }
 
-body iframe {
+body #appFrame {
 	-webkit-transition: opacity 0.2s;
 	opacity: 1;
 }
@@ -153,7 +208,6 @@ body.inactive .loading {
 	text-align: center;
 	width: 70px;
 	height: 20px;
-	padding-bottom: 3px;
 	border-radius: 2px;
 	border: 1px solid #D3E5EC;
 	cursor: pointer;
@@ -171,16 +225,19 @@ body.inactive .loading {
     width: 100%;
     background-color: #414042;
     height: 45px;
+    vertical-align: top;
 }
 .header > div {
     display: inline-block;
+    vertical-align: middle;
 }
 .logo {
     background-image: url("images/logo.png");
+    background-position: center center;
+    background-repeat: no-repeat;
     width: 80px;
-    height: 30px;
+    height: 100%;
     position: relative;
-    top: 13px;
     left: 14px;
 }
 #shareBtn {
@@ -195,8 +252,6 @@ body.inactive .loading {
     width: 55px;
 }
 .toolbar {
-    position: relative;
-    left: 50px;
     height: 100%;
     vertical-align: top;
 }
@@ -247,6 +302,36 @@ body.inactive .loading {
     width: 23px;
     height: 23px;
 }
+
+
+.button .drop {
+    background-image: url("images/drop.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 5px;
+    height: 5px;
+    vertical-align: middle;
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.button.share .img {
+    background-image: url("images/share.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 23px;
+    height: 23px;
+}
+
+.button.new .img {
+    background-image: url("images/new.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 23px;
+    height: 23px;
+}
+
+
 .button.reset .img {
     background-image: url("images/resetbtn.png");
     width: 13px;
@@ -287,9 +372,9 @@ body .code-center, body .code-south, body .server-center {
     padding-top: 10px !important;
 }
 .CodeMirror-scroll {
-    width: auto;
-    height: auto;
-    overflow: visible;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
 }
 .CodeMirror {
     height: 100%;
@@ -425,7 +510,12 @@ input {
 }
 .editor {
     width: 100%;
-    height: 100%
+    height: 100%;
+    display: none;
+}
+
+.editor.active {
+	display: block;
 }
 
 .logBar {
@@ -440,24 +530,38 @@ input {
 
 .logBar .icon.check {
 	background-image: url("images/checkmark.png");
+	background-repeat: no-repeat;
+	background-position: center center;
 	width: 30px;
 	height: 25px;
 }
 
 .logBar .icon.info {
 	background-image: url("images/infomark.png");
-	width: 26px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 30px;
 	height: 25px;
 }
 .logBar .icon.warn {
 	background-image: url("images/warnmark.png");
+	background-repeat: no-repeat;
+	background-position: center center;
 	width: 30px;
 	height: 25px;
 }
 
+.logBar .icon.error {
+	background-image: url("images/error.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	width: 30px;
+	height: 25px;
+}
+
+
 .logBar .logText {
-	margin-top: 2px;
-	margin-left: 5px;
+	margin-left: 2px;
 }
 
 .logBar .logTime {

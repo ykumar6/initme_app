@@ -2,6 +2,7 @@ var CodeModule  = function(codeBoxes) {
 
    var codeBoxArray = codeBoxes;
    var codeEditors = new Array(codeBoxArray.length);   
+   var codeEditorHandles = {};
 
    function _save(cb) {
 	async.forEach(codeEditors,
@@ -72,10 +73,13 @@ var CodeModule  = function(codeBoxes) {
        var codeEditor = CodeMirror.fromTextArea(textArea[0], {
             lineNumbers: true,
             mode: editorMode,
+	     matchBrackets : true,
 	     onChange: function() {
 			codeChanged(index);
 	     }
        });       
+
+	codeEditorHandles[editorMode] = codeEditor;
 
        return codeEditor;
    };
@@ -84,15 +88,31 @@ var CodeModule  = function(codeBoxes) {
    //hide all tabs, attach event handlers
    for (var i=0; i<codeBoxArray.length; i++) {
        codeBoxArray [i] = $(codeBoxArray[i]);
-	
-	if (!codeBoxArray[i].hasClass("active")) {
-		codeBoxArray[i].hide();
-	}
    }
 
    for (var j=0; j<codeBoxArray.length; j++) {
    	codeEditors[j] = {"editor": _initEditor(j), "changed": false, "fileName": codeBoxArray[j].attr("fileName")};
    }
+
+  $(".floatTab.css").click(function() {
+  	$(".floatTab.javascript").removeClass("active");
+       $(".editor.javascript").removeClass("active");
+        		      
+       $(".floatTab.css").addClass("active");
+   	$(".editor.css").addClass("active");
+
+	codeEditorHandles["css"].refresh();
+   });
+        		      		
+   $(".floatTab.javascript").click(function() {
+          $(".floatTab.css").removeClass("active");
+          $(".editor.css").removeClass("active");
+                      
+          $(".floatTab.javascript").addClass("active");
+          $(".editor.javascript").addClass("active");
+
+	   codeEditorHandles["javascript"].refresh();
+   });
 
    return {
 	"push": push,

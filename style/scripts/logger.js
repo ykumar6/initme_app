@@ -1,6 +1,7 @@
 
 var Logger = function(uiPane) {
     
+    var self = this;
     this.uiPane = uiPane;
     this.logBar = $(".logBar");
     this.logIcon = $(".logBar .icon");
@@ -26,6 +27,10 @@ var Logger = function(uiPane) {
 	if (!$("body").hasClass("inactive"))
 		$("body").addClass("inactive");
     };
+
+    this.clear = function() {
+	 this.uiPane.hide("south");
+    };
     
     this.addSocket = function(socket) {
         var self = this;
@@ -35,7 +40,7 @@ var Logger = function(uiPane) {
 	 socket.on("connect", function() {
 		console.log("connected");
 		$("body").removeClass("inactive");
-		$("iframe").attr("src", "http://" + document.appUrl);
+		$("#appFrame").attr("src", "http://" + document.appUrl);
     		self.handleMsg({
 			type: "check",
 			text: "Successfully activated your virtual machine",
@@ -53,9 +58,9 @@ var Logger = function(uiPane) {
 		self._isConnecting();
 	 });
         socket.on("logMsg", function(data) {
+	     console.log(data);
             self.handleMsg.call(self, data);
         });  
-        
     };
     
     this.handleMsg = function(data) {
@@ -65,16 +70,17 @@ var Logger = function(uiPane) {
    	 if (this.msgTimer) {
 		clearTimeout(this.msgTimer);
 	 }
-	 this.msgTimer = setTimeout(function() {
-		self.uiPane.hide("south");
-	 }, 3000);
-
+	 if (data.type !== "error" && !data.isNow) {
+	 	this.msgTimer = setTimeout(function() {
+			self.uiPane.hide("south");
+	 	}, 3000);
+	 }	
 	 this.uiPane.show("south");
         this.logIcon.removeClass("check").removeClass("warn").removeClass("info");
         this.logIcon.addClass(data.type);
         
         this.logText.text(data.text);
-        this.logTime.attr("title", data.time);
+        this.logTime.attr("title", data.time || (new Date()));
 
 	 if (data.isNow) {
 		if (this.logTimer) {

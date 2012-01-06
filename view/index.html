@@ -1,156 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
     <head profile="http://www.w3.org/2005/10/profile">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-	 <title>initMe - Instant web applications</title>
+        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <style>
         
             body {
-                background-color: #F8F8F8   ;
+                background-color: #F8F8F8;
                 margin: 0px;
-                text-rendering: optimizelegibility;
-
+                font-family: "LatoWebSymbol", Lato, Verdana, sans-serif;
+                font-size: 16px;
+                font-weight:400;
             }
             
-            #logo {
-                position: relative;
-                top: 6px;
-            }
-            #wrapper {
-                margin: auto;
-                width: 1150px;
-            }
-            #content {
-                position: relative;
-                top: 50px;
-                margin: auto;
-                text-align:center;
-            }
-
-	     #mainView {
-			-webkit-transition: opacity 0.3s;
-	     }
-
-            
-            .hover {
-			opacity: 0.2;
-	     }            
-
             h1 {
-              font: 400 20px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
-              font-weight:bold;
-              color: #003333;
+                font-size: 48px;
+                font-weight:400;
+                color: #414042;
+                letter-spacing:2px
             }
+            
+            
             h2 {
-              font: 400 14px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
-            }
-            .spacer {
-                height: 100px;
-            }
-            .header .wrapper {
-                margin: auto;
-                width: 1050px;
-            }
-            
-            .header {
-                background-color: #595959;
-                background-image: -moz-linear-gradient(0% 100%,0% 70%,#4a4a4a,#595959);
-                background-image: -o-gradient(linear,0% 100%,0% 70%,from(#4a4a4a),to(#595959));
-                background-image: -webkit-gradient(linear,0% 100%,0% 70%,from(#4a4a4a),to(#595959));
-                background-image: gradient(linear,0% 100%,0% 70%,from(#4a4a4a),to(#595959));
-                color: #AAA;
-                display: block;
-                height: 60px;
-            }
-            
-            .nav > a {
-                font: 400 18px/18px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
-                color: #AAA;
-                text-decoration: none;
-                display: inline-block;
-                padding: 10px;
-            }
-            .nav {
                 position: relative;
-                top: 12px;  
+                top: -25px;
+                font-size: 24px;
+                font-weight:300;
+                color: #414042;
             }
-            .nav {
-                float:right;
-            }
-
-	     .comingSoon {
-		 display: none;
-		 font: 400 36px/36px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
-	     }
             
-            h1 {
-              font: 400 20px/14px Calibri,"Lucida Grande",Lucida Sans,Arial,sans-serif;
-              font-weight:bold;
-              color: #003333;
+            .main {
+                width: 900px;
+                padding-top: 150px;
+                margin: 0 auto;
             }
-        </style>
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-27720942-1']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>
-        <script type="text/javascript">
-		jQuery.fn.center = function () {
-    			this.css("position","absolute");
-    			this.css("top", (($(window).height() - this.outerHeight()) / 2) + $(window).scrollTop() + "px");
-    			this.css("left", (($(window).width() - this.outerWidth()) / 2) + $(window).scrollLeft() + "px");
-    			return this;
-		}
-
-		
-		$(function() {
-			$("#mainView").hover(function() {
-				
-			},
-			function() {
-				$("#mainView").removeClass("hover");
-				$(".comingSoon").hide();
-			});
-
-			$(document).scroll(function() {
-				$(".comingSoon").center();
-			});
-
-			$("#mainView").click(function() {
-				$("#mainView").addClass("hover");
-				$(".comingSoon").center().show();
-
-			});
-			
-		});
-        </script>
+            
+            .main > div {
+                display: inline-block;
+                vertical-align: middle;
+            }
+            
+            .privateBeta {
+                margin-left: 55px;
+                margin-top: 15px;
+            }
+            
+            .privateBeta > div {
+                display: inline-block;
+                vertical-align: middle;
+                color: #939598;
+                padding: 5px;
+            }
+            
+            .left {
+                margin-top: 20px;
+                margin-right: 50px;
+            }
+            
+            .right {
+                padding-left: 50px;
+                height: 250px;
+                border-left: 1px solid #D1D3D4;
+                
+            }
+            
+            .signUp {
+                position: relative;
+                left: 5px;
+                top: 20px;
+            }
+            
+            .signUp > div {
+                display: inline-block;
+                vertical-align: top;
+            }
+            
+            .button {
+                margin-top: 2px;
+                margin-left: 15px;
+                border: 1px solid rgba(0, 0, 0, 0.4);
+                -moz-border-radius: 4px;
+                -webkit-border-radius: 4px;
+                border-radius: 4px;
+                background: #d2d2d2;
+                -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#d2d2d2')";
+                background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(245, 245, 245)), to(rgb(210, 210, 210)));
+                background: -moz-linear-gradient(top, rgb(245, 245, 245), rgb(210, 210, 210));
+                cursor: pointer !important;
+                vertical-align: middle;
+                padding: 6px 12px 6px 12px;
+            }
+            
+            .button:hover {
+                border: 1px solid rgba(0, 20, 40, 0.5);
+                background: #D2D7E6;
+                -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5faff', endColorstr='#d2d7e6')";
+                background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(245, 250, 255)), to(rgb(210, 215, 230)));
+                background: -moz-linear-gradient(top, rgb(245, 250, 255), rgb(210, 215, 230));
+                color: #235;    
+            }
+            
+            .button:active {
+                
+                border: 1px solid rgba(100, 120, 140, 0.9);
+                background: #F5FAFF;
+                -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#d2d7e6', endColorstr='#f5faff')";
+                background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(rgb(210, 215, 230)), to(rgb(245, 250, 255)));
+                background: -moz-linear-gradient(top, rgb(210, 215, 230), rgb(245, 250, 255));
+                color: #235;
+                -webkit-box-shadow: inset 0px 0px 4px rgba(0,0,0,0.3);
+                -moz-box-shadow: inset 0px 0px 4px rgba(0,0,0,0.3);
+                box-shadow: inset 0px 0px 4px rgba(0,0,0,0.3);
+            }
+            
+            input {
+                padding: 8px;
+                width: 360px;
+                font-size: 14px;
+                border: 1px solid #999;
+                border-radius: 4px;
+                -webkit-border-radius: 4px;
+                box-shadow: inset rgba(0,0,0,0.2) 0px 2px 5px;
+            }
+            
+            .field div {
+                width: 375px;
+                text-align: right;
+                font-size: 12px;
+            }
+            
+            .successUser > * {
+                display: inline-block;
+                vertical-align: middle;
+            }
+            
+            .successMsg {
+                margin-left: 10px;
+            }
+            
+            
+            
+            
+    </style>
+    <script type="text/javascript">
+        $(function() {
+            
+            
+            $(".button.join").click(function(e){
+            
+                var successMsg = function() {
+                    $(".signUp").hide();
+                    $(".successUser").show();
+                }
+            
+                $.ajax({
+                    type: "GET",
+                    url: "http://init.me/user/" + $(".signUp input").val(),
+                    success: successMsg,
+                    error: successMsg //for now
+                });
+            });     
+        });
+    </script>
     </head>
     <body>
-        <div class="header">
-            <div class="wrapper">
-                <img id="logo" src="images/logoinit.png"/>
-                <div class="nav">
-                    <a>Coming soon ...</a>
+        <div class="main">
+            <div class="left">
+                <div class="logo">
+                    <img src="images/logowhite.png"/>
+                </div>
+                <div class="privateBeta">
+                    <div class="img">
+                         <img src="images/lock.png"/>
+                    </div>
+                    <div class="text">
+                        private beta
+                    </div>
+                    
+                </div>
+            </div><div class="right">
+                <div class="title">
+                    <h1>Build, share & discover</h1>
+                    <h2>"Live" code snippets in php, ruby and javascript</h2>
+                </div>
+                <div class="successUser" style="display:none;">
+                    <img src="images/checkmark.png">
+                    <div class="successMsg">
+                        Thanks, we will email you about beta access soon.
+                    </div>
+                </div>
+                
+                <div class="signUp">
+                    <div class="field">
+                        <input type="text" size="16" name="u" id="u" placeholder="email">
+                        <div><span>No spam, we promise</span></div>
+                    </div>
+                    <div class="button join">
+                        Join
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div id="content">
-            <img id="mainView" src="images/homeview.png"></img>
-        </div>
-	 <div class="comingSoon">
-		Coming Soon ...
-	 </div>
-        <div class="spacer">
-            
         </div>
     </body>
 </html>

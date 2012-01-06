@@ -1,6 +1,8 @@
 var Connect = require("connect");
 var config = require("./config");
 var Project = require("./projects/Project");
+require("./User");
+
 
 var Path = require("path");
 var global = require("./global");
@@ -9,6 +11,8 @@ var async = require("async");
 var Editor = require("./editor");
 var fs = require('fs');
 var AppChecker = require("./checkapps");
+var User = mongoose.model("User");
+
 
 mongoose.connect(config.mongoURI);
 
@@ -49,7 +53,30 @@ io.sockets.on("connection", function(client) {
 server.use(Connect.static(__dirname + "/style"));
 server.use(Connect.router(function(app) {
 
+    app.get('/', function(req, res, next) {
+        //render user portal or ide
+
+    	fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
+    		res.end(index);
+    	});
+
+    });
     
+    app.get('/user/:email', function(req, res, next) {
+        
+        var usr = new User({"email": req.params.email});
+        usr.save(function(err, doc) {
+           if (err) {
+               res.writeHead(500);
+               res.end();
+           } else {
+               res.writeHead(200);
+               res.end();
+           }
+        });
+        
+    });
+
     app.get('/:id', function(req, res, next) {
         //render user portal or ide
 
