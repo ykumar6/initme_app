@@ -10,7 +10,7 @@ var CodeModule  = function(codeBoxes) {
 			if (item.changed) {
 				$.ajax({
 					type: "POST",
-					url: "http://init.me/" + document.projectId + "-portal/files/" + item.fileName,
+					url: "http://" + document.domain + "/" + document.projectId + "-portal/files/" + item.fileName,
 					data: item.editor.getValue(),
 					success: function() {
 						callback(null);

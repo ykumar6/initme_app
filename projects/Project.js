@@ -19,10 +19,10 @@ var Project = function(args) {
     this.clients = [];
     var self = this;
     
-    if (args.projectId || args.projectTitle) {
+    if (args.projectId || args.projectUrl) {
         async.waterfall(
             [
-                self._projectTasks.projectMustExist.bind(self, args.projectId, args.projectTitle)
+                self._projectTasks.projectMustExist.bind(self, args.projectId, args.projectUrl)
             ], 
         function(err) {
             args.ready(err);
@@ -91,6 +91,14 @@ var Project = function(args) {
     this.getTitle = function() {
         return this.model.projectTitle;
     };
+
+    this.getProjectUrl = function() {
+        return this.model.projectUrl;
+    };
+
+    this.getAuthorName = function() {
+        return this.model.authorName;
+    };
     
     this.isKeepAlive = function() {
         return this.model.keepAlive;
@@ -119,6 +127,8 @@ var Project = function(args) {
             var _self = this;
             var proj = new model({
                 "projectTitle" : args.proposedTitle || null,
+                "projectUrl" : args.proposedUrl || null,
+		  "authorName": args.authorName,
                 "root" : args.clone || args.framework,
                 "framework" : args.framework,
 		  "keepAlive": args.keepAlive || false
@@ -134,7 +144,7 @@ var Project = function(args) {
             })
         },
         
-        projectMustExist : function(projectId, projectTitle, callback) {
+        projectMustExist : function(projectId, projectUrl, callback) {
             var _self = this;
             var searchParams = {};
             if(projectId) {
@@ -143,7 +153,7 @@ var Project = function(args) {
                 };
             } else {
                 searchParams = {
-                    "projectTitle" : projectTitle
+                    "projectUrl" : projectUrl
                 };
             }
 

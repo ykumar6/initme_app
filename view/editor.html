@@ -19,6 +19,8 @@
         <script src="{static}/scripts/codemirror/mode/javascript/javascript.js"></script>
         <script src="{static}/scripts/codemirror/mode/css/css.js"></script>
         <script src="{static}/scripts/async/lib/async.js"></script>
+        <script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
+
 
         <script src="{static}/socket.io/socket.io.js"></script>
         <script type="text/javascript">
@@ -173,6 +175,7 @@ $(document).keydown(function(e) {
                 }
 
                 loadProject();
+						
 
 			var createProject = function(cb) {
                     			if (socketVM) {
@@ -183,7 +186,7 @@ $(document).keydown(function(e) {
                     			}
         				$.ajax({
         					type: "GET",
-        					url: "http://init.me/fork/" + document.projectId,
+        					url: "http://" + document.domain + "/fork/" + document.projectId,
         					success: function(data) {
         					    	data = JSON.parse(data);
         					       document.isOwner = true
@@ -201,21 +204,38 @@ $(document).keydown(function(e) {
         				});
 			};
 
+
+			var doSave = function() {
+				document.CodeCommands.save(function() {
+        					$.ajax({
+        						type: "GET",
+        						url: "http://" + document.domain + "/save/" + document.projectId,
+        						success: function(data) {
+								$(".projTitle").html(data.projectTitle);
+								$(".projTitle").inlineEdit({save: function(e, data) {
+        								$.post("http://" + document.domain + "/title/" + document.projectId, data);
+									return true;
+								}});
+								$(".projTitle").addClass("owner");
+        		       				window.history.pushState( {}, "", "http://" + document.domain + "/" + document.projectId);
+        						},
+        						error: function(err) {
+								console.log(err);
+								window.location = "/?state=loginEditor";
+        						}
+        					});
+				});
+			};
+
+
         		$(".button.save").mouseup(function() {
 				if (!$(".button.save").hasClass("disabled")) {
 					logHandler.clear();
         		   		if (!document.isOwner) {
-						createProject(function() {
-							document.CodeCommands.save(function(err) {
-								if (!err) {
-									window.history.pushState( {}, "", "http://init.me/" + document.projectId);
-								}
-							});
-						});
+						createProject(doSave);
 					}
 					else if (document.isOwner && document.URL.indexOf(document.projectId) < 0) {
-        		       		window.history.pushState( {}, "", "http://init.me/" + document.projectId);
-						document.CodeCommands.save();
+						doSave();
         		   		} else {
 						document.CodeCommands.save();
 					}
@@ -234,6 +254,37 @@ $(document).keydown(function(e) {
         			}
         		});
 
+        		$(".button.Logout").mouseup(function() {
+				window.location = "/logout?redirect=" + window.location;
+        		}); 
+
+        		$(".button.Login").mouseup(function() {
+				window.location = "/?state=loginEditor&redirect=" + window.location;
+        		}); 
+
+        		$(".button.share").mouseup(function(e) {
+				$("#sourceUrl").val("http://" + document.domain + "/" + document.projectId);
+				$("#appUrl").val("http://" + document.appUrl);
+				$(".shareDialog").css("top", "0px");
+				$(".shareDialog").css("left", "0px");
+				$( ".shareDialog" ).position({
+					of: $( ".button.share" ),
+					my: "right top",
+					at: "right bottom"
+				});
+				$(".shareDialog").show();
+        		}); 
+
+			$(".header").mouseup(function(e) {
+				if (!$(e.target).hasClass("share"))
+					e.target = $(e.target).parents(".button.share");
+
+				if (!$(e.target).hasClass("share")) {
+					$(".shareDialog").hide();
+				}
+			});
+
+
         		$(".button.reset").mouseup(function() {
 				if (!$(".button.reset").hasClass("disabled")) {
 					document.CodeCommands.reset();
@@ -243,11 +294,14 @@ $(document).keydown(function(e) {
 					}
 				}
         		});  
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
+	
+			if (document.isOwner) {
+				$(".projTitle").addClass("owner");
+				$(".projTitle").inlineEdit({save: function(e, data) {
+        				$.post("http://" + document.domain + "/title/" + document.projectId, data);
+					return true;
+				}});
+			}
             });
 
         </script>
@@ -299,12 +353,10 @@ $(document).keydown(function(e) {
                                     php
                                 </div>
                                 <div class="titleBox">
-                                    <div class="projTitle">Simple File Uploader</div>
-                                    <div class="author">ykumar6</div>
+                                    <div class="projTitle">{projectTitle}</div>
+                                    <div class="author">{authorName}</div>
                                 </div>
-				    <div class="gPlus">
-				    	<g:plusone size="small" annotation="none" href="http://init.me"></g:plusone>
-				    </div>
+
                             </div>
                             <div class="toolbar rightBar">
                                 <div class="button share">
@@ -314,12 +366,11 @@ $(document).keydown(function(e) {
                                     </div>
                                     <div class="drop"></div>
                                 </div>
-                                <div class="button new">
+                                <div class="button {login}">
                                     <div class="img"></div>
                                     <div class="caption">
-                                        New
+                                        {login}
                                     </div>
-                                    <div class="drop"></div>
                                 </div>
                             </div>
                         </div>
@@ -371,5 +422,15 @@ $(document).keydown(function(e) {
                     </div>
 				<div class="loading">
 				</div>
+			<div class="shareDialog" style="display:none;">
+				<div class="field source">
+					<div class="text">Share your source code</div>
+					<input id="sourceUrl" />
+				</div>
+				<div class="field app">
+					<div class="text">Share your app</div>
+					<input id="appUrl" />
+				</div>
+			</div>
                     </body>
                     </html> 

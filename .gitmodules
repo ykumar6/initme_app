@@ -1,3 +1,6 @@
 [submodule "style/scripts/async"]
 	path = style/scripts/async
 	url = https://github.com/caolan/async.git
+[submodule "passport-google-oauth"]
+	path = passport-google-oauth
+	url = git@github.com:ykumar6/passport-google-oauth.git

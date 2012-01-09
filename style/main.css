@@ -17,6 +17,35 @@ h3 {
     font-weight: 300;
 }
 
+button {
+    background-color:#fff;
+    border:1px solid #D3E5EC;
+    cursor: pointer;
+}
+
+.projTitle.owner:hover {
+	 background-color: #ffC;
+	 color: black;
+}
+
+.shareDialog {
+	z-index: 100;
+	border: 1px solid #D3E5EC;
+	box-shadow: 7px 7px 8px #818181;
+	-webkit-box-shadow: 7px 7px 8px #818181;
+	-moz-box-shadow: 7px 7px 8px #818181;
+	background-color: #FFF;
+	padding: 10px;
+}
+
+.shareDialog {
+	position: absolute;
+	width: 220px;
+}
+.shareDialog .field.app {
+	margin-top: 10px;
+}
+
 .projBox {
 	position: relative;
 	left: 60px;
@@ -317,6 +346,22 @@ body.inactive .loading {
 
 .button.share .img {
     background-image: url("images/share.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 23px;
+    height: 23px;
+}
+
+.button.Login .img {
+    background-image: url("images/login.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 23px;
+    height: 23px;
+}
+
+.button.Logout .img {
+    background-image: url("images/logout.png");
     background-repeat: no-repeat;
     background-position: center center;
     width: 23px;

@@ -3,6 +3,19 @@
     <head profile="http://www.w3.org/2005/10/profile">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27720942-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <style>
         
@@ -29,6 +42,41 @@
                 font-weight:300;
                 color: #414042;
             }
+
+	     a {
+		text-decoration: none;
+		color: #939598;	
+	     }
+	     
+	     a:hover {
+              text-decoration: underline;
+		color: #939598;	
+	     }
+
+
+            .header {
+                width: 900px;
+                margin: 0 auto;
+            }
+	
+	     .header > * {
+		  float: right;
+		  padding: 10px;
+	     }
+	
+	     .likeBtn {
+		 position: relative;
+		 top: 2px;
+ 		 width: 70px;
+		 overflow: hidden;
+	     }
+
+	     .googleBtn {
+		 position: relative;
+		 top: 2px;
+ 		 width: 180px;
+		 overflow: hidden;
+	     }
             
             .main {
                 width: 900px;
@@ -77,7 +125,8 @@
             }
             
             .button {
-                margin-top: 2px;
+		  font-size: 12px;
+                margin-top: 4px;
                 margin-left: 15px;
                 border: 1px solid rgba(0, 0, 0, 0.4);
                 -moz-border-radius: 4px;
@@ -139,32 +188,105 @@
                 margin-left: 10px;
             }
             
+            .options > div {
+                vertical-align: middle;
+                margin-top: 40px;
+                display: inline-block
+            }
             
+            .registerUser {
+                margin-top: 40px;
+            }
             
+            .registerUser .mainText {
+                font-size: 24px;
+                color: #414042;
+            }
+            
+            .registerUser .subText {
+                margin-top: 3px;
+                font-size: 18px;
+                color: #939598;
+            }
+            
+            .loginBtn {
+                padding: 15px;
+                opacity: 0.5;
+                cursor: pointer;
+            }
+            
+            .loginBtn:hover {
+                opacity: 1;
+            }
+            
+            .loginBtn.facebook {
+                border-left: 1px solid #D1D3D4;
+                border-right: 1px solid #D1D3D4;
+
+            }
+            
+            .loginBtn.google {
+                position:relative;
+                top: 4px;
+            }
+            
+            .arrowPointer {
+                margin-right: 20px;
+            }
+            
+            .noSpam {
+                text-align: right;
+                font-size: 11px;
+                color: #A7A9AC;
+            }
             
     </style>
     <script type="text/javascript">
         $(function() {
             
+            function getURLParameter(name) {
+                return decodeURI(
+                    (RegExp(name + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]
+                );
+            }
+            
+            var state = getURLParameter("state");
+
+	     if (typeof(state) === "string") {
+			if (state === "loginMain") {
+		              $(".landing").hide();
+                		$(".registerUser").show();
+			}
+			else if (state === "loginDirect") {
+		              $(".landing").hide();
+                		$(".registerUser").show();
+				$(".registerUser .mainText").html("Create & save unlimited code snippets");
+				$(".registerUser .subText").html("Please login with one of these services");
+
+			}
+			else if (state === "loginEditor") {
+		              $(".landing").hide();
+                		$(".registerUser").show();
+				$(".registerUser .mainText").html("Save unlimited code snippets");
+			}
+	     }
             
             $(".button.join").click(function(e){
-            
-                var successMsg = function() {
-                    $(".signUp").hide();
-                    $(".successUser").show();
-                }
-            
-                $.ajax({
-                    type: "GET",
-                    url: "http://init.me/user/" + $(".signUp input").val(),
-                    success: successMsg,
-                    error: successMsg //for now
-                });
+		  window.location = "/?state=loginMain";
             });     
+
+	     $("#loginBtn").click(function(e) {
+		  window.location = "/?state=loginDirect";
+	     });
         });
     </script>
     </head>
     <body>
+	 <div class="header">
+		<a id="loginBtn" href="javascript:void(0);">Login</a>
+		</div>
+
+	 </div>
         <div class="main">
             <div class="left">
                 <div class="logo">
@@ -180,24 +302,54 @@
                     
                 </div>
             </div><div class="right">
-                <div class="title">
-                    <h1>Build, share & discover</h1>
-                    <h2>"Live" code snippets in php, ruby and javascript</h2>
-                </div>
-                <div class="successUser" style="display:none;">
-                    <img src="images/checkmark.png">
-                    <div class="successMsg">
-                        Thanks, we will email you about beta access soon.
+
+                
+                <div class="registerUser" style="display:none;">
+                    <div class="mainText">
+                        You're almost done
                     </div>
+                    <div class="subText">
+                        Please link your account with one of these services
+                    </div>
+                    
+                    <div class="options">
+                        <div class="arrowPointer">
+                            <img src="images/arrow.png" />
+                        </div>
+                        <div class="loginBtn">
+                            <a href="/auth/github"><img src="images/github.png" /></a>
+                        </div>
+                        <div class="loginBtn facebook">
+                            <a href="/auth/facebook"><img src="images/facebook.png" /></a>
+                        </div>
+                        <div class="loginBtn google">
+                            <a href="/auth/google"><img src="images/google.png" /></a>
+                        </div>
+                    </div>
+                    <div class="noSpam">init.me does not spam or post to your wall</div>
                 </div>
                 
-                <div class="signUp">
-                    <div class="field">
-                        <input type="text" size="16" name="u" id="u" placeholder="email">
-                        <div><span>No spam, we promise</span></div>
+                <div class="landing">
+                    <div class="title">
+                        <h1>Build, share & discover</h1>
+                        <h2>"Live" code snippets in php, ruby and javascript</h2>
                     </div>
-                    <div class="button join">
-                        Join
+                    
+                    <div class="successUser" style="display:none;">
+                        <img src="images/checkmark.png">
+                        <div class="successMsg">
+                            Thanks, we will email you about beta access soon.
+                        </div>
+                    </div>
+                    
+                    <div class="signUp">
+                        <div class="field">
+                            <input type="text" size="16" name="u" id="u" placeholder="You're Name">
+                            <div><span></span></div>
+                        </div>
+                        <div class="button join">
+                            Request Invite
+                        </div>
                     </div>
                 </div>
             </div>

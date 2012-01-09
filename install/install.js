@@ -9,7 +9,9 @@ var projects = [
 	{
 		root: "parent",
 		framework: "php",
-		proposedTitle: "hello-world",
+		proposedTitle: "Hello World",
+		proposedUrl: "hello-world",
+		authorName: "Yash Kumar",
 		copyFrom: __dirname + "/php-hello-world",
 		keepAlive: true
 	}

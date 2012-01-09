@@ -1,11 +1,20 @@
 module.exports = {
+     
+     "facebook": {
+		"appId": "307201729318712",
+		"appSecret": "b8adc2fed7e4dd9ce305d3123892b94b"
+     },
+     "github": {
+		"appId": "7eacd7e39e8ec23cdf17",
+		"appSecret": "d793e412a23ae347c27fcc729e05907422d5c3eb"
+     },
      "ip": "10.160.37.27",
      "port": 8080,
-     "appDomain": "init.me",
+     "appDomain": "cloudcosmos.com",
      "mongoURI": "mongodb://ykumar6:fromme2u@staff.mongohq.com:10038/stacklaunch",
      "db": {
 		"db": "stacklaunch",
-		"host": "127.0.0.1",
+		"host": "staff.mongohq.com",
 		"port": 10038,
 		"username": "ykumar6",
 		"password": "fromme2u",
@@ -13,7 +22,7 @@ module.exports = {
      },
      "workspaceDir": "/initHome/",
      "tmpDir": "/initTemp/",
-     "cfhost": "api.init.me",
+     "cfhost": "api.cloudcosmos.com",
      "cfadmin": "kiwi@stackexpress.com",
      "cfpass": "p4554k1w1",
      "logger": {

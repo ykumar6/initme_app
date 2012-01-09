@@ -323,7 +323,7 @@ var CloudFoundry = function() {
                     "runtime" : null,
                     "framework" : framework
                 },
-                "uris" : [appUrl, "init.me/" + appName + "-portal"],
+                "uris" : [appUrl, config.appDomain + "/" + appName + "-portal"],
                 "name" : appName,
                 "resources" : {
                     "memory" : 256
