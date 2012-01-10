@@ -188,7 +188,7 @@ passport.use(new FacebookStrategy({
 
 passport.use(new GoogleStrategy({ 
     clientID : config.google.appId,
-    clientSecret : config.google.appDomain,
+    clientSecret : config.google.appSecret,
     callbackURL : "http://" + config.appDomain + "/auth/google/callback"
 }, handleLogin
 ));
