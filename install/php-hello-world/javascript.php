@@ -1,1 +1,1 @@
-var doc = {};
+console.log("Hello World");

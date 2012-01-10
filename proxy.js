@@ -187,9 +187,9 @@ passport.use(new FacebookStrategy({
 }, handleLogin));
 
 passport.use(new GoogleStrategy({ 
-    clientID : "338218178481.apps.googleusercontent.com",
-    clientSecret : "30r5WDxGc7mKgQxUb1vmlAp6",
-    callbackURL : "http://cloudcosmos.com/auth/google/callback"
+    clientID : config.google.appId,
+    clientSecret : config.google.appDomain,
+    callbackURL : "http://" + config.appDomain + "/auth/google/callback"
 }, handleLogin
 ));
 
@@ -452,4 +452,4 @@ app.get('/php/:projectUrl', function(req, res, next) {
     });
 });
 
-app.listen(80);
+app.listen(9787, config.ip);

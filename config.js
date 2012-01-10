@@ -8,9 +8,9 @@ module.exports = {
 		"appId": "7eacd7e39e8ec23cdf17",
 		"appSecret": "d793e412a23ae347c27fcc729e05907422d5c3eb"
      },
-     "ip": "10.160.37.27",
-     "port": 8080,
-     "appDomain": "cloudcosmos.com",
+     "ip": "10.167.9.87",
+     "port": 9787,
+     "appDomain": "init.me",
      "mongoURI": "mongodb://ykumar6:fromme2u@staff.mongohq.com:10038/stacklaunch",
      "db": {
 		"db": "stacklaunch",
@@ -22,7 +22,7 @@ module.exports = {
      },
      "workspaceDir": "/initHome/",
      "tmpDir": "/initTemp/",
-     "cfhost": "api.cloudcosmos.com",
+     "cfhost": "api.init.me",
      "cfadmin": "kiwi@stackexpress.com",
      "cfpass": "p4554k1w1",
      "logger": {
