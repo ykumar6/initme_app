@@ -8,14 +8,18 @@ module.exports = {
 		"appId": "7eacd7e39e8ec23cdf17",
 		"appSecret": "d793e412a23ae347c27fcc729e05907422d5c3eb"
      },
+     "google": {
+		"appId": "338218178481.apps.googleusercontent.com",
+		"appSecret": "30r5WDxGc7mKgQxUb1vmlAp6"
+     },
      "ip": "10.160.37.27",
-     "port": 8080,
+     "port": 80,
      "appDomain": "cloudcosmos.com",
-     "mongoURI": "mongodb://ykumar6:fromme2u@staff.mongohq.com:10038/stacklaunch",
+     "mongoURI": "mongodb://ykumar6:fromme2u@staff.mongohq.com:10008/stacklaunch_dev",
      "db": {
-		"db": "stacklaunch",
+		"db": "stacklaunch_dev",
 		"host": "staff.mongohq.com",
-		"port": 10038,
+		"port": 10008,
 		"username": "ykumar6",
 		"password": "fromme2u",
 		"collection": "initSessions"
