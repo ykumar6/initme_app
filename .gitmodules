@@ -3,4 +3,7 @@
 	url = https://github.com/caolan/async.git
 [submodule "passport-google-oauth"]
 	path = passport-google-oauth
-	url = git@github.com:ykumar6/passport-google-oauth.git
+	url = https://ykumar6@github.com/ykumar6/passport-google-oauth.git
+[submodule "style/scripts/inlineedit"]
+	path = style/scripts/inlineedit
+	url = git://github.com/caphun/jquery.inlineedit.git
