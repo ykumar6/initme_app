@@ -26,7 +26,7 @@ module.exports = {
      },
      "workspaceDir": "/initHome/",
      "tmpDir": "/initTemp/",
-     "cfhost": "api.cloudcosmos.com",
+     "cfhost": "api.init.me",
      "cfadmin": "kiwi@stackexpress.com",
      "cfpass": "p4554k1w1",
      "logger": {
