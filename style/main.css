@@ -195,17 +195,21 @@ body.inactive .loading
 
 body.inactive #appFrame {
 	opacity: 0;
+	-ms-filter: "alpha(opacity=0)";
 }
 
 body #appFrame {
 	-webkit-transition: opacity 0.2s;
 	opacity: 1;
+	-ms-filter: "alpha(opacity=100)";
+
 }
 
 .loading {
 	z-index: 100;
 	-webkit-transition: opacity 0.2s;
 	opacity: 0;
+	-ms-filter: "alpha(opacity=0)";
 	background-image: url("images/loading.png");
 	width: 120px;
 	height: 117px;
@@ -213,6 +217,7 @@ body #appFrame {
 
 body.inactive .loading {
 	opacity: 1.0;
+	-ms-filter: "alpha(opacity=100)";
 }
 
 .floatBar {
@@ -220,6 +225,7 @@ body.inactive .loading {
 	right: 5px;
 	top: 5px;
 	z-index: 100;
+	-ms-filter: "alpha(opacity=50)";
 	opacity: 0.5;	
 }
 
@@ -301,6 +307,8 @@ body.inactive .loading {
 
 .toolbar .button.disabled > div {
 	opacity: 0.2;
+	-ms-filter: "alpha(opacity=20)";
+
 }
 
 .toolbar .button.disabled:hover {
@@ -481,17 +489,19 @@ input {
 }
 .browserBar > * {
     vertical-align: middle;
-    display: inline-block;
+    display: inline-block;	
 }
 .btnRefresh {
     background-image: url("images/refreshbtn.png");
     width: 18px;
     height: 18px;
     opacity: 0.50;
+    -ms-filter: "alpha(opacity=50)";
     cursor: pointer;
 }
 .btnRefresh:hover {
     opacity: 1;
+    -ms-filter: "alpha(opacity=100)";
 }
 .popBtn {
     cursor: pointer;

@@ -1,6 +1,9 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
     <head profile="http://www.w3.org/2005/10/profile">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	 <script src="{static}/socket.io/socket.io.js"></script>
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
         <script  type="text/javascript" src="{static}/scripts/layout.js"></script>
@@ -21,9 +24,12 @@
         <script src="{static}/scripts/async/lib/async.js"></script>
         <script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
 
-
-        <script src="{static}/socket.io/socket.io.js"></script>
         <script type="text/javascript">
+	     if (!window.console) {
+		 window.console = function(){};
+	     }
+
+
             io.util.uniqueUri = function(uri) {
                 var protocol = uri.protocol, host = uri.host, port = uri.port;
                 host = host || document.domain;
@@ -40,7 +46,7 @@
 
 $(document).keydown(function(e) {
     var doPrevent;
-    if (window.event.ctrlKey && e.keyCode == 83) {
+    if (e.ctrlKey && e.keyCode == 83) {
 	doPrevent = true;
     }
     else if (e.keyCode == 8) {
@@ -140,7 +146,6 @@ $(document).keydown(function(e) {
                 var logHandler = new Logger(southPane);
                 var socketVM, socketMain;
                 var loadProject = function(cb) {
-                    
                     var tryVMConnect = function() {
                         socketVM = socketVM = io.connect("/", {
                             resource : "" + document.projectId + "-portal/socket.io",
@@ -148,7 +153,6 @@ $(document).keydown(function(e) {
                         });
     
                         socketVM.on("error", function(err) {
-                            console.log("error");
                             setTimeout(tryVMConnect, 1000);
                         });
                         socketVM.on("connect", function(err) {
@@ -174,7 +178,7 @@ $(document).keydown(function(e) {
                     tryVMConnect();
                 }
 
-                loadProject();
+		  setTimeout(loadProject, 1000);
 						
 
 			var createProject = function(cb) {
@@ -186,12 +190,13 @@ $(document).keydown(function(e) {
                     			}
         				$.ajax({
         					type: "GET",
-        					url: "http://" + document.domain + "/fork/" + document.projectId,
+        					url: "http://" + document.domain + "/fork/" + document.projectId + "?ts=" + (new Date()).getTime(),
+						dataType: "json",
         					success: function(data) {
-        					    	data = JSON.parse(data);
         					       document.isOwner = true
         						document.projectId = data.projectId;
         						document.appUrl = data.appUrl;
+							console.log("loading project");
         						loadProject(cb); //reload project connections
         					},
         					error: function() {
@@ -209,7 +214,7 @@ $(document).keydown(function(e) {
 				document.CodeCommands.save(function() {
         					$.ajax({
         						type: "GET",
-        						url: "http://" + document.domain + "/save/" + document.projectId,
+        						url: "http://" + document.domain + "/save/" + document.projectId + "?ts=" +(new Date()).getTime(),
         						success: function(data) {
 								$(".projTitle").html(data.projectTitle);
 								$(".projTitle").inlineEdit({save: function(e, data) {
@@ -217,7 +222,12 @@ $(document).keydown(function(e) {
 									return true;
 								}});
 								$(".projTitle").addClass("owner");
-        		       				window.history.pushState( {}, "", "http://" + document.domain + "/" + document.projectId);
+								if (window.history && window.history.pushState) {
+        		       					window.history.pushState( {}, "", "http://" + document.domain + "/" + document.projectId);
+								}
+								else {
+        		       					window.location = "http://" + document.domain + "/" + document.projectId;
+								}
         						},
         						error: function(err) {
 								console.log(err);

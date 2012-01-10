@@ -385,6 +385,7 @@ app.get("/save/:projectId", function(req, res, next) {
 				if (err) {
 					res.send(500);
 				} else {
+					res.contentType('json');
 					res.send({authorName: proj.getAuthorName(), projectTitle: proj.getTitle()});
 				}
 			});
@@ -400,6 +401,7 @@ app.get('/fork/:projectId', function(req, res, next) {
     //fork new root app
     var framework = "php";
 
+	 console.log("Received fork request........!!!");
         var proj = new Project({
            "framework" : framework,
            "authorName":  "Unknown",
@@ -413,7 +415,9 @@ app.get('/fork/:projectId', function(req, res, next) {
                     var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
                     projList.push(proj.getId());
                     AppChecker.addActiveApp(proj);
-    
+    		
+		      console.log("new project id");
+		      console.log(proj.getId());
                     res.setHeader("Set-Cookie", "INITME=," + projList.join(","));
                     res.writeHead(200);
                     res.end(JSON.stringify({

@@ -35,17 +35,22 @@ var Logger = function(uiPane) {
     this.addSocket = function(socket) {
         var self = this;
 
-	 console.log(socket);
+	 var handleConnect = function() {
+			$("body").removeClass("inactive");
+			$("#appFrame").attr("src", "http://" + document.appUrl);
+    			self.handleMsg({
+				type: "check",
+				text: "Successfully activated your virtual machine",
+				time: new Date()
+    			});
+	 }
+
+	 if (socket.socket.connected) {
+		handleConnect();
+	 }
 
 	 socket.on("connect", function() {
-		console.log("connected");
-		$("body").removeClass("inactive");
-		$("#appFrame").attr("src", "http://" + document.appUrl);
-    		self.handleMsg({
-			type: "check",
-			text: "Successfully activated your virtual machine",
-			time: new Date()
-    		});
+		handleConnect();
 	 });
 	 socket.on("reconnecting", function() {
 		self._isConnecting();
