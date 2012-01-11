@@ -10,7 +10,6 @@
         <script  type="text/javascript" src="{static}/scripts/tabs.js"></script>
         <script  type="text/javascript" src="{static}/scripts/logger.js"></script>
 
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
@@ -25,9 +24,7 @@
         <script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
 
         <script type="text/javascript">
-	     if (!window.console) {
-		 window.console = function(){};
-	     }
+
 
 
             io.util.uniqueUri = function(uri) {
@@ -42,6 +39,31 @@
             document.appUrl = "{appUrl}";
 	        document.isOwner = {isOwner};
             $(function() {
+
+ var alertFallback = false;
+   if (typeof console === "undefined" || typeof console.log === "undefined") {
+     console = {};
+     if (alertFallback) {
+         console.log = function(msg) {
+              alert(msg);
+         };
+     } else {
+         console.log = function() {};
+     }
+   }
+
+function IsIE8Browser() {
+    var rv = -1;
+    var ua = navigator.userAgent;
+    var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null) {
+        rv = parseFloat(RegExp.$1);
+    }
+    return (rv == 4);
+};
+	if (IsIE8Browser()) {
+		$("body").addClass("ie8");
+	}
                 document.CodeCommands = CodeModule($(".editor"));
 
 $(document).keydown(function(e) {
@@ -178,7 +200,7 @@ $(document).keydown(function(e) {
                     tryVMConnect();
                 }
 
-		  setTimeout(loadProject, 1000);
+		  loadProject();
 						
 
 			var createProject = function(cb) {

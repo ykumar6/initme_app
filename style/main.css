@@ -215,9 +215,22 @@ body #appFrame {
 	height: 117px;
 }
 
+body.ie8 .loading {
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)";
+	display: none;
+}
+
+
 body.inactive .loading {
 	opacity: 1.0;
 	-ms-filter: "alpha(opacity=100)";
+}
+
+body.ie8.inactive .loading {
+	opacity: 1.0;
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(enabled=false)";
+	display: block;
+
 }
 
 .floatBar {
