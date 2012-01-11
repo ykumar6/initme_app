@@ -67,9 +67,9 @@ var Project = function(args) {
         var idx = this.clients.indexOf(client);
         if (idx >= 0) {
             this.clients.splice(idx, 1);
-        }
-        if (this.clients.length === 0 && !this.isKeepAlive) {
-            
+        }	
+        if (this.clients.length === 0 && !this.isKeepAlive()) {
+            console.log("killing project"); 
             if (this.killTimer) {
                 clearTimeout(this.killTimer);
             }
@@ -136,7 +136,8 @@ var Project = function(args) {
             proj.save(function(err, doc) {
                 console.log(err);
                 if(err) {
-                    callback("Couldn't create unique project", namespace);
+		    console.log(err)
+                    callback("Couldn't create unique project", args);
                 } else {
                     _self.model = doc;
                     callback(null);
