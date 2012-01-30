@@ -9,6 +9,8 @@
         <script  type="text/javascript" src="{static}/scripts/layout.js"></script>
         <script  type="text/javascript" src="{static}/scripts/tabs.js"></script>
         <script  type="text/javascript" src="{static}/scripts/logger.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/projectManagement.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
 
         <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
@@ -22,11 +24,11 @@
         <script src="{static}/scripts/codemirror/mode/css/css.js"></script>
         <script src="{static}/scripts/async/lib/async.js"></script>
         <script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
-
+<!-- begin olark code --><script type='text/javascript'>/*{literal}<![CDATA[*/window.olark||(function(i){var e=window,h=document,a=e.location.protocol=="https:"?"https:":"http:",g=i.name,b="load";(function(){e[g]=function(){(c.s=c.s||[]).push(arguments)};var c=e[g]._={},f=i.methods.length; while(f--){(function(j){e[g][j]=function(){e[g]("call",j,arguments)}})(i.methods[f])} c.l=i.loader;c.i=arguments.callee;c.f=setTimeout(function(){if(c.f){(new Image).src=a+"//"+c.l.replace(".js",".png")+"&"+escape(e.location.href)}c.f=null},20000);c.p={0:+new Date};c.P=function(j){c.p[j]=new Date-c.p[0]};function d(){c.P(b);e[g](b)}e.addEventListener?e.addEventListener(b,d,false):e.attachEvent("on"+b,d); (function(){function l(j){j="head";return["<",j,"></",j,"><",z,' onl'+'oad="var d=',B,";d.getElementsByTagName('head')[0].",y,"(d.",A,"('script')).",u,"='",a,"//",c.l,"'",'"',"></",z,">"].join("")}var z="body",s=h[z];if(!s){return setTimeout(arguments.callee,100)}c.P(1);var y="appendChild",A="createElement",u="src",r=h[A]("div"),G=r[y](h[A](g)),D=h[A]("iframe"),B="document",C="domain",q;r.style.display="none";s.insertBefore(r,s.firstChild).id=g;D.frameBorder="0";D.id=g+"-loader";if(/MSIE[ ]+6/.test(navigator.userAgent)){D.src="javascript:false"} D.allowTransparency="true";G[y](D);try{D.contentWindow[B].open()}catch(F){i[C]=h[C];q="javascript:var d="+B+".open();d.domain='"+h.domain+"';";D[u]=q+"void(0);"}try{var H=D.contentWindow[B];H.write(l());H.close()}catch(E){D[u]=q+'d.write("'+l().replace(/"/g,String.fromCharCode(92)+'"')+'");d.close();'}c.P(2)})()})()})({loader:(function(a){return "static.olark.com/jsclient/loader0.js?ts="+(a?a[1]:(+new Date))})(document.cookie.match(/olarkld=([0-9]+)/)),name:"olark",methods:["configure","extend","declare","identify"]});
+/* custom configuration goes here (www.olark.com/documentation) */
+olark.identify('5621-433-10-9060');/*]]>{/literal}*/</script>
+<!-- end olark code -->
         <script type="text/javascript">
-
-
-
             io.util.uniqueUri = function(uri) {
                 var protocol = uri.protocol, host = uri.host, port = uri.port;
                 host = host || document.domain;
@@ -37,55 +39,38 @@
 
             document.projectId = "{projId}";
             document.appUrl = "{appUrl}";
-	        document.isOwner = {isOwner};
+            document.oauth = "{oauth}";
+            document.isOwner = {isOwner};
+            document.FacebookId = "{facebookId}";
+            
             $(function() {
 
- var alertFallback = false;
-   if (typeof console === "undefined" || typeof console.log === "undefined") {
-     console = {};
-     if (alertFallback) {
-         console.log = function(msg) {
-              alert(msg);
-         };
-     } else {
-         console.log = function() {};
-     }
-   }
+                var alertFallback = false;
+                if( typeof console === "undefined" || typeof console.log === "undefined") {
+                    console = {};
+                    if(alertFallback) {
+                        console.log = function(msg) {
+                            alert(msg);
+                        };
+                    } else {
+                        console.log = function() {
+                        };
+                    }
+                }
 
-function IsIE8Browser() {
-    var rv = -1;
-    var ua = navigator.userAgent;
-    var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
-    if (re.exec(ua) != null) {
-        rv = parseFloat(RegExp.$1);
-    }
-    return (rv == 4);
-};
-	if (IsIE8Browser()) {
-		$("body").addClass("ie8");
-	}
-                document.CodeCommands = CodeModule($(".editor"));
+                function IsIE8Browser() {
+                    var rv = -1;
+                    var ua = navigator.userAgent;
+                    var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
+                    if(re.exec(ua) != null) {
+                        rv = parseFloat(RegExp.$1);
+                    }
+                    return (rv == 4);
+                };
 
-$(document).keydown(function(e) {
-    var doPrevent;
-    if (e.ctrlKey && e.keyCode == 83) {
-	doPrevent = true;
-    }
-    else if (e.keyCode == 8) {
-        var d = e.srcElement || e.target;
-        if (d.tagName.toUpperCase() == 'INPUT' || d.tagName.toUpperCase() == 'TEXTAREA') {
-            doPrevent = d.readOnly || d.disabled;
-        }
-        else
-            doPrevent = true;
-    }
-    else
-        doPrevent = false;
-
-    if (doPrevent)
-        e.preventDefault();
-});
-
+                if(IsIE8Browser()) {
+                    $("body").addClass("ie8");
+                }
                 $('body').layout({
                     north__resizable : false,
                     north__closable : false,
@@ -105,7 +90,7 @@ $(document).keydown(function(e) {
                     north__paneSelector : ".codearea-north",
                     center__paneSelector : ".codearea-center",
                     center__onresize : function() {
-                        //codeEditor.refresh();
+                        document.CodeCommands.refresh("main");
                     }
                 })
 
@@ -113,6 +98,9 @@ $(document).keydown(function(e) {
                     north__resizable : false,
                     north__closable : false,
                     center__paneSelector : ".server-center",
+                    center__onresize : function() {
+                        document.CodeCommands.refresh("secondary");
+                    },
                     south__paneSelector : ".server-south",
                     south__size : "50%",
                     south__closable : false,
@@ -138,7 +126,7 @@ $(document).keydown(function(e) {
                     south__slidable : false
 
                 });
-                
+
                 var positionLoading = function() {
                     setTimeout(function() {
                         $(".loading").position({
@@ -146,204 +134,220 @@ $(document).keydown(function(e) {
                             my : "center center",
                             at : "center center"
                         });
+                        $(".facebook_oauth").position({
+                            of : $(".browser-center"),
+                            my : "center center",
+                            at : "center center"
+                        });
                     }, 10);
+                    
                 };
                 positionLoading();
-		  $("body").bind("save", function(e, state) {
-			if (!$(".button.save").hasClass("disabled")) {
-				$(".button.save").addClass("disabled");
-			}
-		  });
-		  $("body").bind("push", function(e, state) {
-			if (!$(".button.save").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
-				$(".button.save").addClass("disabled");
-			}
-			var iframe = document.getElementById("appFrame");
-			iframe.src = iframe.src;
-		  });
-
+                
+                document.CodeCommands = CodeModule($(".editor")); //load up editor
+                var oauthSession, projectSession;
+                document.logHandler = new Logger(southPane);
 
                 
+                projectSession = new document.ProjectManagement();
+                if (document.oauth === "facebook") {
+                    projectSession.setState("oauth");
+
+                    oauthSession = new document.FacebookOAuth();
+                    $("body").bind("oauthLogin", function(e, token) {
+			   window.accessToken = token;
+			   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken);
+                        projectSession.setState("active");
+                    });
+                    $("body").bind("oauthLogout", function(e) {
+                        projectSession.setState("oauth");
+                    });
+                } 
+		  else {
+		      $(".tag.facebook").hide();
+			projectSession.setState("active");
+		  }
+                projectSession.loadProject();
+
                 
-                var logHandler = new Logger(southPane);
-                var socketVM, socketMain;
-                var loadProject = function(cb) {
-                    var tryVMConnect = function() {
-                        socketVM = socketVM = io.connect("/", {
-                            resource : "" + document.projectId + "-portal/socket.io",
-                            "force new connection" : true
+                $("body").bind("vmConnected", function(e) {
+                    projectSession.setState("vmActive");
+                });
+                $("body").bind("vmDisconnected", function(e) {
+                    projectSession.setState("vmInactive");
+                });
+                
+
+                
+                var _save = function() {
+                    document.CodeCommands.save(function() {
+                        $.ajax({
+                            type : "GET",
+                            url : "http://" + document.domain + "/save/" + document.projectId + "?ts=" + (new Date()).getTime(),
+                            success : function(data) {
+                                $(".title h1").html(data.projectTitle);
+                                $(".subTitle h2").html(data.subTitle);
+
+                                $(".title h1").inlineEdit({
+                                    save : function(e, data) {
+                                        $.post("http://" + document.domain + "/title/" + document.projectId, data);
+                                        return true;
+                                    }
+                                });
+                                $(".title h1").addClass("owner");
+
+                    		    $(".subTitle h2").addClass("owner");
+                    		    $(".subTitle h2").inlineEdit({
+                        		save : function(e, data) {
+                            		$.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
+                            		return true;
+                        		}
+                    		    });
+                                if(window.history && window.history.pushState) {
+                                    window.history.pushState({}, "", "http://" + document.domain + "/" + document.projectId);
+                                } else {
+                                    window.location = "http://" + document.domain + "/" + document.projectId;
+                                }
+                            },
+                            error : function(err) {
+                                console.log(err);
+                                window.location = "/?state=loginEditor";
+                            }
                         });
-    
-                        socketVM.on("error", function(err) {
-                            setTimeout(tryVMConnect, 1000);
-                        });
-                        socketVM.on("connect", function(err) {
-				if (cb) 
-					cb();
-                        });
-                        logHandler.addSocket(socketVM);
-                    };
-                    var tryMainConnect = function() {
-                        socketMain = io.connect("/", {
-                            "force new connection" : true
-                        });
-                        socketMain.on('connect', function() {
-                            socketMain.emit("attach", {
-                                "projectId" : document.projectId
-                            });
-                        });
-                        socketMain.on("error", function(err) {
-                            setTimeout(tryMainConnect, 1000);
-                        });
-                    };
-                    tryMainConnect();
-                    tryVMConnect();
+                    });
                 }
 
-		  loadProject();
-						
+                $(".btn.fork").mouseup(function() {
+                    if(!$(".btn.fork").hasClass("disabled")) {
+                        document.logHandler.clear();
+                        if(!document.isOwner) {
+                            projectSession.createProject(_save);
+                        } else if(document.isOwner && document.URL.indexOf(document.projectId) < 0) {
+                            _save();
+                        } else {
+                            document.CodeCommands.save();
+                        }
+                    }
+                });
 
-			var createProject = function(cb) {
-                    			if (socketVM) {
-                        			socketVM.disconnect();
-                    			}
-                    			if (socketMain) {
-                        			socketMain.disconnect();
-                    			}
-        				$.ajax({
-        					type: "GET",
-        					url: "http://" + document.domain + "/fork/" + document.projectId + "?ts=" + (new Date()).getTime(),
-						dataType: "json",
-        					success: function(data) {
-        					       document.isOwner = true
-        						document.projectId = data.projectId;
-        						document.appUrl = data.appUrl;
-							console.log("loading project");
-        						loadProject(cb); //reload project connections
-        					},
-        					error: function() {
-        						logHandler.handleMsg({
-        							type: "warn",
-        							text: "Unable to run your code. Please try again",
-        							time: new Date()
-        						});
-        					}
-        				});
-			};
+                $(".btn.run").click(function() {
+                    if (!projectSession.isActive) return;
+                    
+                    document.logHandler.clear();
+                    if(document.isOwner) {
+                        document.CodeCommands.push();
+                    } else {
+                        projectSession.createProject(function() {
+                            document.CodeCommands.push();
+                        });
+                    }
+                });
 
+                $(".button.reset").mouseup(function() {
+                    if(!$(".button.reset").hasClass("disabled")) {
+                        document.CodeCommands.reset();
+                        $(".button.reset").addClass("disabled");
+                        if($(".button.save").hasClass("disabled")) {
+                            $(".button.save").removeClass("disabled");
+                        }
+                    }
+                });
 
-			var doSave = function() {
-				document.CodeCommands.save(function() {
-        					$.ajax({
-        						type: "GET",
-        						url: "http://" + document.domain + "/save/" + document.projectId + "?ts=" +(new Date()).getTime(),
-        						success: function(data) {
-								$(".projTitle").html(data.projectTitle);
-								$(".projTitle").inlineEdit({save: function(e, data) {
-        								$.post("http://" + document.domain + "/title/" + document.projectId, data);
-									return true;
-								}});
-								$(".projTitle").addClass("owner");
-								if (window.history && window.history.pushState) {
-        		       					window.history.pushState( {}, "", "http://" + document.domain + "/" + document.projectId);
-								}
-								else {
-        		       					window.location = "http://" + document.domain + "/" + document.projectId;
-								}
-        						},
-        						error: function(err) {
-								console.log(err);
-								window.location = "/?state=loginEditor";
-        						}
-        					});
-				});
-			};
+                $("body").bind("save", function(e, state) {
+                    if(!$(".btn.fork").hasClass("disabled")) {
+                        $(".btn.fork").addClass("disabled");
+                    }
+                });
+                $("body").bind("push", function(e, state) {
+                    if(!$(".btn.fork").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
+                        $(".btn.fork").addClass("disabled");
+                    }
+                    var iframe = document.getElementById("appFrame");
+                    iframe.src = iframe.src;
+                });
 
 
-        		$(".button.save").mouseup(function() {
-				if (!$(".button.save").hasClass("disabled")) {
-					logHandler.clear();
-        		   		if (!document.isOwner) {
-						createProject(doSave);
-					}
-					else if (document.isOwner && document.URL.indexOf(document.projectId) < 0) {
-						doSave();
-        		   		} else {
-						document.CodeCommands.save();
-					}
-				}
-			});
+                $("a.LOGOUT").mouseup(function() {
+                    window.location = "/logout?redirect=" + window.location;
+                });
 
-        		$(".button.play").mouseup(function() {
-				if (!socketVM || !socketVM.socket.connected) return;
-				logHandler.clear();
-        			if (document.isOwner) {
-        			    document.CodeCommands.push();
-        			} else {
-					createProject(function() {
-						document.CodeCommands.push();
-					});
-        			}
-        		});
+                $("a.LOGIN").mouseup(function() {
+                    window.location = "/?state=loginEditor&redirect=" + window.location;
+                });
 
-        		$(".button.Logout").mouseup(function() {
-				window.location = "/logout?redirect=" + window.location;
-        		}); 
+                $(".btn.newCode").mouseup(function() {
+                    window.location = "/?state=newCode";
+                });
 
-        		$(".button.Login").mouseup(function() {
-				window.location = "/?state=loginEditor&redirect=" + window.location;
-        		}); 
+                $(".btn.discoverCode").mouseup(function() {
+                    window.location = "/?state=discoverCode";
+                });
 
-        		$(".button.share").mouseup(function(e) {
-				$("#sourceUrl").val("http://" + document.domain + "/" + document.projectId);
-				$("#appUrl").val("http://" + document.appUrl);
-				$(".shareDialog").css("top", "0px");
-				$(".shareDialog").css("left", "0px");
-				$( ".shareDialog" ).position({
-					of: $( ".button.share" ),
-					my: "right top",
-					at: "right bottom"
-				});
-				$(".shareDialog").show();
-        		}); 
-
-			$(".header").mouseup(function(e) {
-				if (!$(e.target).hasClass("share"))
-					e.target = $(e.target).parents(".button.share");
-
-				if (!$(e.target).hasClass("share")) {
-					$(".shareDialog").hide();
-				}
-			});
+                $(".btn.download").mouseup(function() {
+                    window.location = "/?state=downloadCode";
+                });
 
 
-        		$(".button.reset").mouseup(function() {
-				if (!$(".button.reset").hasClass("disabled")) {
-					document.CodeCommands.reset();
-					$(".button.reset").addClass("disabled");
-					if ($(".button.save").hasClass("disabled")) {
-						$(".button.save").removeClass("disabled");
-					}
-				}
-        		});  
-	
-			if (document.isOwner) {
-				$(".projTitle").addClass("owner");
-				$(".projTitle").inlineEdit({save: function(e, data) {
-        				$.post("http://" + document.domain + "/title/" + document.projectId, data);
-					return true;
-				}});
-			}
+                $(".btn.share").click(function(e) {
+                    $("#sourceUrl").val("http://" + document.domain + "/" + document.projectId);
+                    $("#appUrl").val("http://" + document.appUrl);
+                    $(".shareDialog").css("top", "0px");
+                    $(".shareDialog").css("left", "0px");
+                    $(".shareDialog").position({
+                        of : $(".btn.share"),
+                        offset : "5 5",
+
+                        my : "right top",
+                        at : "right bottom"
+                    });
+                    $(".shareDialog").show();
+                });
+
+                $(".headerWrapper").click(function(e) {
+                    if(!$(e.target).hasClass("share"))
+                        e.target = $(e.target).parents(".btn.share");
+
+                    if(!$(e.target).hasClass("share")) {
+                        $(".shareDialog").hide();
+                    }
+                });
+
+                $(".projAreaWrapper").click(function(e) {
+                    if(!$(e.target).hasClass("share"))
+                        e.target = $(e.target).parents(".btn.share");
+
+                    if(!$(e.target).hasClass("share")) {
+                        $(".shareDialog").hide();
+                    }
+                });
+
+                if(document.isOwner) {
+                    $(".title h1").addClass("owner");
+                    $(".title h1").inlineEdit({
+                        save : function(e, data) {
+                            $.post("http://" + document.domain + "/title/" + document.projectId, data);
+                            return true;
+                        }
+                    });
+                    $(".subTitle h2").addClass("owner");
+                    $(".subTitle h2").inlineEdit({
+                        save : function(e, data) {
+                            $.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
+                            return true;
+                        }
+                    });
+                }
+
             });
 
         </script>
     </head>
-    <body class="inactive">
+    <body>
         <div class="ui-layout-center">
             <div class="codearea-center">
                 <div class="code-center">
                     <div class="editor html active" fileName="main.php">
-                        <textarea class="code" mode="application/x-httpd-php"">
+                        <textarea class="code" mode="application/x-httpd-php" name="main.php">
 {main.php}
 </textarea>
                     </div>
@@ -351,71 +355,91 @@ $(document).keydown(function(e) {
                         <div class="floatTab active">
                             PHP
                         </div>
-                    </div>
-                    
+                    </div>          
                     </div>
                     
                 </div>
          </div>
                     <div class="ui-layout-north">
+			   <div class="headerWrapper">
                         <div class="header">
                             <div class="logo"></div>
-                            <div class="toolbar leftBar">
-                                <div class="button play">
-                                    <div class="img"></div>
-                                    <div class="caption">
-                                        Run
-                                    </div>
-                                </div>
-                                <div class="button save disabled">
-                                    <div class="img"></div>
-                                    <div class="caption">
-                                        Save
-                                    </div>
-                                </div>
-                                <div class="button reset disabled">
-                                    <div class="img"></div>
-                                    <div class="caption">
-                                        Reset
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="projBox">
-                                <div class="tag">
-                                    php
-                                </div>
-                                <div class="titleBox">
-                                    <div class="projTitle">{projectTitle}</div>
-                                    <div class="author">{authorName}</div>
-                                </div>
+				<div class="headerOptions">
+					<div class="btn newCode">
+						<div class="caption">
+							New Code
+						</div>
+						<div class="subText">
+							Build & share code
+						</div>
+					</div>
+					<div class="btn discoverCode">
+						<div class="caption">
+							Discover
+						</div>
+						<div class="subText">
+							Code snippets & apps
+						</div>
+					</div>
+				</div>
+                            <div class="toolbar rightBar">
+					<a href="/?state=Blog">BLOG</a>
+					<a href="/?state=loginDirect">SIGN UP</a>
+					<a class="{login}" href="javascript:void(0)">{login}</a>
 
                             </div>
-                            <div class="toolbar rightBar">
-                                <div class="button share">
-                                    <div class="img"></div>
-                                    <div class="caption">
-                                        Share
-                                    </div>
-                                    <div class="drop"></div>
-                                </div>
-                                <div class="button {login}">
-                                    <div class="img"></div>
-                                    <div class="caption">
-                                        {login}
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+			   </div>	
+			   <div class="projAreaWrapper">
+                        <div class="projArea">
+				<div class="projLeft"> 
+					<div class="info">
+						<div class="title">
+							<h1>{title}</h1>
+							<div class="tags">
+								<div class="tag facebook"><h3>facebook</h3></div>
+								<div class="tag php"><h3>php</h3></div>
+							</div>
+						</div>
+						<div class="subTitle">
+						<h2>{subTitle}</h2>
+						</div>
+					</div>
+					<div class="author">
+						<img src="/images/ykumar6.jpg"/>
+						<div class="text">{authorName}</div>
+					</div>
+				</div>
+				<div class="projRight">
+					<div class="commandBar">
+						<div class="btn download">
+							<div class="img"></div>
+							<div class="caption">Download</div>
+						</div>
+						<div class="btn share">
+							<div class="img"></div>
+							<div class="caption">Share</div>
+							<div class="dropdown"></div>
+
+						</div>
+						<div class="btn fork disabled">
+							<div class="img"></div>
+							<div class="caption">Save</div>
+						</div>
+					</div>
+				</div>
+                        </div>
+			   </div>
                     </div>
-                    <div class="ui-layout-east">
+   <div class="ui-layout-east">
                         <div class="server-center">
                             <div class="editor css active" fileName="css.php">
-                                <textarea class="code" mode="css">
+                                <textarea class="code" mode="css" name="css.php">
 {css.php}
 </textarea>
                     </div>
                             <div class="editor javascript" fileName="javascript.php">
-                                <textarea class="code" mode="javascript">
+                                <textarea class="code" mode="javascript"  name="javascript.php">
 {javascript.php}
 </textarea>
                     </div>
@@ -430,12 +454,16 @@ $(document).keydown(function(e) {
                     </div>
                     <div class="server-south">
                         <div class="browser-center">
+				<div class="btn run">
+					<div class="img"></div>
+					<div class="text">Reload</div>
+				</div>
                     		<div class="floatBar">
                        		   <div class="floatTab active">
                             		Output
                                 </div>
                             </div>
-                            
+				
                             <iframe id="appFrame" width="100%" height="100%" frameBorder="0">
                             </iframe>
                    		</div>
@@ -454,6 +482,8 @@ $(document).keydown(function(e) {
                     </div>
 				<div class="loading">
 				</div>
+				<div class="facebook_oauth">
+				</div>
 			<div class="shareDialog" style="display:none;">
 				<div class="field source">
 					<div class="text">Share your source code</div>
@@ -464,5 +494,6 @@ $(document).keydown(function(e) {
 					<input id="appUrl" />
 				</div>
 			</div>
+			<div id="fb-root"></div> 
                     </body>
                     </html> 

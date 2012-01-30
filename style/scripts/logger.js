@@ -24,8 +24,9 @@ var Logger = function(uiPane) {
 		isNow: true
     	});
 
-	if (!$("body").hasClass("inactive"))
-		$("body").addClass("inactive");
+	if (!$("body").hasClass("inactive")) {
+		$("body").trigger("vmDisconnected", []);
+	}
     };
 
     this.clear = function() {
@@ -36,8 +37,8 @@ var Logger = function(uiPane) {
         var self = this;
 
 	 var handleConnect = function() {
-			$("body").removeClass("inactive");
-			$("#appFrame").attr("src", "http://" + document.appUrl);
+			$("body").trigger("vmConnected", []);
+			$("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken);
     			self.handleMsg({
 				type: "check",
 				text: "Successfully activated your virtual machine",

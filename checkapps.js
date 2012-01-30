@@ -35,6 +35,7 @@ module.exports = {
         }
     },
 
+
     activateApp: function(appName, cb) {
         var self = this;
         if (activeApps[appName]) {

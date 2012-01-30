@@ -92,6 +92,10 @@ var Project = function(args) {
         return this.model.projectTitle;
     };
 
+    this.getSubTitle = function() {
+        return this.model.subTitle;
+    };
+
     this.getProjectUrl = function() {
         return this.model.projectUrl;
     };
@@ -127,8 +131,10 @@ var Project = function(args) {
             var _self = this;
             var proj = new model({
                 "projectTitle" : args.proposedTitle || null,
+                "subTitle" : args.subTitle || null,
                 "projectUrl" : args.proposedUrl || null,
 		  "authorName": args.authorName,
+		  "oauth": args.oauth || "",
                 "root" : args.clone || args.framework,
                 "framework" : args.framework,
 		  "keepAlive": args.keepAlive || false

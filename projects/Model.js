@@ -19,12 +19,14 @@ function randomString(string_length, chars) {
 Project = new Schema({
   'projectId': {type: String, index: { unique: true }}, 
   'projectTitle': {type: String}, 
+  'subTitle': {type: String}, 
   'projectUrl': {type: String, index: { unique: true }}, 
   'root': String, //where was this project cloned from?
   'namespace': String, //either null or userId
   'framework': String,
   'restricted': Boolean, 
   'keepAlive': Boolean,
+  'oauth': String,
   'userId': {type: String, index: true},
   'authorName': {type: String},
   'url': {type: String, index: true}
@@ -46,8 +48,8 @@ Project.virtual('ideBase').get(function() {
 
 Project.pre('save', function(next) {
     if (!this.projectId) {
-        this.projectId = randomString(2, "abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") +  randomString(2, "abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"); //TODO check for collisions
-	 this.url = this.projectId + "-app." + config.appDomain;
+        this.projectId = randomString(2, "abcdefghiklmnopqrstuvwxyz") +  randomString(2, "abcdefghiklmnopqrstuvwxyz0123456789"); //TODO check for collisions
+	 this.url = this.projectId + "." + config.projDomain;
     }
     if (!this.projectTitle) {
 	 this.projectTitle = this.projectId;

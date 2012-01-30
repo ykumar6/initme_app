@@ -11,10 +11,22 @@ var projects = [
 		framework: "php",
 		proposedTitle: "Hello World",
 		proposedUrl: "hello-world",
+		subTitle: "Hello World, echoed in PHP",		
 		authorName: "Yash Kumar",
 		copyFrom: __dirname + "/php-hello-world",
 		keepAlive: true
-	}
+	},
+        {
+                root: "parent",
+                framework: "php",
+                proposedTitle: "Facebook get friends",
+		subTitle: "Select and search for facebook friends using the Facebook PHP SDK",
+                proposedUrl: "facebook-friends",
+		oauth: "facebook",
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-friends",
+                keepAlive: true
+        }
 ];
 
 async.forEach(projects,

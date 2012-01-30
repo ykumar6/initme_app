@@ -50,6 +50,18 @@ var CodeModule  = function(codeBoxes) {
 	
    };
 
+   function refresh(area) {
+	if (area === "main") {
+		codeEditorHandles["php"].refresh();
+	}
+	else {
+		codeEditorHandles["javascript"].refresh();
+		codeEditorHandles["css"].refresh();
+
+	}
+   };
+
+
    function reset(cb) {
 	for (var i=0; i<codeEditors.length; i++) {
 		var editor = codeEditors[i].editor;
@@ -62,8 +74,7 @@ var CodeModule  = function(codeBoxes) {
 
    function codeChanged(index) {
 	codeEditors[index].changed = true;
-	$(".button.save").removeClass("disabled");
-	$(".button.reset").removeClass("disabled");
+	$(".btn.fork").removeClass("disabled");
    }
    
    function _initEditor(index) {
@@ -117,7 +128,8 @@ var CodeModule  = function(codeBoxes) {
    return {
 	"push": push,
 	"save": save,
-	"reset": reset
+	"reset": reset,
+	"refresh": refresh
    }
    
    
