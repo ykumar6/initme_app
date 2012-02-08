@@ -246,6 +246,10 @@ app.get('/logout', function(req, res) {
     }
 });
 
+app.get("/loading", function(req, res) {
+	res.send("Loading ...");
+});
+
 var handleLoginReturn = function(req, res) {
 
 	var recoverProjId = (req.session || {}).recoverProjId;
@@ -332,28 +336,6 @@ app.get('/user/:email', function(req, res, next) {
     });
 });
 
-app.get('/:id', function(req, res, next) {
-    //render user portal or ide
-
-    var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
-    var isOwner = (projList.indexOf(req.params.id) >= 0);
-
-    AppChecker.activateApp(req.params.id, function(proj) {
-        if(proj && proj.getAuthorName() !== "Unknown") {
-	
-            Editor.getIndex(proj, isOwner, req.user, function(err, index) {
-                if(err) {
-                    console.log(err);
-                    res.send(500);
-                } else {
-                    res.end(index);
-                }
-            });
-        } else {
-            res.send(500);
-        }
-    });
-});
 
 app.post("/title/:projectId", function(req, res, next) {	
     var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
@@ -470,16 +452,20 @@ app.get('/fork/:projectId', function(req, res, next) {
                     console.log(err);
                     res.send(500);
                 } else {
+			console.log(req.headers);
                     var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
                     projList.push(proj.getId());
                     AppChecker.addActiveApp(proj);
-    		
+    		   // console.log(projList);	
                     res.setHeader("Set-Cookie", "INITME=," + projList.join(","));
                     res.writeHead(200);
+		    
                     res.end(JSON.stringify({
                         projectId : proj.getId(),
                         appUrl : proj.getUrl()
                     }));
+		    
+			console.log("ending");
                 }
             }
         });
@@ -493,24 +479,59 @@ app.get('/fork/:projectId', function(req, res, next) {
 
 });
 
-app.get('/php/:projectUrl', function(req, res, next) {
+app.get('/:id/*', function(req, res, next) {
     //render user portal or ide
 
     var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
     var isOwner = (projList.indexOf(req.params.id) >= 0);
 
-    AppChecker.activateApp(req.params.projectUrl, function(proj) {
-        if(proj) {
-            Editor.getIndex(proj, isOwner, req.user, function(err, index) {
+    AppChecker.activateApp(req.params.id, function(proj) {
+        if(proj && proj.getAuthorName() !== "Unknown") {
+		
+	     if (req.url.indexOf(proj.getProjectUrl()) < 0) {
+		 res.redirect("/" + proj.getProjectUrl());
+	     }
+	     else {
+              Editor.getIndex(proj, isOwner, req.user, function(err, index) {
                 if(err) {
                     console.log(err);
-                    next(500);
+                    res.send(500);
                 } else {
                     res.end(index);
                 }
-            });
+              });
+	     }
         } else {
-            next(500);
+            res.send(500);
+        }
+    });
+});
+
+
+app.get('/:id', function(req, res, next) {
+    //render user portal or ide
+
+    var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
+    var isOwner = (projList.indexOf(req.params.id) >= 0);
+
+    AppChecker.activateApp(req.params.id, function(proj) {
+        if(proj && proj.getAuthorName() !== "Unknown") {
+		
+	     if (req.url.indexOf(proj.getProjectUrl()) < 0) {
+		 res.redirect("/" + proj.getProjectUrl());
+	     }
+	     else {
+              Editor.getIndex(proj, isOwner, req.user, function(err, index) {
+                if(err) {
+                    console.log(err);
+                    res.send(500);
+                } else {
+                    res.end(index);
+                }
+              });
+	     }
+        } else {
+            res.send(500);
         }
     });
 });

@@ -25,13 +25,17 @@ document.ProjectManagement = function() {
             $("body").removeClass("inactive");
         } 
         else if (state === "oauth") {
-            $("body").removeClass("inactive");
             $("body").removeClass("oauth");
             $("body").addClass("oauth");
+            $("body").removeClass("inactive");
+
         }
         else if (state === "active") {
             self.isActive = true;
             $("body").removeClass("oauth");
+	     if (this.isVMActive) {
+		   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken);
+	     }
         }
     };
 
@@ -62,6 +66,7 @@ document.ProjectManagement = function() {
                 if(cb)
                     cb();
             });
+	     console.log(self.socketVM);
             document.logHandler.addSocket(self.socketVM);
         };
         var tryMainConnect = function() {

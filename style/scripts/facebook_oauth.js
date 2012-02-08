@@ -43,6 +43,7 @@ document.FacebookOAuth = function() {
     this.fbLoginStatus = function(response) {
 	     var self = this;
 	     console.log(response);
+
             if(response.status === "connected") {
                 self.handleLoginState(true, response.authResponse.accessToken);
             } else {

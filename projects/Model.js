@@ -18,9 +18,8 @@ function randomString(string_length, chars) {
 
 Project = new Schema({
   'projectId': {type: String, index: { unique: true }}, 
-  'projectTitle': {type: String}, 
+  'projectTitle': {type: String, validate: /^([a-z][\w]*[\s]?)+$/i}, 
   'subTitle': {type: String}, 
-  'projectUrl': {type: String, index: { unique: true }}, 
   'root': String, //where was this project cloned from?
   'namespace': String, //either null or userId
   'framework': String,
@@ -38,6 +37,10 @@ Project.virtual('path').get(function() {
 });
 
 
+Project.virtual('projectUrl').get(function() {
+  return (this.projectId + "/" + this.projectTitle.replace(/\s/gi, "-").toLowerCase());
+});
+
 Project.virtual('ideBase').get(function() {
   return this.projectId;   
 });
@@ -48,14 +51,14 @@ Project.virtual('ideBase').get(function() {
 
 Project.pre('save', function(next) {
     if (!this.projectId) {
-        this.projectId = randomString(2, "abcdefghiklmnopqrstuvwxyz") +  randomString(2, "abcdefghiklmnopqrstuvwxyz0123456789"); //TODO check for collisions
+        this.projectId = 1 + randomString(5, "0123456789"); //TODO check for collisions
 	 this.url = this.projectId + "." + config.projDomain;
     }
     if (!this.projectTitle) {
-	 this.projectTitle = this.projectId;
+	 this.projectTitle = "Untitled";
     }
-    if (!this.projectUrl) {
-	 this.projectUrl = this.projectId;
+    if (!this.subTitle) {
+	 this.projectTitle = "Please add a description";
     }
     next();
 });

@@ -24,9 +24,8 @@ var Logger = function(uiPane) {
 		isNow: true
     	});
 
-	if (!$("body").hasClass("inactive")) {
-		$("body").trigger("vmDisconnected", []);
-	}
+	$("body").trigger("vmDisconnected", []);
+
     };
 
     this.clear = function() {

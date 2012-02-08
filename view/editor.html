@@ -156,10 +156,10 @@ olark.identify('5621-433-10-9060');/*]]>{/literal}*/</script>
                     oauthSession = new document.FacebookOAuth();
                     $("body").bind("oauthLogin", function(e, token) {
 			   window.accessToken = token;
-			   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken);
                         projectSession.setState("active");
                     });
                     $("body").bind("oauthLogout", function(e) {
+			   $("#appFrame").attr("src", "http://" + document.domain + "/loading");
                         projectSession.setState("oauth");
                     });
                 } 
@@ -174,6 +174,7 @@ olark.identify('5621-433-10-9060');/*]]>{/literal}*/</script>
                     projectSession.setState("vmActive");
                 });
                 $("body").bind("vmDisconnected", function(e) {
+		      $("#appFrame").attr("src", "http://" + document.domain + "/loading");
                     projectSession.setState("vmInactive");
                 });
                 
@@ -464,7 +465,7 @@ olark.identify('5621-433-10-9060');/*]]>{/literal}*/</script>
                                 </div>
                             </div>
 				
-                            <iframe id="appFrame" width="100%" height="100%" frameBorder="0">
+                            <iframe id="appFrame" width="100%" height="100%" src="/loading" frameBorder="0">
                             </iframe>
                    		</div>
                         <div class="browser-south">

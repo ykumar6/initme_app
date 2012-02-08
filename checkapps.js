@@ -30,9 +30,6 @@ module.exports = {
     addActiveApp: function(proj) {
         proj.killProject = this.removeApp;
         activeApps[proj.getId()] = proj;
-        if (proj.getId() !== proj.getProjectUrl()) {
-            activeApps[proj.getProjectUrl()] = proj;
-        }
     },
 
 
@@ -43,11 +40,7 @@ module.exports = {
         }
         else {
             var params = {};
-            if (appName.length <= 5) {//id
-                params.projectId = appName;
-            } else {
-                params.projectUrl = appName;
-            }
+            params.projectId = appName;
             params.ready = function(err, model) {
                 if(err) {
                     cb(null);
@@ -64,9 +57,6 @@ module.exports = {
     removeApp: function(proj) {
         if (activeApps[proj.getId()]) {
 		delete activeApps[proj.getId()];
-	 }
-        if (activeApps[proj.getProjectUrl()]) {
-		delete activeApps[proj.getProjectUrl()];
 	 }
     }
     
