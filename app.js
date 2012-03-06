@@ -7,6 +7,7 @@ var GitHubStrategy = require('passport-github').Strategy;
 var GoogleStrategy = require('./passport-google-oauth/lib/passport-google-oauth').Strategy;
 var https = require("https");
 var MongoStore = require("connect-mongo");
+var Twilio = require("./twilio");
 
 require("./User");
 
@@ -78,6 +79,8 @@ app.configure(function() {
 });
 var io = require("socket.io").listen(app);
 io.set('transports', ['xhr-polling']);
+io.set('transports', ['xhr-polling']);
+
 
 io.set('authorization', function(data, accept) {
     var projList = data.headers["x-vcap_projects"] ? data.headers["x-vcap_projects"].split(",") : [];
@@ -86,6 +89,20 @@ io.set('authorization', function(data, accept) {
 
 });
 io.sockets.on("connection", function(client) {
+
+    client.on("detach", function(data) {
+        var projId = data.projectId;
+
+	 if (!projId) {
+		return;
+	 }
+	 console.log("detaching " + projId);
+	 var proj = AppChecker.currentApps[projId];
+	 if (proj) {
+ 		proj.removeClientConnection(client);
+	 }
+    });
+
     client.on("attach", function(data) {
 
         var projId = data.projectId;
@@ -250,6 +267,17 @@ app.get("/loading", function(req, res) {
 	res.send("Loading ...");
 });
 
+app.all("/twilio/getToken", function(req, res, next) {
+	req.project = AppChecker.currentApps[req.param("appId")];
+	Twilio.handleRequest(req, res, next);
+});
+
+app.all("/twilio/verifyPhone", function(req, res, next) {
+	Twilio.verifyPhone(req, res, next);
+});
+
+
+
 var handleLoginReturn = function(req, res) {
 
 	var recoverProjId = (req.session || {}).recoverProjId;
@@ -319,6 +347,9 @@ app.get('/auth/facebook',
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
 });
+
+app.get('/twilio/route', Twilio.handleRequest);
+app.get('/twilio/verifyPhone', Twilio.verifyPhone);
 
 
 
@@ -438,13 +469,13 @@ app.get('/fork/:projectId', function(req, res, next) {
     //fork new root app
     var framework = "php";
 
-	var createFork = function(oauth) {
+	var createFork = function(tags) {
 	 console.log("Received fork request........!!!");
         var proj = new Project({
            "framework" : framework,
            "authorName":  "Unknown",
 	    "proposedTitle": "Untitled",
-	    "oauth": oauth,
+	    "tags": tags,
 	    "subTitle": "Please add a description",
             clone : req.params.projectId,
             ready : function(err) {
@@ -472,8 +503,8 @@ app.get('/fork/:projectId', function(req, res, next) {
      };
 
 	var exitingProj = AppChecker.activateApp(req.params.projectId, function(proj) {
-		var oauth = proj.model.oauth;
-		createFork(oauth);
+		var tags = proj.model.tags;
+		createFork(tags);
 	});
 
 

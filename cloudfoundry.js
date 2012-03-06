@@ -330,6 +330,8 @@ var CloudFoundry = function() {
                 }
             };
 
+	     console.log(data);
+
             ajax.jsonPost({
                 "path" : path,
                 "data" : data,
@@ -350,6 +352,7 @@ var CloudFoundry = function() {
                                 action : "createApp",
                                 error : res
                             }));
+				console.log(res);
                             callback(res.status);
                         }
                     }

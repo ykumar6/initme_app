@@ -3,9 +3,8 @@ var async = require("async");
 var config = require("./config");
 
 var frameworkFiles = {
-    "php": ["main.php", "css.php", "javascript.php"]
+    "php": ["main.php", "css.php", "additional.php"]
 }
-
 
 module.exports = {
     
@@ -25,10 +24,21 @@ module.exports = {
 	     index = index.replace(/{title}/mig, proj.getTitle());  
              index = index.replace(/{subTitle}/mig, proj.model.subTitle || ""); 
 	     index = index.replace(/{authorName}/mig, proj.getAuthorName());   
-             index = index.replace(/{oauth}/mig, proj.model.oauth || ""); 
+             index = index.replace(/{tags}/mig, (proj.model.tags || []).join(",")); 
    	     index = index.replace(/{login}/mig, user ? "LOGOUT": "LOGIN");            
    	     index = index.replace(/{facebookId}/mig, config.facebookId);            
+            if (proj.model.tags.indexOf("twilio") >= 0) {
+			index = index.replace(/{additionalMode}/mig, "php");            
+			index = index.replace(/{additionalName}/mig, "TwiML");   
+			index = index.replace(/{challengeClass}/mig, "twilio");            
+            } else {
+			index = index.replace(/{additionalMode}/mig, "javascript");            
+			index = index.replace(/{additionalName}/mig, "JavaScript");   
+	     }
 
+            if (proj.model.tags.indexOf("facebook") >= 0) {
+			index = index.replace(/{challengeClass}/mig, "facebook_oauth");            
+            }
 
             var getFile = function(fileName, callback) {
                   fs.readFile(proj.getPath() + "/" + fileName, function(err, fileData) {
@@ -39,9 +49,12 @@ module.exports = {
                   });
             };
             
+			var files = frameworkFiles[proj.getFramework()];
+			
             async.forEach(frameworkFiles[proj.getFramework()], getFile, function(err) {
                 callback(err, index);
             })
+
             
         });
     }

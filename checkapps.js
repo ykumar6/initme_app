@@ -1,11 +1,12 @@
 var global = require("./global");
 var Project = require("./projects/Project");
-
+var Twilio = require("./twilio");
 
 var activeApps = {};
-
+console.log("checkapp init");
 
 function checkInitialState() {
+
     global.cloudFoundry.getRunningApps(function(err, apps) {
         if(err) {
             console.log("Error initializing state " + err);
@@ -20,6 +21,26 @@ function checkInitialState() {
             }
         }
     });
+
+	Twilio.allApps(function(apps) {
+		
+		for (var i=0; i<apps.length; i++) {
+			var isBeingUsed = false;
+
+			for (var projId in activeApps) {
+                if (apps[i].sid === activeApps[projId].twilioSid) {
+                    isBeingUsed = true;
+                    break;
+                }
+			}
+
+			if (!isBeingUsed) {
+				console.log(apps[i].sid);
+				Twilio.deleteApp(apps[i].sid);
+			}
+		}		
+
+	});
 }
 
 setTimeout(checkInitialState, 10000);
@@ -27,11 +48,10 @@ setTimeout(checkInitialState, 10000);
 module.exports = {
     
 
-    addActiveApp: function(proj) {
+    addActiveApp: function(proj, twilio) {
         proj.killProject = this.removeApp;
         activeApps[proj.getId()] = proj;
     },
-
 
     activateApp: function(appName, cb) {
         var self = this;
@@ -58,7 +78,9 @@ module.exports = {
         if (activeApps[proj.getId()]) {
 		delete activeApps[proj.getId()];
 	 }
-    }
+    },
+
+	currentApps: activeApps
     
 };
 

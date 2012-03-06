@@ -1,5 +1,6 @@
 require("./Model");
 
+var Twilio = require('../twilio');
 var mongoose = require('mongoose');
 var fs = require("fs");
 var async = require("async");
@@ -22,7 +23,8 @@ var Project = function(args) {
     if (args.projectId || args.projectUrl) {
         async.waterfall(
             [
-                self._projectTasks.projectMustExist.bind(self, args.projectId, args.projectUrl)
+                self._projectTasks.projectMustExist.bind(self, args.projectId, args.projectUrl),
+				self._projectTasks.setupAPIs.bind(self)
             ], 
         function(err) {
             args.ready(err);
@@ -31,6 +33,7 @@ var Project = function(args) {
         async.waterfall(
             [
                 self._projectTasks.createUniqueProject.bind(self, args),
+                self._projectTasks.setupAPIs.bind(self),
                 self._projectTasks.cloneProjectFiles.bind(self, args.copyFrom || null),
                 self._projectTasks.pushProject.bind(self)
             ], 
@@ -43,12 +46,59 @@ var Project = function(args) {
 
 (function() {
 
+    var verifyPhone = function(account, phone, client) {
+		Twilio.verifyPhone(account, phone, function(code) {
+			if (code) {
+				client.emit("outgoingVerifyCode", code);
+			} else {
+				client.emit("outgoingVerifyError", code);
+			}
+		});
+    };
+
     this.errorHandler = function(userId, command, msg) {
     };
     this.successHandler = function(userId, command, payload) {
     };
-    
+
+    this.getTwilioAccount = function(accoundId, cb) {
+	 async.forEach(this.clients, 
+	 function(client, callback) {
+		client.get("twilioAccount", function(err, account) {
+			console.log(account);
+			if (account && account.sid == accoundId) {
+				cb(account);
+				callback(true);
+			}
+		});
+		callback(null);
+	 },
+	 function(isFound) {
+		if (!isFound) {
+			cb(null);
+		}
+	 });
+    };	
+   
+
     this.addClientConnection = function(client) {
+	var self = this;
+    	var twilioVerify = function(phone) {
+		client.get("twilioAccount", function(err, account) {
+			if (account) {
+				verifyPhone(twilioAccount, phone, client);
+			} else {
+				Twilio.addAccount(function(account) {
+					client.emit("twilioAccount", account.sid);
+					client.set("twilioAccount", account, function() {});
+					verifyPhone(account, phone, client);
+				});	
+			}
+		});
+    	}; 
+   
+	 client.on("twilioVerify", twilioVerify);
+
         this.clients.push(client);
         if (this.clients.length === 1) {
             //start app
@@ -75,6 +125,7 @@ var Project = function(args) {
             }
             self.killTimer = setTimeout(function() {
                 self._projectTasks.stopProject.call(self);
+		  console.log("killing project for real");
                 if (self.killProject) self.killProject(self); //removes reference from checkapps
             }, 10000);            
         }
@@ -121,7 +172,7 @@ var Project = function(args) {
     };
 
     this.getUrl = function() {
-        return this.model.url;
+        return this.model.projectId + "." + config.appDomain;
     };
     //workspace tasks to be used by async waterfall
     this._projectTasks = {
@@ -130,10 +181,11 @@ var Project = function(args) {
             console.log("Creating project");
             var _self = this;
             var proj = new model({
+                "projectId" : args.proposedId || null,
                 "projectTitle" : args.proposedTitle || null,
                 "subTitle" : args.subTitle || null,
 		  "authorName": args.authorName,
-		  "oauth": args.oauth || "",
+		  "tags": args.tags || [],
                 "root" : args.clone || args.framework,
                 "framework" : args.framework,
 		  "keepAlive": args.keepAlive || false
@@ -141,7 +193,7 @@ var Project = function(args) {
             proj.save(function(err, doc) {
                 console.log(err);
                 if(err) {
-		    console.log(err)
+		    		console.log(err)
                     callback("Couldn't create unique project", args);
                 } else {
                     _self.model = doc;
@@ -149,6 +201,26 @@ var Project = function(args) {
                 }
             })
         },
+
+		setupAPIs: function(callback) {
+			var self = this;
+			if (this.model.tags.indexOf("twilio")) {
+				Twilio.createApp(this.getId(), this.getUrl(), function(data) {
+					if (data && data.appId) {
+						console.log("twilio app created " + JSON.stringify(data));
+						self.twilioSid = data.appId;
+						callback(null);
+					} 
+					else {
+						console.log("error");
+						console.log(data);
+						callback("Couldn't setup twilio api");
+					}
+				});
+			} else {
+				callback(null);
+			}
+		},
         
         projectMustExist : function(projectId, projectUrl, callback) {
             var _self = this;
@@ -210,6 +282,7 @@ var Project = function(args) {
 
         pushProject : function(callback) {
             var self = this;
+	     console.log("starting project");
             global.cloudFoundry.pushNewApp({
                 "appName" : self.getId(),
                 "appUrl" : self.getUrl(),

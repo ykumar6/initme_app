@@ -1,4 +1,5 @@
 document.FacebookOAuth = function() {
+	
         var js, id = 'facebook-jssdk';
         var d = document;
         

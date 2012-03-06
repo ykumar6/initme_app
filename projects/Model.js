@@ -26,6 +26,7 @@ Project = new Schema({
   'restricted': Boolean, 
   'keepAlive': Boolean,
   'oauth': String,
+  'tags': [String],
   'userId': {type: String, index: true},
   'authorName': {type: String},
   'url': {type: String, index: true}

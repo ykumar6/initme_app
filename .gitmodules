@@ -7,3 +7,12 @@
 [submodule "style/scripts/inlineedit"]
 	path = style/scripts/inlineedit
 	url = git://github.com/caphun/jquery.inlineedit.git
+[submodule "node-twilio"]
+	path = node-twilio
+	url = git@github.com:ykumar6/node-twilio.git
+[submodule "jwt-node"]
+	path = jwt-node
+	url = https://ykumar6@github.com/ykumar6/jwt-node.git
+[submodule "install/twilio-outbound/twilio-php"]
+	path = install/twilio-outbound/twilio-php
+	url = https://github.com/ykumar6/twilio-php

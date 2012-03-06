@@ -12,8 +12,8 @@ module.exports = {
 		"appId": "338218178481.apps.googleusercontent.com",
 		"appSecret": "30r5WDxGc7mKgQxUb1vmlAp6"
      },
-     "ip": "10.160.37.27",
-     "port": 80,
+     "ip": "10.176.42.80",
+     "port": 9787,
      "projDomain": "cloudcosmos.com",
      "appDomain": "cloudcosmos.com",
      "mongoURI": "mongodb://initme_dev:pass4kiwi@staff.mongohq.com:10053/initme_dev",
@@ -25,6 +25,10 @@ module.exports = {
 		"password": "pass4kiwi",
 		"collection": "initSessions"
      },
+	 "twilio": {
+		"sid": "ACc7e3ab1491e14ecdb1ef29e48f8bd302",
+		"authToken": "ecd8df3b9fd1d70002a513ec07e1a216"
+	 },
      "facebookId": "307201729318712",
      "workspaceDir": "/initHome/",
      "tmpDir": "/initTemp/",

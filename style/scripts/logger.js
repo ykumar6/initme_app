@@ -5,7 +5,7 @@ var Logger = function(uiPane) {
     this.uiPane = uiPane;
     this.logBar = $(".logBar");
     this.logIcon = $(".logBar .icon");
-    this.logText = $(".logBar .logText");
+    this.logText = $(".logBar .logTextInner");
     this.logTime = $(".logBar .logTime");
 
     this._isConnecting();
@@ -37,7 +37,7 @@ var Logger = function(uiPane) {
 
 	 var handleConnect = function() {
 			$("body").trigger("vmConnected", []);
-			$("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken);
+			$("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken || "");
     			self.handleMsg({
 				type: "check",
 				text: "Successfully activated your virtual machine",
@@ -85,6 +85,8 @@ var Logger = function(uiPane) {
         this.logIcon.addClass(data.type);
         
         this.logText.text(data.text);
+        this.logText.attr("title",data.text);
+
         this.logTime.attr("title", data.time || (new Date()));
 
 	 if (data.isNow) {

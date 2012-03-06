@@ -3,6 +3,7 @@ document.ProjectManagement = function() {
     this.socketMain = null;
     this.isVMActive = false;
     this.isActive = false;
+    this.events = [];
 };
 
 
@@ -34,7 +35,7 @@ document.ProjectManagement = function() {
             self.isActive = true;
             $("body").removeClass("oauth");
 	     if (this.isVMActive) {
-		   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken);
+		   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken || "");
 	     }
         }
     };
@@ -46,9 +47,18 @@ document.ProjectManagement = function() {
             self.socketVM.disconnect();
         }
         if(self.socketMain) {
-            self.socketMain.disconnect();
+                self.socketMain.emit("detach", {
+                    "projectId" : document.projectId
+                });
         }
    };
+
+    this.addEvent = function(evtName, evtCallBack) {
+	  this.events.push({"evtName": evtName, "callback": evtCallBack});
+	  if (this.socketMain) {
+		this.socketMain.on(evtName, evtCallBack);
+	  }
+    };
 
     this.loadProject = function(cb) {
 	 var self = this;
@@ -60,7 +70,7 @@ document.ProjectManagement = function() {
             });
 
             self.socketVM.on("error", function(err) {
-                setTimeout(tryVMConnect, 1000);
+                setTimeout(tryVMConnect, 5000);
             });
             self.socketVM.on("connect", function(err) {
                 if(cb)
@@ -70,20 +80,31 @@ document.ProjectManagement = function() {
             document.logHandler.addSocket(self.socketVM);
         };
         var tryMainConnect = function() {
-            socketMain = io.connect("/", {
+	     console.log("trying main connect");
+            self.socketMain = io.connect("/", {
                 "force new connection" : true,
             });
-            socketMain.on('connect', function() {
-                socketMain.emit("attach", {
+	     for (var i=0; i<self.events.length; i++) {
+		  self.socketMain.on(self.events[i].evtName, self.events[i].callback);
+	     }
+            self.socketMain.on('connect', function() {
+                self.socketMain.emit("attach", {
                     "projectId" : document.projectId
                 });
             });
-            socketMain.on("error", function(err) {
+            self.socketMain.on("error", function(err) {
                 setTimeout(tryMainConnect, 1000);
             });
         };
-        tryMainConnect();
-        tryVMConnect();
+	 if (self.socketMain && self.socketMain.socket.connected) {
+                self.socketMain.emit("attach", {
+                    "projectId" : document.projectId
+                });
+	 }
+	 else {
+        	tryMainConnect();
+        } 
+	 tryVMConnect();
     };
 
     this.createProject = function(cb) {

@@ -28,6 +28,7 @@ var CodeModule  = function(codeBoxes) {
 				for (var i=0; i<codeEditors.length; i++) {
 					codeEditors[i].changed = false;
 				}
+				$(".saveStatus").removeClass("active");
 			}
 			cb(err);
 		}
@@ -52,11 +53,11 @@ var CodeModule  = function(codeBoxes) {
 
    function refresh(area) {
 	if (area === "main") {
-		codeEditorHandles["php"].refresh();
+		codeEditorHandles["main.php"].refresh();
 	}
 	else {
-		codeEditorHandles["javascript"].refresh();
-		codeEditorHandles["css"].refresh();
+		codeEditorHandles["additional.php"].refresh();
+		codeEditorHandles["css.php"].refresh();
 
 	}
    };
@@ -75,11 +76,16 @@ var CodeModule  = function(codeBoxes) {
    function codeChanged(index) {
 	codeEditors[index].changed = true;
 	$(".btn.fork").removeClass("disabled");
+	if (!$(".saveStatus").hasClass("active")) {
+		$(".saveStatus").addClass("active");
+	}
    }
    
    function _initEditor(index) {
        var textArea = $(".code", codeBoxArray[index]);
+       var editorName = textArea.attr("name");
        var editorMode = textArea.attr("mode");
+
        
        var codeEditor = CodeMirror.fromTextArea(textArea[0], {
             lineNumbers: true,
@@ -90,7 +96,7 @@ var CodeModule  = function(codeBoxes) {
 	     }
        });       
 
-	codeEditorHandles[editorMode] = codeEditor;
+	codeEditorHandles[editorName] = codeEditor;
 
        return codeEditor;
    };
@@ -106,23 +112,23 @@ var CodeModule  = function(codeBoxes) {
    }
 
   $(".floatTab.css").click(function() {
-  	$(".floatTab.javascript").removeClass("active");
-       $(".editor.javascript").removeClass("active");
+  	$(".floatTab.additional").removeClass("active");
+       $(".editor.additional").removeClass("active");
         		      
        $(".floatTab.css").addClass("active");
    	$(".editor.css").addClass("active");
 
-	codeEditorHandles["css"].refresh();
+	codeEditorHandles["css.php"].refresh();
    });
         		      		
-   $(".floatTab.javascript").click(function() {
+   $(".floatTab.additional").click(function() {
           $(".floatTab.css").removeClass("active");
           $(".editor.css").removeClass("active");
                       
-          $(".floatTab.javascript").addClass("active");
-          $(".editor.javascript").addClass("active");
+          $(".floatTab.additional").addClass("active");
+          $(".editor.additional").addClass("active");
 
-	   codeEditorHandles["javascript"].refresh();
+	   codeEditorHandles["additional.php"].refresh();
    });
 
    return {

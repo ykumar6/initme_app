@@ -1,5 +1,5 @@
 var spawn = require('child_process').spawn;
-var sys = require("sys");
+var sys = require("util");
 var EventEmitter = require("events").EventEmitter;
 
 var clone = function(src, dest) {
