@@ -22,3 +22,6 @@
 [submodule "install/facebook-friends/php-sdk"]
 	path = install/facebook-friends/php-sdk
 	url = https://github.com/facebook/php-sdk.git
+[submodule "style/scripts/bootstrap"]
+	path = style/scripts/bootstrap
+	url = https://github.com/twitter/bootstrap.git
