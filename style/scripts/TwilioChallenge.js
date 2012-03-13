@@ -3,6 +3,8 @@ document.TwilioChallenge = function(project) {
 	var self = this;
 
 	$("body").trigger("challengeStart");
+	$(".phoneBox input").focus();
+
 
 	$(".phoneBox .button").click(function() {
 		var phoneNumber = $(".phoneBox input").val();
@@ -24,6 +26,7 @@ document.TwilioChallenge = function(project) {
 	$(".verifyCode .button").click(function() {
 		$(".twilioVerify").removeClass("askCode");
 		$("body").trigger("challengeComplete");
+		$('#myModal').modal('hide')
 	});
 };
 

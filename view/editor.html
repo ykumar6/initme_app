@@ -13,7 +13,8 @@
         <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
         <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
 
-
+    	 <link href="{static}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	 <link href="{static}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
@@ -92,30 +93,18 @@
                     north__spacing_open : 0,
                     north__spacing_closed : 0,
                     north__slidable : false,
-                    north__paneSelector : ".codearea-north",
+                    north__paneSelector : ".codearea-tabs",
+
                     center__paneSelector : ".codearea-center",
                     center__onresize : function() {
                         document.CodeCommands.refresh("main");
                     }
-                })
+                });
+
+		  $('.nav a:first').tab('show')
 
                 $(".ui-layout-east").layout({
-                    north__resizable : false,
-                    north__closable : false,
-                    center__paneSelector : ".server-center",
-                    center__onresize : function() {
-                        document.CodeCommands.refresh("secondary");
-                    },
-                    south__paneSelector : ".server-south",
-                    south__size : "50%",
-                    south__closable : false,
-                    north__spacing_open : 0,
-                    north__spacing_closed : 0,
-                    north__slidable : false,
-                })
-
-                $(".codearea-center").layout({
-                    center__paneSelector : ".code-center"
+                    center__paneSelector : ".server-south",
                 })
 
                 var southPane = $(".server-south").layout({
@@ -127,12 +116,15 @@
 			   }
 			   logBar.resizeAll();
                     },
+		      onopen: function() {
+			   logBar.show();
+		      },
                     south__resizable : false,
                     south__closable : false,
                     south__spacing_open : 0,
                     south__spacing_closed : 0,
                     south__slidable : false
-
+			
                 });
 
                 $(".browser-center").layout({
@@ -161,17 +153,18 @@
                     west__spacing_closed : 0,
                     west__slidable : false,
                     west__size : 40
-                })
+                });
+
+		  $('.theBtn.Run').popover({
+				title: "Run and edit code",
+				content: "You can edit and re-run live code by clicking this button"
+		  });
+		  $('.theBtn.Run').popover('show');
 
 
                 var positionLoading = function() {
                     setTimeout(function() {
                         $(".loading").position({
-                            of : $(".browser-center"),
-                            my : "center center",
-                            at : "center center"
-                        });
-                        $(".challenge").position({
                             of : $(".browser-center"),
                             my : "center center",
                             at : "center center"
@@ -185,17 +178,20 @@
                 var challengeSession, projectSession;
                 document.logHandler = new Logger(southPane);
 
-                
+                var isAuthRequired = true;
                 projectSession = new document.ProjectManagement();
-                if ($.inArray("facebook", document.tags) >= 0 ) {
-                    projectSession.setState("oauth");
-                    positionLoading();
+                projectSession.setState("oauth");
 
+                if ($.inArray("facebook", document.tags) >= 0 ) {
+                    positionLoading();
 
                     challengeSession = new document.FacebookOAuth();
                     $("body").bind("oauthLogin", function(e, token) {
+			   $("#myModal").modal("hide");
+			   document.logHandler.show();
 			   window.accessToken = token;
                         projectSession.setState("active");
+			   document.CodeCommands.focus();
                     });
                     $("body").bind("oauthLogout", function(e) {
 			   $("#appFrame").attr("src", "http://" + document.domain + "/loading");
@@ -204,14 +200,15 @@
 
                     });
                 } 
-                if ($.inArray("twilio", document.tags) >= 0 ) {
-                    projectSession.setState("oauth");
+                else if ($.inArray("twilio", document.tags) >= 0 ) {
                     positionLoading();
-
 
                     challengeSession = new document.TwilioChallenge(projectSession);
                     $("body").bind("challengeComplete", function(e, token) {
+
+			   document.logHandler.show();
                         projectSession.setState("active");
+			   document.CodeCommands.focus();
                     });
                     $("body").bind("challengeStart", function(e) {
 			   $("#appFrame").attr("src", "http://" + document.domain + "/loading");
@@ -219,11 +216,13 @@
                         positionLoading();
 
                     });
-                } 
+                }
 		  else {
-			projectSession.setState("active");
+			isAuthRequired = false;
 		  }
+
                 projectSession.loadProject();
+
 
                 
                 $("body").bind("vmConnected", function(e) {
@@ -275,8 +274,8 @@
                     });
                 }
 
-                $(".btn.fork").mouseup(function() {
-                    if(!$(".btn.fork").hasClass("disabled")) {
+                $(".theBtn.fork").mouseup(function() {
+                    if(!$(".theBtn.fork").hasClass("disabled")) {
                         document.logHandler.clear();
                         if(!document.isOwner) {
                             projectSession.createProject(_save);
@@ -288,17 +287,21 @@
                     }
                 });
 
-                $(".btn.run").click(function() {
-                    if (!projectSession.isActive) return;
-                    
-                    document.logHandler.clear();
-                    if(document.isOwner) {
-                        document.CodeCommands.push();
-                    } else {
-                        projectSession.createProject(function() {
-                            document.CodeCommands.push();
-                        });
-                    }
+                $(".theBtn.Run").click(function() {
+                    if (!projectSession.isActive && isAuthRequired) {
+				$("#myModal").modal({backdrop: false});
+		      }
+		      else {
+				projectSession.setState("active");
+                    		document.logHandler.clear();
+                   		if(document.isOwner) {
+                        		document.CodeCommands.push();
+                    		} else {
+                        		projectSession.createProject(function() {
+                            	document.CodeCommands.push();
+                        		});
+                    		}
+		      } 
                 });
 
                 $(".button.reset").mouseup(function() {
@@ -312,13 +315,13 @@
                 });
 
                 $("body").bind("save", function(e, state) {
-                    if(!$(".btn.fork").hasClass("disabled")) {
-                        $(".btn.fork").addClass("disabled");
+                    if(!$(".theBtn.fork").hasClass("disabled")) {
+                        $(".theBtn.fork").addClass("disabled");
                     }
                 });
                 $("body").bind("push", function(e, state) {
-                    if(!$(".btn.fork").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
-                        $(".btn.fork").addClass("disabled");
+                    if(!$(".theBtn.fork").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
+                        $(".theBtn.fork").addClass("disabled");
                     }
                     var iframe = document.getElementById("appFrame");
                     iframe.src = iframe.src;
@@ -333,37 +336,48 @@
                     window.location = "/?state=loginEditor&redirect=" + window.location;
                 });
 
-                $(".btn.newCode").mouseup(function() {
+                $(".theBtn.newCode").mouseup(function() {
                     window.location = "/?state=newCode";
                 });
 
-                $(".btn.discoverCode").mouseup(function() {
+                $(".theBtn.discoverCode").mouseup(function() {
                     window.location = "/?state=discoverCode";
                 });
 
-                $(".btn.download").mouseup(function() {
+                $(".theBtn.download").mouseup(function() {
                     window.location = "/?state=downloadCode";
                 });
 
 
-                $(".btn.share").click(function(e) {
+                $(".theBtn.share").click(function(e) {
                     $("#sourceUrl").val("http://" + document.domain + "/" + document.projectId);
                     $("#appUrl").val("http://" + document.appUrl);
                     $(".shareDialog").css("top", "0px");
                     $(".shareDialog").css("left", "0px");
                     $(".shareDialog").position({
-                        of : $(".btn.share"),
+                        of : $(".theBtn.share"),
                         offset : "5 5",
 
                         my : "right top",
                         at : "right bottom"
                     });
                     $(".shareDialog").show();
+		
+		      setTimeout(function() {
+		      $("body").bind("click.share", function(e) {
+				var parents = $(e.target).parents("#shareDialog");
+				if (parents.length === 0) {
+					$("#shareDialog").hide();
+					$("body").unbind("click.share");
+				}
+		      });
+		      }, 10);
+
                 });
 
                 $(".headerWrapper").click(function(e) {
                     if(!$(e.target).hasClass("share"))
-                        e.target = $(e.target).parents(".btn.share");
+                        e.target = $(e.target).parents(".theBtn.share");
 
                     if(!$(e.target).hasClass("share")) {
                         $(".shareDialog").hide();
@@ -372,7 +386,7 @@
 
                 $(".projAreaWrapper").click(function(e) {
                     if(!$(e.target).hasClass("share"))
-                        e.target = $(e.target).parents(".btn.share");
+                        e.target = $(e.target).parents(".theBtn.share");
 
                     if(!$(e.target).hasClass("share")) {
                         $(".shareDialog").hide();
@@ -402,19 +416,40 @@
     </head>
     <body>
         <div class="ui-layout-center">
+	     <div class="codearea-tabs">
+			<div class="tabHolder">
+			<ul class="nav nav-tabs">
+  				<li><a href="#main" data-toggle="tab">PHP</a></li>
+ 				<li><a href="#javascript" data-toggle="tab">JavaScript</a></li>
+  				<li><a href="#additional" data-toggle="tab" style="{additionalStyle}">{additionalName}</a></li>
+  				<li><a href="#css" data-toggle="tab">CSS</a></li>
+			</ul>
+			</div>
+			<div class="floatBar">
+				Live Code
+			</div>
+	     </div>
             <div class="codearea-center">
-                <div class="code-center">
-                    <div class="editor html active" fileName="main.php">
-                        <textarea class="code" mode="application/x-httpd-php" name="main.php">
+                    <div class="editor html tab-pane active" fileName="main.php" id="main">
+                        <textarea class="code" mode="application/x-httpd-php" name="main">
 {main.php}
 </textarea>
                     </div>
-                    <div class="floatBar">
-                        <div class="floatTab active">
-                            PHP
-                        </div>
-                    </div>          
-                    </div>
+                    <div class="editor javascript tab-pane" fileName="javascript.php" id="javascript">
+                        <textarea class="code" mode="javascript" name="javascript">
+{javascript.php}
+</textarea>
+                    </div>    
+                    <div class="editor additional tab-pane" fileName="additional.php" id="additional">
+                        <textarea class="code" mode="{additionalMode}" name="additional">
+{additional.php}
+</textarea>
+                    </div>    
+                    <div class="editor css tab-pane" fileName="css.php" id="css">
+                        <textarea class="code" mode="css" name="css">
+{css.php}
+</textarea>
+                    </div>  
                 </div>
          </div>
                     <div class="ui-layout-north">
@@ -422,7 +457,7 @@
                         <div class="header">
                             <div class="logo"></div>
 				<div class="headerOptions">
-					<div class="btn newCode">
+					<div class="theBtn newCode">
 						<div class="caption">
 							New Code
 						</div>
@@ -430,7 +465,7 @@
 							Build & share code
 						</div>
 					</div>
-					<div class="btn discoverCode">
+					<div class="theBtn discoverCode">
 						<div class="caption">
 							Discover
 						</div>
@@ -468,58 +503,33 @@
 				</div>
 				<div class="projRight">
 					<div class="commandBar">
-						<div class="btn download">
+						<div class="theBtn Run">
 							<div class="img"></div>
-							<div class="caption">Download</div>
+							<div class="caption">Run</div>
 						</div>
-						<div class="btn share">
+						<div class="theBtn fork">
+							<div class="img"></div>
+							<div class="caption">Make a Copy</div>
+						</div>
+						<div class="theBtn share"  data-target="#shareDialog">
 							<div class="img"></div>
 							<div class="caption">Share</div>
 							<div class="dropdown"></div>
 
-						</div>
-						<div class="btn fork disabled">
-							<div class="img"></div>
-							<div class="caption">Save</div>
-						</div>
-					</div>
+						</div>					</div>
 				</div>
                         </div>
 			   </div>
                     </div>
    <div class="ui-layout-east">
-                        <div class="server-center">
-                            <div class="editor css" fileName="css.php">
-                                <textarea class="code" mode="css" name="css.php">
-{css.php}
-</textarea>
-                    </div>
-                            <div class="editor active additional" fileName="additional.php">
-                                <textarea class="code" mode="{additionalMode}"  name="additional.php">
-{additional.php}
-</textarea>
-                    </div>
-                    <div class="floatBar">
-                        <div class="floatTab active additional">
-                            {additionalName}
-                        </div>
-                        <div class="floatTab css">
-                            CSS
-                        </div>
-                    </div>
-                    </div>
                     <div class="server-south">
                         <div class="browser-center">
 				<div class="browserToolbar">
-				<div class="btn run">
-					<div class="img"></div>
-					<div class="text">Reload</div>
-				</div>
-				<div class="saveStatus">Unsaved Changes... Click reload to save</div>
-                    		<div class="floatBar">
-                       		   <div class="floatTab active">
-                            		Output
-                                </div>
+				<div class="browserBar">
+				<div class="saveStatus">Unsaved Changes... Click run</div>
+   			<div class="floatBar">
+				Output
+			</div>
                             </div>
 				</div>
 				
@@ -545,12 +555,19 @@
                     </div>
 				<div class="loading">
 				</div>
+<div class="modal" id="myModal" style="display:none;">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">X</a>
+    <h3>Run this code in 60 seconds</h3>
+  </div>
+  <div class="modal-body">
 				<div class="challenge {challengeClass}">
 					<div class="twilioVerify">
 						<div class="logo">
 						</div>
 						<div class="box">
-							Please verify your phone number to run this code snippet
+							<div class="big">This code makes outbound calls</div>
+							<div class="small">Please verify your phone number</div>
 							<div class="phoneBox">
 							<div class="code">+1</div><input type="text" value="" /> <div class="button">Call</div>
 							</div>
@@ -563,16 +580,20 @@
 						</div>
 					</div>
 				</div>
-			<div class="shareDialog" style="display:none;">
+  </div>
+</div>
+
+			<div id="shareDialog" class="shareDialog dropdown-menu" style="display:none;">
 				<div class="field source">
-					<div class="text">Share your source code</div>
+					<div class="text">Share this code</div>
 					<input id="sourceUrl" />
 				</div>
 				<div class="field app">
-					<div class="text">Share your app</div>
+					<div class="text">Share this app</div>
 					<input id="appUrl" />
 				</div>
 			</div>
 			<div id="fb-root"></div> 
+    <script src="{static}/scripts/bootstrap/js/bootstrap.min.js"></script>
                     </body>
                     </html> 

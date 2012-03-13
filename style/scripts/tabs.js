@@ -62,6 +62,10 @@ var CodeModule  = function(codeBoxes) {
 	}
    };
 
+   function doFocus() {
+	codeEditorHandles["main"].focus();
+   };
+
 
    function reset(cb) {
 	for (var i=0; i<codeEditors.length; i++) {
@@ -75,7 +79,7 @@ var CodeModule  = function(codeBoxes) {
 
    function codeChanged(index) {
 	codeEditors[index].changed = true;
-	$(".btn.fork").removeClass("disabled");
+	$(".theBtn.fork").removeClass("disabled");
 	if (!$(".saveStatus").hasClass("active")) {
 		$(".saveStatus").addClass("active");
 	}
@@ -86,7 +90,14 @@ var CodeModule  = function(codeBoxes) {
        var editorName = textArea.attr("name");
        var editorMode = textArea.attr("mode");
 
-       
+	var onFocus = function() {
+
+	};
+
+	var unFocus = function() {
+		
+	};
+	
        var codeEditor = CodeMirror.fromTextArea(textArea[0], {
             lineNumbers: true,
             mode: editorMode,
@@ -111,31 +122,17 @@ var CodeModule  = function(codeBoxes) {
    	codeEditors[j] = {"editor": _initEditor(j), "changed": false, "fileName": codeBoxArray[j].attr("fileName")};
    }
 
-  $(".floatTab.css").click(function() {
-  	$(".floatTab.additional").removeClass("active");
-       $(".editor.additional").removeClass("active");
-        		      
-       $(".floatTab.css").addClass("active");
-   	$(".editor.css").addClass("active");
-
-	codeEditorHandles["css.php"].refresh();
-   });
-        		      		
-   $(".floatTab.additional").click(function() {
-          $(".floatTab.css").removeClass("active");
-          $(".editor.css").removeClass("active");
-                      
-          $(".floatTab.additional").addClass("active");
-          $(".editor.additional").addClass("active");
-
-	   codeEditorHandles["additional.php"].refresh();
-   });
+	$('a[data-toggle="tab"]').on('shown', function (e) {
+ 	 	var tabName = ($(e.target).attr("href") || "").replace("#", "");
+		codeEditorHandles[tabName].refresh();
+	});
 
    return {
 	"push": push,
 	"save": save,
 	"reset": reset,
-	"refresh": refresh
+	"refresh": refresh,
+	"focus": doFocus
    }
    
    

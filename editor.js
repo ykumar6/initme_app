@@ -3,7 +3,7 @@ var async = require("async");
 var config = require("./config");
 
 var frameworkFiles = {
-    "php": ["main.php", "css.php", "additional.php"]
+    "php": ["main.php", "css.php", "javascript.php"]
 }
 
 module.exports = {
@@ -26,14 +26,20 @@ module.exports = {
 	     index = index.replace(/{authorName}/mig, proj.getAuthorName());   
              index = index.replace(/{tags}/mig, (proj.model.tags || []).join(",")); 
    	     index = index.replace(/{login}/mig, user ? "LOGOUT": "LOGIN");            
-   	     index = index.replace(/{facebookId}/mig, config.facebookId);            
+   	     index = index.replace(/{facebookId}/mig, config.facebookId);   
+
+	     var files = ["main.php", "css.php", "javascript.php"];
+            console.log(proj.model.tags);
             if (proj.model.tags.indexOf("twilio") >= 0) {
+			files.push("additional.php");
 			index = index.replace(/{additionalMode}/mig, "php");            
 			index = index.replace(/{additionalName}/mig, "TwiML");   
-			index = index.replace(/{challengeClass}/mig, "twilio");            
+			index = index.replace(/{challengeClass}/mig, "twilio");  
+          
             } else {
 			index = index.replace(/{additionalMode}/mig, "javascript");            
 			index = index.replace(/{additionalName}/mig, "JavaScript");   
+			index = index.replace(/{additionalStyle}/mig, "display:none;");  
 	     }
 
             if (proj.model.tags.indexOf("facebook") >= 0) {
@@ -49,9 +55,8 @@ module.exports = {
                   });
             };
             
-			var files = frameworkFiles[proj.getFramework()];
 			
-            async.forEach(frameworkFiles[proj.getFramework()], getFile, function(err) {
+            async.forEach(files, getFile, function(err) {
                 callback(err, index);
             })
 

@@ -46,6 +46,7 @@ module.exports = {
         client.apiCall("POST", "/2010-04-01/Accounts.json", {
             params : ""
         }, function(response) {
+			console.log(response);
             cb({
                 "sid" : response.sid,
                 "token" : response.auth_token

@@ -86,7 +86,7 @@ var Project = function(args) {
     	var twilioVerify = function(phone) {
 		client.get("twilioAccount", function(err, account) {
 			if (account) {
-				verifyPhone(twilioAccount, phone, client);
+				verifyPhone(account, phone, client);
 			} else {
 				Twilio.addAccount(function(account) {
 					client.emit("twilioAccount", account.sid);

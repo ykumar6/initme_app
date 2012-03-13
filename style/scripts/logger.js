@@ -8,8 +8,8 @@ var Logger = function(uiPane) {
     this.logText = $(".logBar .logTextInner");
     this.logTime = $(".logBar .logTime");
 
-    this._isConnecting();
-    
+    this.clear();
+    this._isConnecting(); 
 };
 
 (function() {
@@ -28,7 +28,14 @@ var Logger = function(uiPane) {
 
     };
 
+    this.show = function() {
+	 if (this.isShow) {
+		this.uiPane.show("south");
+	 }
+    };
+
     this.clear = function() {
+	 this.isShow = false;
 	 this.uiPane.hide("south");
     };
     
@@ -77,10 +84,16 @@ var Logger = function(uiPane) {
 	 }
 	 if (data.type !== "error" && !data.isNow) {
 	 	this.msgTimer = setTimeout(function() {
+			self.isShow = false;
 			self.uiPane.hide("south");
 	 	}, 3000);
 	 }	
-	 this.uiPane.show("south");
+
+	 if (!$("body").hasClass("oauth")) {
+	 	this.isShow = true;
+	 	this.uiPane.show("south");
+	 }
+
         this.logIcon.removeClass("check").removeClass("warn").removeClass("info");
         this.logIcon.addClass(data.type);
         
