@@ -18,6 +18,9 @@
 <body>
     <?php include("twilio-php/Services/Twilio/Capability.php"); ?>
 	<?php include("main.php"); ?>
+	<script type="text/javascript">
+		<?php include("javascript.php"); ?>
+	</script>
 </body>
 </html>
 	

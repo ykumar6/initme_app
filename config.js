@@ -29,6 +29,10 @@ module.exports = {
 		"sid": "ACc7e3ab1491e14ecdb1ef29e48f8bd302",
 		"authToken": "ecd8df3b9fd1d70002a513ec07e1a216"
 	 },
+	 "DropBox": {
+		"appKey": "z0f21nzbs6kncyr",
+		"appSecret": "5esuj94jsz411gw"
+	 },
      "facebookId": "307201729318712",
      "workspaceDir": "/initHome/",
      "tmpDir": "/initTemp/",

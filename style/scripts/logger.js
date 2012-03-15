@@ -19,7 +19,7 @@ var Logger = function(uiPane) {
     this._isConnecting = function() {
     	this.handleMsg({
 		type: "info",
-		text: "Trying to connect with virtual machine",
+		text: "Creating a new with virtual machine, just for you!",
 		time: new Date(),
 		isNow: true
     	});

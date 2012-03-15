@@ -29,7 +29,8 @@ Project = new Schema({
   'tags': [String],
   'userId': {type: String, index: true},
   'authorName': {type: String},
-  'url': {type: String, index: true}
+  'url': {type: String, index: true},
+  'namespaceUrl': {type: String}
 });
 
 
@@ -60,6 +61,9 @@ Project.pre('save', function(next) {
     }
     if (!this.subTitle) {
 	 this.projectTitle = "Please add a description";
+    }
+    if (this.namespace && !this.namespaceUrl) {
+	 this.namespaceUrl = this.projectTitle.replace(/\s/gi, "-").toLowerCase();
     }
     next();
 });

@@ -510,6 +510,65 @@ app.get('/fork/:projectId', function(req, res, next) {
 
 });
 
+
+app.get('/:projectTitle', function(req, res, next) {
+    //render user portal or ide
+
+    var domainParts = req.headers.host.split(".");
+    if (domainParts.length !== 3 || req.params.projectTitle == "favicon.ico") {
+	 next();
+	 return;
+    }
+
+    var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
+    var isOwner = (projList.indexOf(req.params.id) >= 0);
+
+    AppChecker.activateApp(req.params.projectTitle, function(proj) {
+        if(proj && proj.getAuthorName() !== "Unknown") {
+              Editor.getIndex(proj, isOwner, req.user, function(err, index) {
+                if(err) {
+                    console.log(err);
+                    res.send(500);
+                } else {
+                    res.end(index);
+                }
+              });
+        } else {
+            res.send(500);
+        }
+    }, domainParts[0]);
+});
+
+
+app.get('/:id/*', function(req, res, next) {
+    //render user portal or ide
+
+    var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
+    var isOwner = (projList.indexOf(req.params.id) >= 0);
+
+    AppChecker.activateApp(req.params.id, function(proj) {
+        if(proj && proj.getAuthorName() !== "Unknown") {
+		
+	     if (req.url.indexOf(proj.getProjectUrl()) < 0) {
+		 res.redirect("/" + proj.getProjectUrl());
+	     }
+	     else {
+              Editor.getIndex(proj, isOwner, req.user, function(err, index) {
+                if(err) {
+                    console.log(err);
+                    res.send(500);
+                } else {
+                    res.end(index);
+                }
+              });
+	     }
+        } else {
+            res.send(500);
+        }
+    });
+});
+
+
 app.get('/:id/*', function(req, res, next) {
     //render user portal or ide
 

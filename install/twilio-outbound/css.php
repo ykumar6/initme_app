@@ -1,4 +1,3 @@
-
 body {
   text-align: center;
   margin: 0;
@@ -151,4 +150,6 @@ button.hangup:before { background-position: 0 -131px; }
 button.hangup:hover:before,
 button.hangup:focus:before,
 button.hangup:active:before { background-position: 0 -88px; }
+
+
 

@@ -5,9 +5,6 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 	<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type="text/javascript">
-		<?php include("additional.php"); ?>
-	</script>
 	<style type="text/css">
 		<?php include("css.php"); ?>
 	</style>

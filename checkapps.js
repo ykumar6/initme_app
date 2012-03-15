@@ -1,5 +1,9 @@
 var global = require("./global");
 var Project = require("./projects/Project");
+var mongoose = require("mongoose");
+require("./projects/Model");
+var ProjectModel = mongoose.model("Project");
+
 var Twilio = require("./twilio");
 
 var activeApps = {};
@@ -53,15 +57,18 @@ module.exports = {
         activeApps[proj.getId()] = proj;
     },
 
-    activateApp: function(appName, cb) {
+    activateApp: function(appName, cb, namespace) {
         var self = this;
-        if (activeApps[appName]) {
-            cb(activeApps[appName]);
+
+       var getApp = function(appId) {
+        if (activeApps[appId]) {
+            cb(activeApps[appId]);
         }
         else {
-            var params = {};
-            params.projectId = appName;
-            params.ready = function(err, model) {
+           var params = {};
+	    params.projectId = appId;
+	
+           params.ready = function(err, model) {
                 if(err) {
                     cb(null);
                 }
@@ -72,6 +79,27 @@ module.exports = {
             };
             var proj = new Project(params);
         }
+      };
+
+      if (appName && namespace) {
+		console.log(appName);
+		console.log(namespace);
+
+		ProjectModel.findOne({"namespaceUrl": appName.toLowerCase(), "namespace": namespace.toLowerCase()}, function(err, doc) {
+			console.log(err);
+			console.log(doc);
+			if (doc) {
+				getApp(doc.projectId);
+			}
+			else {
+				cb(null);
+			}
+		});
+      }
+      else {
+		getApp(appName);
+      }
+	
     },
     
     removeApp: function(proj) {

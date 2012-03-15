@@ -1,18 +1,24 @@
 body {
     margin: 0px;
-    font-family: "LatoWebSymbol", Lato, Verdana, sans-serif;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-rendering: optimizelegibility;
     font-size: 14px;
-    font-weight: 300;
+    font-weight: 400;
     margin: 0;
     padding: 0;
     height: 100%; /* this is the key! */
 }
 
 body p {
-    font-family: "LatoWebSymbol", Lato, Verdana, sans-serif;
+    text-rendering: optimizelegibility;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 400;
     color: #58595B;
+}
+
+.headerOptions .subText {
+	color: #6D6E71;
 }
 
 .headerOptions .theBtn {
@@ -23,7 +29,7 @@ body p {
 }
 
 .browserBar {
-	height: 35px;
+	height: 40px;
 }
 
 .tabHolder .active a, .tabHolder .active a:hover {
@@ -43,25 +49,33 @@ body p {
 }
 
 h1 input {
-	border: none;
-	background: none;
-    font-size: 24px;
-    font-weight: 400;
-    letter-spacing: 1px;
-    margin-right: 0px;
-    padding: 0px;
-     width: 300px;
+border: none;
+background: none;
+font-size: 18px;
+font-weight: 400;
+letter-spacing: 1px;
+margin-right: 0px;
+width: 300px;
+line-height: 20px;
+height: 20px;
+vertical-align: middle;
+margin-top: 7px;
 }
 
 h2 input {
-	border: none;
-	background: none;
-    font-size: 16px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    margin-right: 0px;
-    padding: 0px;
-    width: 500px;
+border: none;
+background: none;
+font-size: 16px;
+font-weight: 400;
+letter-spacing: 1px;
+margin-right: 0px;
+width: 500px;
+line-height: 18px;
+height: 18px;
+}
+
+h2 button {
+	vertical-align: top;
 }
 
 .commandBar {
@@ -262,10 +276,11 @@ h1 {
 }
 
 h2 {
+    color: #6D6E71;
     margin-top: 0px;
     margin-bottom: 0px;
     font-size: 16px;
-    font-weight: 300;
+    font-weight: 400;
     letter-spacing: 1px;
     line-height: 20px !important;
 }
@@ -273,8 +288,9 @@ h3 {
     margin-top: 0px;
     margin-bottom: 0px;
     font-size: 16px;
-    font-weight: 300;
-    line-height: 20px !important;
+    font-weight: 400;
+    line-height: 18px !important;
+    color: #6D6E71;
 }
 
 button {
@@ -350,7 +366,7 @@ button {
 }
 
 .titleBox .author {
-	font-weight: 300;
+	font-weight: 400;
 	position: relative;
 	font-size: 12px;
 	top: -2px;
@@ -482,7 +498,7 @@ body.ie8.inactive .loading {
 }
 
 .floatBar {
-
+	padding-top: 2px;
 	position: absolute;
 	right: 10px;
 	top: 10px;
@@ -601,6 +617,10 @@ background-color: #D3E5EC;
 }
 
 .tag.facebook {
+	background-color: #D0E5F0;
+}
+
+.tag.dropbox {
 	background-color: #D0E5F0;
 }
 
@@ -844,8 +864,7 @@ body .code-center, body .code-south, body .server-center {
 }
 input {
     border: 1px solid #B5DBEB;
-    color: #A7A9AC;
-    padding: 2px 2px 2px 8px;
+    padding: 2px 2px 2px 4px;
     width: 200px;
     margin-right: 5px;
 }
@@ -990,7 +1009,7 @@ body.oauth .facebook_oauth:hover {
 }
 .twilioVerify .box .small {
 	font-size: 14px;
-	font-weight: 300;
+	font-weight: 400;
 }
 
 .twilioVerify .code {
@@ -1109,5 +1128,9 @@ body.oauth .facebook_oauth:hover {
 
 .twilioVerify.askCode .box {
 	display: none;
+}
 
+
+.twilioVerify .codeBox {
+        padding-top: 10px;
 }

@@ -1,6 +1,8 @@
 require("./Model");
 
 var Twilio = require('../twilio');
+var DropBox = require('../DropBox');
+
 var mongoose = require('mongoose');
 var fs = require("fs");
 var async = require("async");
@@ -83,6 +85,7 @@ var Project = function(args) {
 
     this.addClientConnection = function(client) {
 	var self = this;
+	client.emit("attached");
     	var twilioVerify = function(phone) {
 		client.get("twilioAccount", function(err, account) {
 			if (account) {
@@ -96,6 +99,15 @@ var Project = function(args) {
 			}
 		});
     	}; 
+
+	 client.on("DropboxToken", function() {
+		console.log("getting token");
+		DropBox.getTokenUrl(client);
+	 });
+
+	 client.on("DropboxAccess", function() {
+		DropBox.getAccessToken(client);
+	 });
    
 	 client.on("twilioVerify", twilioVerify);
 
@@ -183,6 +195,8 @@ var Project = function(args) {
             var proj = new model({
                 "projectId" : args.proposedId || null,
                 "projectTitle" : args.proposedTitle || null,
+                "namespace" : args.namespace || null,
+                "namespaceUrl" : args.namespaceUrl || null,
                 "subTitle" : args.subTitle || null,
 		  "authorName": args.authorName,
 		  "tags": args.tags || [],
@@ -204,7 +218,7 @@ var Project = function(args) {
 
 		setupAPIs: function(callback) {
 			var self = this;
-			if (this.model.tags.indexOf("twilio")) {
+			if (this.model.tags.indexOf("twilio") >= 0) {
 				Twilio.createApp(this.getId(), this.getUrl(), function(data) {
 					if (data && data.appId) {
 						console.log("twilio app created " + JSON.stringify(data));

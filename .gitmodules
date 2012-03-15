@@ -25,3 +25,6 @@
 [submodule "style/scripts/bootstrap"]
 	path = style/scripts/bootstrap
 	url = https://github.com/twitter/bootstrap.git
+[submodule "node-dbox"]
+	path = node-dbox
+	url = https://github.com/sintaxi/node-dbox.git

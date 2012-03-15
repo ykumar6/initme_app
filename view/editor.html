@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
     <head profile="http://www.w3.org/2005/10/profile">
+    <title>InitMe - {title}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
 	 <script src="{static}/socket.io/socket.io.js"></script>
@@ -12,11 +13,13 @@
         <script  type="text/javascript" src="{static}/scripts/projectManagement.js"></script>
         <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
         <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+
 
     	 <link href="{static}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     	 <link href="{static}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
-        <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+	 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:bold,regular,medium,thin,italic,mediumitalic">
         <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
         <script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
         <link rel="stylesheet" href="{static}/main.css">
@@ -41,7 +44,10 @@
             document.tags = "{tags}";
             document.isOwner = {isOwner};
             document.FacebookId = "{facebookId}";
-            
+
+	     var parts = document.domain.split(".");
+	     document.realDomain = parts[parts.length-2] + "." + parts[parts.length-1];
+		                  
             $(function() {
 
 		  document.tags = (document.tags || "").split(",");
@@ -157,7 +163,8 @@
 
 		  $('.theBtn.Run').popover({
 				title: "Run and edit code",
-				content: "You can edit and re-run live code by clicking this button"
+				content: "You can edit and re-run live code by clicking this button",
+				placement: "bottom"
 		  });
 		  $('.theBtn.Run').popover('show');
 
@@ -176,13 +183,14 @@
                 
                 document.CodeCommands = CodeModule($(".editor")); //load up editor
                 var challengeSession, projectSession;
-                document.logHandler = new Logger(southPane);
 
-                var isAuthRequired = true;
+                document.logHandler = new Logger(southPane);     
+
+	         var isAuthRequired = true;
                 projectSession = new document.ProjectManagement();
                 projectSession.setState("oauth");
-
-                if ($.inArray("facebook", document.tags) >= 0 ) {
+       
+	         if ($.inArray("facebook", document.tags) >= 0 ) {
                     positionLoading();
 
                     challengeSession = new document.FacebookOAuth();
@@ -200,10 +208,11 @@
 
                     });
                 } 
-                else if ($.inArray("twilio", document.tags) >= 0 ) {
+                else if ($.inArray("twilio", document.tags) >= 0 || $.inArray("dropbox", document.tags) >= 0 ) {
                     positionLoading();
 
-                    challengeSession = new document.TwilioChallenge(projectSession);
+		      var modName = ($.inArray("twilio", document.tags) >= 0 ? "TwilioChallenge" : "DropboxChallenge");
+                    challengeSession = new document[modName](projectSession);
                     $("body").bind("challengeComplete", function(e, token) {
 
 			   document.logHandler.show();
@@ -260,11 +269,7 @@
                             		return true;
                         		}
                     		    });
-                                if(window.history && window.history.pushState) {
-                                    window.history.pushState({}, "", "http://" + document.domain + "/" + document.projectId);
-                                } else {
-                                    window.location = "http://" + document.domain + "/" + document.projectId;
-                                }
+                                window.location = "http://" + document.realDomain + "/" + document.projectId;
                             },
                             error : function(err) {
                                 console.log(err);
@@ -349,8 +354,8 @@
                 });
 
 
-                $(".theBtn.share").click(function(e) {
-                    $("#sourceUrl").val("http://" + document.domain + "/" + document.projectId);
+                $(".theBtn.share").click(function(e) {		      
+                    $("#sourceUrl").val("http://" + document.realDomain + "/" + document.projectId);
                     $("#appUrl").val("http://" + document.appUrl);
                     $(".shareDialog").css("top", "0px");
                     $(".shareDialog").css("left", "0px");
@@ -573,7 +578,7 @@
 							</div>
 						</div>
 						<div class="verifyCode">
-							Please enter this number
+							We're calling you, enter this number on your dialpad
 							<div class="codeBox">
 							<div class="verifyCodeNumber">12324242</div> <div class="button">Done</div>
 							</div>
