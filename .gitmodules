@@ -15,7 +15,7 @@
 	url = https://ykumar6@github.com/ykumar6/jwt-node.git
 [submodule "install/twilio-outbound/twilio-php"]
 	path = install/twilio-outbound/twilio-php
-	url = https://github.com/ykumar6/twilio-php
+	url = https://ykumar6@github.com/ykumar6/twilio-php.git
 [submodule "php-sdk"]
 	path = php-sdk
 	url = https://github.com/facebook/php-sdk.git
