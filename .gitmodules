@@ -9,7 +9,7 @@
 	url = git://github.com/caphun/jquery.inlineedit.git
 [submodule "node-twilio"]
 	path = node-twilio
-	url = git@github.com:ykumar6/node-twilio.git
+	url = https://ykumar6@github.com/ykumar6/node-twilio.git
 [submodule "jwt-node"]
 	path = jwt-node
 	url = https://ykumar6@github.com/ykumar6/jwt-node.git

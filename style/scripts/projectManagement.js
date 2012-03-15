@@ -71,7 +71,10 @@ document.ProjectManagement = function() {
             });
 
             self.socketVM.on("error", function(err) {
-                setTimeout(tryVMConnect, 5000);
+		  if (self.vmErrorTimer) {
+			clearInterval(self.vmErrorTimer);
+		  }
+                self.vmErrorTimer = setTimeout(tryVMConnect, 5000);
             });
             self.socketVM.on("connect", function(err) {
                 if(cb)
@@ -94,7 +97,10 @@ document.ProjectManagement = function() {
                 });
             });
             self.socketMain.on("error", function(err) {
-                setTimeout(tryMainConnect, 1000);
+		  if (self.mainErrorTimer) {
+			clearInterval(self.mainErrorTimer);
+		  }
+                self.mainErrorTimer = setTimeout(tryMainConnect, 1000);
             });
         };
 	 if (self.socketMain && self.socketMain.socket.connected) {
