@@ -28,3 +28,6 @@
 [submodule "node-dbox"]
 	path = node-dbox
 	url = https://github.com/sintaxi/node-dbox.git
+[submodule "install/dropbox-upload-php/Dropbox"]
+	path = install/dropbox-upload-php/Dropbox
+	url = https://github.com/ykumar6/dropbox-php

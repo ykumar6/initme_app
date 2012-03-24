@@ -43,6 +43,20 @@ var projects = [
                 copyFrom: __dirname + "/twilio-outbound",
                 keepAlive: true
         },
+     	{
+                root: "parent",
+                framework: "php",
+          		proposedId: 100021,
+                namespace: "dropbox",
+                namespaceUrl: "upload-file-php",
+                proposedTitle: "Dropbox File Uploader",
+          		subTitle: "Uploads files to your Dropbox account using the PHP SDK",
+          		tags: ["php", "dropbox"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/dropbox-upload-php",
+                keepAlive: true
+        },
+
 
 ];
 
