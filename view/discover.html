@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+
+        <link rel="stylesheet" href="main.css">
+        
+        <style>
+        
+            body {
+                margin: 0px;
+    		  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    		  text-rendering: optimizelegibility;
+                font-size: 14px;
+                font-weight: 400;
+                margin:0; 
+                padding:0; 
+                height:100%; /* this is the key! */		
+ 	         background-color:  #F1F2F2;
+
+            }
+
+	    	.productWrapper {
+			padding-top: 20px;
+			background-color:  #F1F2F2;
+
+	    	}
+
+
+	     .mainBody {
+			margin: 0 auto;
+			width: 1000px;
+			margin-bottom: 50px;
+			background-color: white;
+			padding-bottom: 30px;
+			border-radius: 5px;	     
+		}
+        
+            .productBar {
+		  padding-top: 13px;
+		  margin: 0 auto;
+		  width: 1000px;
+		  height: 60px;
+	     }
+		
+	     .mainTitle {
+	font-size: 14px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	     }
+	
+	     .liveImg {
+    			background-image: url("images/live.png");
+    			background-repeat: no-repeat;  
+			width: 65px;
+			height: 23px;
+	     }
+
+	      .productBar > div {
+		  display: inline-block;
+		  vertical-align: bottom;
+	     }
+
+	      .productBar .logo {
+    			background-image: url("images/twiliobiglogo.png");
+    			background-position: center center;
+    			background-repeat: no-repeat;
+			width: 220px;
+			height: 80px;
+			padding-left: 50px;
+	     }
+
+	     .footer .logo {
+    			background-image: url("images/logodark.png");
+    			background-position: center center;
+    			background-repeat: no-repeat;
+			width: 180px;
+			height: 60px;
+			margin: 0 auto;
+	     }
+	.tag {
+		padding: 3px 5px 3px 5px;
+		margin-left: 3px;
+		border-radius: 3px;
+		font-size: 16px;
+		font-weight: 400;
+		color: #6D6E71;
+		vertical-align: bottom;
+
+	}
+
+	.tagging > div {
+		display: inline-block;
+		vertical-align: middle;
+
+	}
+
+	.tagging {
+		color: #6D6E71;
+		float: right;
+		margin-top: 20px;
+		margin-right: 10px;
+		font-size: 11px;
+	}
+
+	.tags > div {
+		display: inline-block;
+	}
+	.tag.facebook {
+		background-color: #D0E5F0;
+	}
+
+	.tag.dropbox {
+		background-color: #D0E5F0;
+	}
+
+	.tag.php {
+		background-color: #FFE6CB;
+	}
+
+	.tag.twilio {
+		background-color: #DAD3E3;
+	}
+
+	.tag.javascript {
+		background-color: #F9F7D2;
+	}
+
+
+	     .exampleTitle {
+			color: #333;
+			font-size: 38px;
+	     }
+
+	    .exampleTitle .bold {
+			font-weight: bold;
+	    }
+		
+	 	.separator {
+			margin-top: 20px;
+			width: 100%;
+			height: 3px;
+		}	
+
+		.codeItem {
+			padding-top: 60px;
+			margin: 0 auto;
+			width: 900px;
+			height: 150px;
+		}
+
+		.codeItem .body {
+
+			width: 535px;
+		}
+
+		.codeItem .img {
+			width: 200px;
+			height: 150px;
+		}
+
+		.codeItem .subSeparator {
+			border-right: 1px solid #D1D3D4;
+			height: 90px;
+			margin-left: 10px;
+			margin-right: 30px;
+		}
+
+		.codeItem > div {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.subBody > div {
+			display: inline-block;
+			vertical-align: middle;
+		}
+
+		.codeItem .title {
+			font-size: 30px;
+			color: #6D6E71;
+		}
+		
+		.codeItem .subTitle {
+			font-size: 18px;
+			color: #939598;
+		}
+
+		.codeItem .subBody {
+			margin-top: 15px;
+		}
+
+		.codeItem .comments {
+			float: right;
+			margin-top: 10px;
+		}
+
+		.codeItem .comments > * {
+			display: inline-block;
+			vertical-align: bottom;
+		}
+
+		.codeItem .comments .num {
+			margin-left: 5px;
+			font-size: 12px;
+			color: #58595B;
+		}
+
+		.goBtn {
+    			background-image: url("images/gobtn.png");
+    			background-position: center center;
+    			background-repeat: no-repeat;
+			width: 80px;
+			height: 150px;
+			opacity: 0.5;
+			margin-left: 30px;
+			cursor: pointer;
+		}
+
+		.goBtn:hover {
+			opacity: 1;
+
+		}
+
+		.footer {
+			font-size: 11px;
+			width: 200px;
+			margin: 0 auto;
+			padding-bottom: 30px;
+		}
+
+		.headerWrapper {
+			border-bottom: 1px solid #E6E7E8;
+		}
+
+        </style>
+
+    <script type="text/javascript">
+        
+                $(function() {
+                    
+                });
+        </script>
+
+    </head>
+    <body class="discover">
+  <div class="headerWrapper">
+                        <div class="header">
+                            <div class="logo"></div>
+				<div class="headerOptions">
+					<div class="theBtn newCode">
+						<div class="caption">
+							New Code
+						</div>
+						<div class="subText">
+							Build & share code
+						</div>
+					</div>
+					<div class="theBtn discoverCode">
+						<div class="caption">
+							Discover
+						</div>
+						<div class="subText">
+							Code snippets & apps
+						</div>
+					</div>
+				</div>
+                            <div class="toolbar rightBar">
+					<a href="/?state=Blog">BLOG</a>
+					<a href="/?state=loginDirect">SIGN UP</a>
+					<a class="{login}" href="javascript:void(0)">{login}</a>
+
+                            </div>
+                        </div>
+			   </div>	
+		
+		<div class="productWrapper">
+			<div class="productBar">
+				<div class="exampleTitle">
+					<div><span class="bold">LIVE</span> Twilio Code</div>
+					<div class="mainTitle">Run, edit & share code snippets powered by Twilio's API</div>
+				</div>
+				<div class="tagging">
+					<div class="label">Active Filters</div>
+					<div class="tag twilio">
+						twilio
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="mainBody">
+			<div class="separator"></div>
+			<div class="codeItem">
+				<div class="img"><img src="images/codeIcons/100011.png"></div>
+				<div class="subSeparator"></div>
+				<div class="body">
+					<div class="title">Outbound call with JavaScript client</div>
+					<div class="subTitle">Make outbound calls to physical phones with Twilio Client and PHP</div>
+					<div class="subBody">
+						<div class="tags">
+							<div class="tag twilio">twilio</div>
+							<div class="tag javascript">javascript</div>
+							<div class="tag php">php</div>
+
+						</div>
+						<div class="comments">
+							<img src="images/comments.png" />
+							<div class="num">0 Comments</div>
+						</div>
+					</div>
+				</div>
+				<div class="goBtn"></div>
+			</div>
+			<div class="codeItem">
+				<div class="img"><img src="images/codeIcons/100012.png"></div>
+				<div class="subSeparator"></div>
+				<div class="body">
+					<div class="title">Send a text message</div>
+					<div class="subTitle">Send simple text messages using PHP & Twilio Markup Language</div>
+					<div class="subBody">
+						<div class="tags">
+							<div class="tag twilio">twilio</div>
+							<div class="tag php">php</div>
+
+						</div>
+						<div class="comments">
+							<img src="images/comments.png" />
+							<div class="num">0 Comments</div>
+						</div>
+					</div>
+				</div>
+				<div class="goBtn"></div>
+			</div>
+			</div>
+		</div>
+		<div class="footer">
+			(c) Copyright 2012 InitMe Inc.
+		</div>
+    </body>
+</html>

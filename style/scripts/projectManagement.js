@@ -24,6 +24,9 @@ document.ProjectManagement = function() {
         else if (state === "vmActive") {
     	     this.isVMActive = true;
             $("body").removeClass("inactive");
+	     if (this.isActive) {
+		   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken || "");
+	     }
         } 
         else if (state === "oauth") {
             $("body").removeClass("oauth");

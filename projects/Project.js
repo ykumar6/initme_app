@@ -105,8 +105,8 @@ var Project = function(args) {
 		DropBox.getTokenUrl(client);
 	 });
 
-	 client.on("DropboxAccess", function() {
-		DropBox.getAccessToken(client);
+	 client.on("DropboxAccess", function(msg) {
+		DropBox.getAccessToken(msg.token, client);
 	 });
    
 	 client.on("twilioVerify", twilioVerify);

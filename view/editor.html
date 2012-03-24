@@ -14,8 +14,23 @@
         <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
         <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
         <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+<script type="text/javascript">
 
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27720942-1']);
+  _gaq.push(['_trackPageview']);
 
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<script type="text/javascript">
+document.write(unescape("%3Cscript src='" + ((document.location.protocol=="https:")?"https://snapabug.appspot.com":"http://www.snapengage.com") + "/snapabug.js' type='text/javascript'%3E%3C/script%3E"));</script><script type="text/javascript">
+SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
+</script>
     	 <link href="{static}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     	 <link href="{static}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
         <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
@@ -299,13 +314,18 @@
 		      else {
 				projectSession.setState("active");
                     		document.logHandler.clear();
-                   		if(document.isOwner) {
-                        		document.CodeCommands.push();
-                    		} else {
-                        		projectSession.createProject(function() {
-                            	document.CodeCommands.push();
-                        		});
-                    		}
+				if (document.CodeCommands.isChanged()) {
+                   			if(document.isOwner) {
+                        			document.CodeCommands.push();
+                    			} else {
+                        			projectSession.createProject(function() {
+                            			document.CodeCommands.push();
+                        			});
+                    			}
+				} 
+				else {
+					frame.src = iframe.src;
+				}
 		      } 
                 });
 
@@ -582,6 +602,15 @@
 							<div class="codeBox">
 							<div class="verifyCodeNumber">12324242</div> <div class="button">Done</div>
 							</div>
+						</div>
+					</div>
+					<div class="dropboxVerify">
+						<div class="logo">
+						</div>
+						<div class="box">
+							<div class="big">Please login to Dropbox</div>
+							<div class="small">Permission is only requested to an init.me app folder, and not your root folder</div>
+						 	<button class="btn btn-large">Login</button>
 						</div>
 					</div>
 				</div>

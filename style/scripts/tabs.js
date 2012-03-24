@@ -3,7 +3,8 @@ var CodeModule  = function(codeBoxes) {
    var codeBoxArray = codeBoxes;
    var codeEditors = new Array(codeBoxArray.length);   
    var codeEditorHandles = {};
-
+   var isCodeChanged = false;
+   
    function _save(cb) {
 	async.forEach(codeEditors,
  		function(item, callback) {
@@ -28,6 +29,7 @@ var CodeModule  = function(codeBoxes) {
 				for (var i=0; i<codeEditors.length; i++) {
 					codeEditors[i].changed = false;
 				}
+				isCodeChanged = false;
 				$(".saveStatus").removeClass("active");
 			}
 			cb(err);
@@ -79,11 +81,17 @@ var CodeModule  = function(codeBoxes) {
 
    function codeChanged(index) {
 	codeEditors[index].changed = true;
+	isCodeChanged = true;
 	$(".theBtn.fork").removeClass("disabled");
 	if (!$(".saveStatus").hasClass("active")) {
 		$(".saveStatus").addClass("active");
 	}
    }
+
+   function isChanged() {
+	return isCodeChanged;
+   };
+
    
    function _initEditor(index) {
        var textArea = $(".code", codeBoxArray[index]);
@@ -132,7 +140,8 @@ var CodeModule  = function(codeBoxes) {
 	"save": save,
 	"reset": reset,
 	"refresh": refresh,
-	"focus": doFocus
+	"focus": doFocus,
+	"isChanged": isChanged
    }
    
    

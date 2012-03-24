@@ -45,6 +45,9 @@ module.exports = {
             if (proj.model.tags.indexOf("facebook") >= 0) {
 			index = index.replace(/{challengeClass}/mig, "facebook_oauth");            
             }
+	     else if (proj.model.tags.indexOf("dropbox") >= 0) {
+			index = index.replace(/{challengeClass}/mig, "dropbox");            
+            }
 
             var getFile = function(fileName, callback) {
                   fs.readFile(proj.getPath() + "/" + fileName, function(err, fileData) {

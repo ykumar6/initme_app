@@ -23,7 +23,6 @@ var Logger = function(uiPane) {
 		time: new Date(),
 		isNow: true
     	});
-
 	$("body").trigger("vmDisconnected", []);
 
     };
@@ -44,7 +43,6 @@ var Logger = function(uiPane) {
 
 	 var handleConnect = function() {
 			$("body").trigger("vmConnected", []);
-			$("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken || "");
     			self.handleMsg({
 				type: "check",
 				text: "Successfully activated your virtual machine",

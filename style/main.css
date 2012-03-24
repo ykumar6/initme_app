@@ -970,6 +970,41 @@ body.oauth .facebook_oauth:hover {
 	z-index: 200;
 }
 
+.dropboxVerify {
+	display: none;
+}
+
+.dropboxVerify button {
+	float: right;
+	margin-top: 15px;
+}
+
+
+.challenge.dropbox {
+	margin: 0 auto;
+	padding-bottom: 10px;
+	width: 540px;
+}
+
+
+.challenge.dropbox .dropboxVerify {
+	display: block;
+}
+
+.dropboxVerify .logo {
+	vertical-align: middle;
+	margin-right: 10px;
+	display: inline-block;
+	background-image: url("images/dropbox.png");
+	width: 170px;
+	height: 150px;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.challenge.dropbox .box {
+	width: 300px;
+}
 
 .challenge.twilio {
 	margin: 0 auto;
@@ -990,7 +1025,7 @@ body.oauth .facebook_oauth:hover {
 	display: none;
 }
 
-.twilioVerify .box {
+.challenge .box {
 	font-weight: 400;
 	color: #404040;
 	width: 270px;
@@ -1004,10 +1039,10 @@ body.oauth .facebook_oauth:hover {
 
 }
 
-.twilioVerify .box .big {
+.challenge .box .big {
 	font-size: 18px;
 }
-.twilioVerify .box .small {
+.challenge .box .small {
 	font-size: 14px;
 	font-weight: 400;
 }

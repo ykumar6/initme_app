@@ -249,6 +249,14 @@ app.get('/', function(req, res, next) {
     }
 });
 
+app.get('/discover', function(req, res, next) {
+    //render user portal or ide
+    fs.readFile(__dirname + "/view/discover.html", "utf8", function(err, index) {
+        res.end(index);
+    });
+});
+
+
 //app.all('/?proxy=*', require("./proxy"));
 
 app.get('/logout', function(req, res) {
