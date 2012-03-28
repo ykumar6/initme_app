@@ -1,0 +1,753 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+        <title>InitMe - {title}</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <script src="{static}/socket.io/socket.io.js"></script>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/layout.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/tabs.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/logger.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/projectManagement.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+        <script type="text/javascript">
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-27720942-1']);
+            _gaq.push(['_trackPageview']); (function() {
+                var ga = document.createElement('script');
+                ga.type = 'text/javascript';
+                ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(ga, s);
+            })();
+
+        </script>
+        <link href="{static}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="{static}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
+        <link href='{static}/embed.css' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:bold,regular,medium,thin,italic,mediumitalic">
+        <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
+        <script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
+        <script src="{static}/scripts/codemirror/mode/xml/xml.js"></script>
+        <script src="{static}/scripts/codemirror/mode/php/php.js"></script>
+        <script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
+        <script src="{static}/scripts/codemirror/mode/javascript/javascript.js"></script>
+        <script src="{static}/scripts/codemirror/mode/css/css.js"></script>
+        <script src="{static}/scripts/async/lib/async.js"></script>
+        <link rel="canonical" href="./Twilio Docs - HowTo Twilio Client Click To Call_files/Twilio Docs - HowTo Twilio Client Click To Call.htm">
+        <link rel="stylesheet" type="text/css" href="{static}/twilio/base.css">
+        <link rel="stylesheet" type="text/css" href="{static}/twilio/buttons.css">
+        <link rel="stylesheet" type="text/css" href="{static}/twilio/docs.css">
+        <link rel="stylesheet" type="text/css" href="{static}/twilio/errors.css">
+        <script type="text/javascript">
+            io.util.uniqueUri = function(uri) {
+                var protocol = uri.protocol, host = uri.host, port = uri.port;
+                host = host || document.domain;
+                port = port || (protocol == 'https' && document.location.protocol !== 'https:' ? 443 : document.location.port);
+
+                return (protocol || 'http') + '://' + host + "/" + uri.directory;
+            };
+
+            document.projectId = "{projId}";
+            document.appUrl = "{appUrl}";
+            document.tags = "{tags}";
+            document.isOwner = {isOwner};
+            document.FacebookId = "{facebookId}";
+            document.twilioId = "{twilioSid}";
+
+            var parts = document.domain.split(".");
+            document.realDomain = parts[parts.length - 2] + "." + parts[parts.length - 1];
+
+            $(function() {
+
+                document.tags = (document.tags || "").split(",");
+
+                var alertFallback = false;
+                if( typeof console === "undefined" || typeof console.log === "undefined") {
+                    console = {};
+                    if(alertFallback) {
+                        console.log = function(msg) {
+                            alert(msg);
+                        };
+                    } else {
+                        console.log = function() {
+                        };
+                    }
+                }
+
+                function IsIE8Browser() {
+                    var rv = -1;
+                    var ua = navigator.userAgent;
+                    var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
+                    if(re.exec(ua) != null) {
+                        rv = parseFloat(RegExp.$1);
+                    }
+                    return (rv == 4);
+                };
+
+                if(IsIE8Browser()) {
+                    $("body").addClass("ie8");
+                }
+
+		  $(".app").mouseenter(function() {
+                   	   $(".appToolbar").position({
+                        	of : $(".appWindow"),
+                        	my : "right bottom",
+                        	at : "right bottom"
+                   	   });
+                   	   $(".poweredBy").position({
+                        	of : $(".appWindow"),
+                        	my : "left bottom",
+                        	at : "left bottom"
+                   	   });
+		  });
+
+		  $(".editor").mouseenter(function() {
+                   	   $(".reloadCode.main").position({
+                        	of : $(".editor.main"),
+                        	my : "right top",
+                        	at : "right top"
+                   	   });
+                   	   $(".reloadCode.javascript").position({
+                        	of : $(".editor.javascript"),
+                        	my : "right top",
+                        	at : "right top"
+                   	   });
+                   	   $(".reloadCode.additional").position({
+                        	of : $(".editor.additional"),
+                        	my : "right top",
+                        	at : "right top"
+                   	   });
+		  });
+
+                var positionLoading = function() {
+                    setTimeout(function() {
+                        $(".loading").position({
+                            of : $(".outputHolder"),
+                            my : "center center",
+                            at : "center center"
+                        });
+                    }, 1000);
+                    $(".RunBtn").position({
+                        of : $(".appWindow"),
+                        my : "center center",
+                        at : "center center"
+                    });
+                };
+
+		  window.onresize = function(event) {
+	                positionLoading();
+		  }
+
+                document.CodeCommands = CodeModule($(".editor"));
+                //load up editor
+                var challengeSession, projectSession;
+
+                document.logHandler = new Logger($("<div></div>"));
+
+                var isAuthRequired = true;
+                projectSession = new document.ProjectManagement();
+                projectSession.setState("oauth");
+
+                if($.inArray("facebook", document.tags) >= 0) {
+                    positionLoading();
+                    challengeSession = new document.FacebookOAuth();
+                    $("body").bind("oauthLogin", function(e, token) {
+                        $("#myModal").modal("hide");
+                        document.logHandler.show();
+                        window.accessToken = token;
+                        projectSession.setState("active");
+                        document.CodeCommands.focus();
+                    });
+                    $("body").bind("oauthLogout", function(e) {
+                        $("#appFrame").attr("src", "http://" + document.domain + "/loading");
+                        projectSession.setState("oauth");
+                        positionLoading();
+
+                    });
+                } else if($.inArray("twilio", document.tags) >= 0 || $.inArray("dropbox", document.tags) >= 0) {
+                    positionLoading();
+
+                    var modName = ($.inArray("twilio", document.tags) >= 0 ? "TwilioChallenge" : "DropboxChallenge");
+                    challengeSession = new document[modName](projectSession);
+                    $("body").bind("challengeComplete", function(e, token) {
+
+                        document.logHandler.show();
+                        projectSession.setState("active");
+                        document.CodeCommands.focus();
+                    });
+                    $("body").bind("challengeStart", function(e) {
+                        $("#appFrame").attr("src", "http://" + document.domain + "/loading");
+                        projectSession.setState("oauth");
+                        positionLoading();
+
+                    });
+                } else {
+                    isAuthRequired = false;
+                }
+
+                projectSession.loadProject();
+
+                $("body").bind("vmConnected", function(e) {
+                    projectSession.setState("vmActive");
+                });
+                $("body").bind("vmDisconnected", function(e) {
+                    $("#appFrame").attr("src", "http://" + document.domain + "/loading");
+                    projectSession.setState("vmInactive");
+                    positionLoading();
+                });
+                var _save = function() {
+                    document.CodeCommands.save(function() {
+                        $.ajax({
+                            type : "GET",
+                            url : "http://" + document.domain + "/save/" + document.projectId + "?ts=" + (new Date()).getTime(),
+                            success : function(data) {
+                                $(".title h1").html(data.projectTitle);
+                                $(".subTitle h2").html(data.subTitle);
+
+                                $(".title h1").inlineEdit({
+                                    save : function(e, data) {
+                                        $.post("http://" + document.domain + "/title/" + document.projectId, data);
+                                        return true;
+                                    }
+                                });
+                                $(".title h1").addClass("owner");
+
+                                $(".subTitle h2").addClass("owner");
+                                $(".subTitle h2").inlineEdit({
+                                    save : function(e, data) {
+                                        $.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
+                                        return true;
+                                    }
+                                });
+                                window.location = "http://" + document.realDomain + "/" + document.projectId;
+                            },
+                            error : function(err) {
+                                console.log(err);
+                                window.location = "/?state=loginEditor";
+                            }
+                        });
+                    });
+                }
+
+		  $(".appToolbar .edit").click(function() {
+			window.open("http://" + document.realDomain + "/" + document.projectId);
+		  });
+
+                $(".appToolbar .share").click(function(e) {		      
+                    $("#sourceUrl").val("http://" + document.realDomain + "/" + document.projectId);
+                    $("#appUrl").val("http://" + document.appUrl);
+                    $(".shareDialog").position({
+                        of : $(".appToolbar"),
+                        my : "left top",
+                        at : "left bottom"
+                    });
+                    $(".shareDialog").show();
+		
+                });
+		  $("body").bind("click.share", function(e) {
+				var parentsA = $(e.target).parents("#shareDialog");
+				var parentsB = $(e.target).parents(".appToolbar");
+				if (parentsA.length === 0 && parentsB.length === 0) {
+					$("#shareDialog").hide();
+				}
+		   });
+
+
+                $(".theBtn.fork").mouseup(function() {
+                    if(!$(".theBtn.fork").hasClass("disabled")) {
+                        document.logHandler.clear();
+                        if(!document.isOwner) {
+                            projectSession.createProject(_save);
+                        } else if(document.isOwner && document.URL.indexOf(document.projectId) < 0) {
+                            _save();
+                        } else {
+                            document.CodeCommands.save();
+                        }
+                    }
+                });
+
+                $(".RunBtn").click(function() {
+                    if(!projectSession.isActive && isAuthRequired) {
+				window.accessToken = document.twilioId;
+				$("body").trigger("challengeComplete", {});
+                    } else {
+                        projectSession.setState("active");
+                        document.logHandler.clear();
+                        if(document.CodeCommands.isChanged()) {
+                            if(document.isOwner) {
+                                document.CodeCommands.push();
+                            } else {
+                                projectSession.createProject(function() {
+                                    document.CodeCommands.push();
+                                });
+                            }
+                        } else {
+                            frame.src = iframe.src;
+                        }
+                    }
+                });
+
+                $(".reloadCode button").click(function() {
+                    if(!projectSession.isActive && isAuthRequired) {
+				//do nothing
+                    } else {
+                        projectSession.setState("active");
+                        document.logHandler.clear();
+                        if(document.CodeCommands.isChanged()) {
+                            if(document.isOwner) {
+                                document.CodeCommands.push();
+                            } else {
+                                projectSession.createProject(function() {
+                                    document.CodeCommands.push();
+                                });
+                            }
+                        } else {
+                            frame.src = iframe.src;
+                        }
+                    }
+                });
+
+
+                $(".button.reset").mouseup(function() {
+                    if(!$(".button.reset").hasClass("disabled")) {
+                        document.CodeCommands.reset();
+                        $(".button.reset").addClass("disabled");
+                        if($(".button.save").hasClass("disabled")) {
+                            $(".button.save").removeClass("disabled");
+                        }
+                    }
+                });
+
+                $("body").bind("save", function(e, state) {
+                    if(!$(".theBtn.fork").hasClass("disabled")) {
+                        $(".theBtn.fork").addClass("disabled");
+                    }
+                });
+                $("body").bind("push", function(e, state) {
+                    if(!$(".theBtn.fork").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
+                        $(".theBtn.fork").addClass("disabled");
+                    }
+                    var iframe = document.getElementById("appFrame");
+                    iframe.src = iframe.src;
+                });
+
+                $("a.LOGOUT").mouseup(function() {
+                    window.location = "/logout?redirect=" + window.location;
+                });
+
+                $("a.LOGIN").mouseup(function() {
+                    window.location = "/?state=loginEditor&redirect=" + window.location;
+                });
+
+                $(".theBtn.newCode").mouseup(function() {
+                    window.location = "/?state=newCode";
+                });
+
+                $(".theBtn.discoverCode").mouseup(function() {
+                    window.location = "/?state=discoverCode";
+                });
+
+                $(".theBtn.download").mouseup(function() {
+                    window.location = "/?state=downloadCode";
+                });
+
+                $(".app .share").click(function(e) {
+                    $("#sourceUrl").val("http://" + document.realDomain + "/" + document.projectId);
+                    $("#appUrl").val("http://" + document.appUrl);
+                });
+
+                $(".headerWrapper").click(function(e) {
+                    if(!$(e.target).hasClass("share"))
+                        e.target = $(e.target).parents(".theBtn.share");
+
+                    if(!$(e.target).hasClass("share")) {
+                        $(".shareDialog").hide();
+                    }
+                });
+
+                $(".projAreaWrapper").click(function(e) {
+                    if(!$(e.target).hasClass("share"))
+                        e.target = $(e.target).parents(".theBtn.share");
+
+                    if(!$(e.target).hasClass("share")) {
+                        $(".shareDialog").hide();
+                    }
+                });
+
+		
+
+            });
+
+        </script>
+    </head>
+    <body>
+
+       <div class="loading"></div>
+	<div id="wrap-header">
+		<div id="main-header">
+			<a id="header-logo" href="http://www.twilio.com/"><img src="{static}/twilio/images/twilio-header-logo.png" alt="Twilio"></a>
+
+				<ul id="main-navigation">
+						<li><a href="http://www.twilio.com/api">How It Works</a></li>
+						<li><a href="http://www.twilio.com/pricing">Pricing</a></li>
+						<li><a href="http://www.twilio.com/solutions">Solutions</a></li>
+						<li><a href="http://www.twilio.com/help">Help</a></li>
+						<li><a href="http://www.twilio.com/company/jobs">Jobs</a></li>
+						<li class="selected"><a href="http://www.twilio.com/docs">Docs</a></li>
+				</ul><!-- #main-navigation -->
+
+				<form action="http://www.google.com/cse" id="search-header">
+				<input type="hidden" name="cx" value="009653677423610680294:kc8vvpkhsgs">
+				<input type="hidden" name="ie" value="UTF-8">
+				<input class="search-box rounded" type="text" name="q" value="">
+				</form><!-- #search-header -->
+
+				<ul id="utility-navigation">
+				
+					<li><a href="http://www.twilio.com/try-twilio">Free Trial</a></li>
+						<li><a href="http://www.twilio.com/user/account">Login</a></li>
+					</ul>
+				</div><!-- #main-header -->
+
+	</div><!-- #wrap-header -->
+
+	<div id="wrapper">
+
+		<div class="content-wrap ">
+		<div class="toolbar">
+			<div class="tb run"></div><div class="tb fullscreen"></div>
+		</div>
+				
+	<!-- main content -->
+	<div id="markdown" class="doc_wrap">
+	<div class="side_nav">
+		<ul id="doc_menu">
+	<li id="doc_link">
+		<a href="http://www.twilio.com/docs">Docs Home</a>
+	</li>
+	<li id="quickstart">
+		<a href="http://www.twilio.com/docs/quickstart">Quickstart Tutorials</a>
+		</li>
+	<li class="menu_selected" id="code">
+		<a href="http://www.twilio.com/docs/howto/">HowTo's and Examples</a>
+		<ul>
+			<li><b>Voice</b>
+				<ul>
+					<li><a href="http://www.twilio.com/docs/howto/appointment-reminder">Appointment Reminder</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/search-and-buy">Buy a Phone Number</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/callqueue">Call Queue</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/callscreening">Call Screening</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/call-tracking">Call Tracking</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/click-to-call">Click to Call</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/companydirectory">Company Directory</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/ivrs-the-basics">IVR: The Basics</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/ivrs-extensions">IVR: Extensions</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/ivrs-call-screening-and-recording">IVR: Call Screening and Recording</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/ivrs-database-integration">IVR: Database Integration</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/ivrs-logging-and-reporting">IVR: Logging and Reporting</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/moderated-conference">Moderated Conferencing</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/phonemenu">Phone Menu</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/phonepoll">Phone Poll</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/reject">Reject an Incoming Call</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/simple-conference">Simple Conference</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/subaccounts">Using Subaccounts</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/broadcast">Voice Broadcast</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/voicemail">Voicemail</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/voicemailtranscribe">Voicemail Transcription</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/weatherbyphone">Weather By Phone</a></li>
+				</ul>
+			</li>
+			<li><b>Twilio Client</b>
+				<ul>
+					<li><a href="http://www.twilio.com/docs/howto/twilio-client-record">Audio Recording</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/twilio-client-browser-soft-phone">Browser Soft Phone</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/twilio-client-browser-to-browser-call">Browser to Browser Call</a></li>
+					<li><a href="./Twilio Docs - HowTo Twilio Client Click To Call_files/Twilio Docs - HowTo Twilio Client Click To Call.htm">Click to Call</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/twilio-client-browser-conference-call">Conference Call</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/twilio-client-browser-conference-call-monitor">Conference Call Monitor</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/twilio-client-text-to-speech">Text To Speech</a></li>
+				</ul>
+			</li>
+			<li><b>SMS Messages</b>
+			  <ul>
+					<li><a href="http://www.twilio.com/docs/howto/send-sms-in-call">Send SMS in Call</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/sms-notifications-and-alerts">SMS Notifications</a></li>
+					<li><a href="http://www.twilio.com/docs/howto/two-factor-authentication">Two-Factor Authentication</a></li>
+			  </ul>
+			</li>
+		</ul>
+		</li>
+	<li id="library">
+		<a href="http://www.twilio.com/docs/libraries/">Helper Libraries</a>
+	</li>
+	<li id="twiml">
+	<a href="http://www.twilio.com/docs/api/twiml/">TwiML Reference</a>
+		</li>
+	<li id="restapi">
+		<a href="http://www.twilio.com/docs/api/rest/">REST API Reference</a>
+		</li>
+
+	<li id="client">
+		<a href="http://www.twilio.com/docs/client/">Client Reference</a>
+		</li>
+	<li id="connect">
+		<a href="http://www.twilio.com/docs/connect">Connect Reference</a>
+	</li>
+	<li id="error">
+		<a href="http://www.twilio.com/docs/errors/">Debugging Errors </a>
+		</li>
+	<li id="security">
+		<a href="http://www.twilio.com/docs/security">Security</a>
+		</li>
+	<li id="availability">
+		<a href="http://www.twilio.com/docs/availability-reliability">Availability &amp; Reliability</a>
+	</li>
+</ul>
+
+
+	</div>
+	<div id="documentation">
+		
+		<div id="md" class="docs howto">
+			<h2>Twilio Client Click-to-Call</h2>
+        <div class="outputHolder">
+            <div class="RunBtn"></div>
+            <div class="app">
+		      <div class="appToolbar">
+<div class="btn-group">
+          <button class="btn dropdown-toggle share" data-toggle="dropdown">Action <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+			<li>
+				<div class="field source">
+					<div class="text">Share this code</div>
+					<input id="sourceUrl" />
+				</div>
+			</li>
+	              <li class="divider"></li>
+			<li>
+				<div class="field app">
+					<div class="text">Share this app</div>
+					<input id="appUrl" />
+				</div>
+			</li>
+          </ul>
+        </div>
+				<button class="btn edit"><div class="editorBtn"></div></button>
+		      </div>
+		      <div class="poweredBy"></div>
+                <div class="appWindow">
+                    <iframe id="appFrame" width="100%" height="100%" src="/loading" frameBorder="0">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+<h3>Implementation</h3>
+
+<ol>
+<li>Generate a <a href="http://www.twilio.com/docs/client/tokens">Twilio Capability Token</a> with permissions to make an outgoing connection.</li>
+<li>Create javascript to set up a <a href="http://www.twilio.com/docs/client/device">Twilio.Device</a> and HTML to display status and a button initiate a call</li>
+<li>When the web user clicks the connect button an outgoing connection is made to the <a href="http://www.twilio.com/blog/2011/06/introducing-twilio-applications-an-easier-way-to-manage-phone-numbers.html">Application</a> specified in the `Services_Twilio_Capability`</li>
+<li>Twilio <a href="http://www.twilio.com/docs/api/twiml/twilio_request">requests the Voice URL</a> specified in the Application, and the Application responds with <a href="http://www.twilio.com/docs/api/twiml">TwiML</a> instructions to dial the third party number.</li>
+<li>Twilio establishes a call between the third party and the user's browser.</li>
+</ol>
+
+<h3>Get Started</h3>
+
+<ul>
+<li><h4 id="step1"><a href="http://www.twilio.com/docs/howto/twilio-client-click-to-call#step1">1</a></h4>
+
+<ul>
+<li class="even"><p>Create a <a href="http://www.twilio.com/docs/client/tokens">capability token</a> to securely bind Twilio Client to your account and also give permissions to make outbound calls to a <a href="http://www.twilio.com/blog/2011/06/introducing-twilio-applications-an-easier-way-to-manage-phone-numbers.html">Twilio Application</a>.</p>
+
+<div class="example-chooser">
+
+<ul class="picker">
+
+
+</ul>
+
+<ul class="examples">
+
+
+      <li class="click_to_call-php">
+      
+    <a href="http://www.twilio.com/resources/code/howtos/browser-clicktocall/click_to_call.php" rel="nofollow">howtos/browser-clicktocall/click_to_call.php</a>
+
+  
+    <div>
+                    <div class="editor html active main" fileName="main.php" id="main">
+	<div class="reloadCode main">
+		<button class="btn disabled"><img src="images/greenplay.png"/><div>Reload App</div></button> 
+	</div>
+                        <textarea class="code" mode="application/x-httpd-php" name="main">
+{main.php}
+</textarea>
+                    </div>
+    </div>
+  </li>
+
+</ul>
+
+</div>
+</li>
+</ul></li>
+<li><h4 id="step2"><a href="http://www.twilio.com/docs/howto/twilio-client-click-to-call#step2">2</a></h4>
+
+<ul>
+<li class="odd">Add javascript to setup a <a href="http://www.twilio.com/docs/client/device">Twilio.Device</a> with the capability token.  We use <a href="http://jquery.com/">jQuery</a> to create click handlers for the call and disconnect buttons as well as register Twilio.Device callbacks to update the status text.</li>
+</ul>
+
+<div class="example-chooser">
+
+<ul class="picker">
+
+
+</ul>
+
+<ul class="examples">
+
+
+      <li class="click_to_call-php">
+      
+    <a href="http://www.twilio.com/resources/code/howtos/browser-clicktocall/click_to_call.php" rel="nofollow">howtos/browser-clicktocall/click_to_call.php</a>
+
+  
+    <div>
+                    <div class="editor javascript" fileName="javascript.php" id="javascript">
+	<div class="reloadCode javascript">
+		<button class="btn disabled"><img src="images/greenplay.png"/><div>Reload App</div></button> 
+	</div>
+                        <textarea class="code" mode="javascript" name="javascript">
+{javascript.php}
+</textarea>
+			</div>
+  </li>
+
+</ul>
+
+</div>
+
+	</li>
+<li><h4 id="step3"><a href="http://www.twilio.com/docs/howto/twilio-client-click-to-call#step3">3</a></h4>
+
+<ul>
+<li class="even">When the user clicks the 'Start Call' button, javascript will invoke Twilio.Device's connect method which will initiate an outbound connection.</li>
+</ul></li>
+<li><h4 id="step4"><a href="http://www.twilio.com/docs/howto/twilio-client-click-to-call#step4">4</a></h4>
+
+<ul>
+<li class="odd">Twilio <a href="http://www.twilio.com/docs/api/twiml/twilio_request">requests the Voice Url</a> specified in the Application for instructions on how to handle the call logic.  The Application responds to Twilio's request with <a href="http://www.twilio.com/docs/api/twiml">TwiML</a>.</li>
+</ul></li>
+</ul>
+
+<div class="example-chooser">
+
+<ul class="picker">
+
+
+</ul>
+
+<ul class="examples">
+
+
+      <li class="twiml-xml">
+      
+    <a href="http://www.twilio.com/resources/code/howtos/browser-clicktocall/twiml.xml" rel="nofollow">howtos/browser-clicktocall/twiml.xml</a>
+
+  
+    <div>
+                    <div class="editor additional tab-pane" fileName="additional.php" id="additional">
+	<div class="reloadCode additional">
+		<button class="btn disabled"><img src="images/greenplay.png"/><div>Reload App</div></button> 
+	</div>
+                        <textarea class="code" mode="{additionalMode}" name="additional">
+{additional.php}
+</textarea>
+                    </div>    
+    </div>
+  </li>
+
+</ul>
+
+</div>
+
+
+<p>Our TwiML speaks audio to the web user using <a href="http://www.twilio.com/docs/api/twiml/say">&lt;Say&gt;</a> verb, then initiates a phone call to the third party phone number via the <a href="http://www.twilio.com/docs/api/twiml/dial">&lt;Dial&gt;</a> verb. The 'callerId' attribute is required and determines what number the third party sees on their phone when it rings.  For a complete overview of TwiML (Twilio's XML) see the <a href="http://www.twilio.com/docs/api/twiml/">TwiML documentation</a>.</p>
+
+<ul>
+<li><h4 id="step5"><a href="http://www.twilio.com/docs/howto/twilio-client-click-to-call#step5">5</a></h4>
+
+<ul>
+<li class="odd">Twilio processes the TwiML we sent, calls the third party and successfully connects the two parties.</li>
+</ul></li>
+</ul>
+
+		</div>
+	</div>
+	
+					</div>
+					<div id="push"></div>
+				</div><!--END WRAPPER-->
+					<div id="footer">
+						<div id="footer_wrapper">
+							<div id="footer_content_wrapper">
+								<ul class="footer_main_navigation">
+									<li class="title"><a href="http://www.twilio.com/">Home</a></li>
+									<li><a href="http://www.twilio.com/api">Tour</a></li>
+									<li><a href="http://www.twilio.com/gallery">Gallery</a></li>
+									<li><a href="http://www.twilio.com/pricing">Pricing</a></li>
+									<li><a href="http://www.twilio.com/pricing/international-calling-rates">International Rates</a></li>
+									<li><a href="http://labs.twilio.com/">Twilio Labs</a></li>
+								</ul>
+
+								<ul class="footer_main_navigation">
+									<li class="title"><a href="http://www.twilio.com/docs">Documentation</a></li>
+									<li><a href="http://www.twilio.com/docs/quickstart">Quickstart Guide</a></li>
+									<li><a href="http://www.twilio.com/docs/howto">HowTo's</a></li>
+									<li><a href="http://www.twilio.com/docs/libraries" title="PHP, Ruby, Java, Python, C#">Helper Libraries</a></li>
+									<li><a href="http://www.twilio.com/faq">FAQ</a></li>
+									<li><a href="http://getsatisfaction.com/twilio/">Forum</a></li>
+								</ul>
+
+								<ul class="footer_main_navigation">
+									<li class="title"><a href="http://www.twilio.com/company/">About Us</a></li>
+									<li><a href="http://www.twilio.com/company/jobs">Jobs</a></li>
+									<li><a href="http://www.twilio.com/blog">Blog</a></li>
+									<li><a href="http://www.twilio.com/engineering/">Engineering Blog</a></li>
+									<li><a target="_blank" href="http://www.twitter.com/twilio">Twitter</a></li>
+									<li><a target="_blank" href="http://www.youtube.com/user/TeamTwilio">YouTube</a></li>
+								</ul>
+
+								<ul class="footer_main_navigation">
+									<li class="title"><a href="http://www.twilio.com/legal/">Legal</a></li>
+									<li><a href="http://www.twilio.com/legal/privacy">Privacy Policy</a></li>
+									<li><a href="http://www.twilio.com/legal/tos">Terms of Service</a></li>
+									<li><a href="http://www.twilio.com/legal/aup">Acceptable Use Policy</a></li>
+									<li><a href="http://www.twilio.com/company/">Contact Us</a></li>
+								</ul>
+
+								<ul class="footer_main_navigation">
+									<li class="title">Twilio Inc.</li>
+									<li>Support: <a class="email" href="mailto:help@twilio.com">help@twilio.com</a></li>
+									<li>Sales: <a href="http://www.twilio.com/help/sales">Contact form</a></li>
+									<li class="legal-notice">Copyright 2012 Twilio. All rights reserved. Patents Pending. Twilio, TwiML, and OpenVBX are trademarks of Twilio, Inc.</li>
+								</ul>
+
+							</div>
+						</div>
+					</div>
+			<div id="shareDialog" class="shareDialog dropdown-menu" style="display:none;">
+
+			</div>
+    <script src="{static}/scripts/bootstrap/js/bootstrap.min.js"></script>
+
+
+    </body>
+</html>

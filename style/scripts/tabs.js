@@ -30,6 +30,7 @@ var CodeModule  = function(codeBoxes) {
 					codeEditors[i].changed = false;
 				}
 				isCodeChanged = false;
+				$(".reloadCode button").addClass("disabled");
 				$(".saveStatus").removeClass("active");
 			}
 			cb(err);
@@ -82,6 +83,7 @@ var CodeModule  = function(codeBoxes) {
    function codeChanged(index) {
 	codeEditors[index].changed = true;
 	isCodeChanged = true;
+	$(".reloadCode .btn").removeClass("disabled");
 	$(".theBtn.fork").removeClass("disabled");
 	if (!$(".saveStatus").hasClass("active")) {
 		$(".saveStatus").addClass("active");
@@ -107,7 +109,7 @@ var CodeModule  = function(codeBoxes) {
 	};
 	
        var codeEditor = CodeMirror.fromTextArea(textArea[0], {
-            lineNumbers: true,
+	     lineNumbers: (document.projectId === "100011") ? false: true,
             mode: editorMode,
 	     matchBrackets : true,
 	     onChange: function() {

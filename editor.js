@@ -9,7 +9,16 @@ var frameworkFiles = {
 module.exports = {
     
     getIndex: function(proj, isOwner, user, callback) {        
-        fs.readFile(__dirname + "/view/editor.html", "utf8", function(err, index) {
+
+	 var file = "editor.html";
+	 if (proj.model.tags.indexOf("twilio") >= 0) {
+		file = "ide.html";
+	 }
+	 if (proj.getId() === "100011") {
+		file = "embed.html";
+	 }
+	 
+        fs.readFile(__dirname + "/view/" + file, "utf8", function(err, index) {
             
             if (err) {
                 callback(err);
@@ -35,6 +44,7 @@ module.exports = {
 			index = index.replace(/{additionalMode}/mig, "php");            
 			index = index.replace(/{additionalName}/mig, "TwiML");   
 			index = index.replace(/{challengeClass}/mig, "twilio");  
+			index = index.replace(/{twilioSid}/mig, proj.twilioSid);  
           
             } else {
 			index = index.replace(/{additionalMode}/mig, "javascript");            
@@ -65,5 +75,43 @@ module.exports = {
 
             
         });
+    },
+
+    getFile: function(proj, isOwner, user, fileName, callback) {        
+        fs.readFile(__dirname + "/view/file.html", "utf8", function(err, index) {
+            
+            if (err) {
+                callback(err);
+                return;
+            }
+            
+            index = index.toString();
+            index = index.replace(/{projId}/mig, proj.getId());
+            index = index.replace(/{appUrl}/mig, proj.getUrl());
+            index = index.replace(/{static}/mig, "http://" + config.appDomain);
+	     index = index.replace(/{isOwner}/mig, isOwner ? "true" : "false");       
+	     index = index.replace(/{title}/mig, proj.getTitle());  
+             index = index.replace(/{subTitle}/mig, proj.model.subTitle || ""); 
+	     index = index.replace(/{authorName}/mig, proj.getAuthorName());   
+             index = index.replace(/{tags}/mig, (proj.model.tags || []).join(",")); 
+   	     index = index.replace(/{login}/mig, user ? "LOGOUT": "LOGIN");            
+   	     index = index.replace(/{facebookId}/mig, config.facebookId);   
+	     index = index.replace(/{fileName}/mig, fileName);   
+	
+	     if (fileName === "main" || fileName === "additional") {
+			index = index.replace(/{mode}/mig, "application/x-httpd-php"); 
+	     } 
+	     else {
+			index = index.replace(/{mode}/mig, fileName); 
+	     }
+
+             fs.readFile(proj.getPath() + "/" + fileName + ".php", function(err, fileData) {
+                        if (!err) {
+                            index = index.replace(new RegExp("{fileData}", "mig"), fileData.toString());   
+                        }                        
+                        callback(err, index); 
+             });            
+        });
     }
+
 }

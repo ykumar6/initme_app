@@ -1,0 +1,370 @@
+      body {
+                font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+                font-size:14px;
+                font-weight:400;    
+                text-rendering:optimizeLegibility;  
+            }
+            .outputHolder {
+                width: 690px;
+            }
+            
+            .app {
+                
+                width: 100%;
+            }
+
+body.oauth .appToolbar, body.inactive .appToolbar {
+	display: none;
+}
+
+body.oauth .poweredBy, body.inactive .poweredBy {
+	display: none;
+}
+
+
+body.oauth .poweredByTwilio, body.inactive .poweredByTwilio {
+	display: none;
+}
+
+.poweredBy {
+	padding-bottom: 10px;
+	opacity: 0.7;
+	width: 100px;
+	height: 30px;
+       background-position: center center;
+       background-repeat: no-repeat;
+       background-image: url("images/poweredbyinit.png");
+}
+
+.poweredByTwilio {
+	padding-top: 20px;
+	opacity: 0.7;
+	width: 180px;
+	height: 20px;
+       background-position: center center;
+       background-repeat: no-repeat;
+       background-image: url("images/poweredbytwilio.png");
+}
+
+.appToolbar {
+	width: 120px;
+	-webkit-transition:  opacity 0.1s ease-in-out;
+	position: absolute;
+	opacity: 0.5;
+	padding-bottom: 10px;
+	padding-right: 10px;
+	float: right;
+}
+.appToolbar:hover {
+	opacity: 1;
+}
+
+.appToolbar > div {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+
+.shareDialog {
+	z-index: 100;
+	padding: 10px;
+}
+
+.shareDialog {
+	position: absolute;
+	width: 220px;
+}
+.field.source {
+	padding: 10px;
+}
+
+.field.app {
+	padding-top: 10px;
+padding-left: 10px;
+padding-right: 10px;
+padding-bottom: 20px;
+}
+
+.btn.edit {
+	height: 28px !important;
+}
+
+.editorBtn {
+	margin-top: -4px !important;
+}
+
+.appToolbar > div {
+
+}
+
+.app .btn .caret {
+margin-top: 0px !important;
+}
+
+.appToolbar button > * {
+	display: inline-block;
+	vertical-align: middle;
+}
+.appToolbar .editorBtn {
+                width: 20px;
+                height: 20px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-image: url("images/editorbtn.png");
+}
+            
+            .appTitle {
+                width: 100%;
+                height: 30px;
+                background-color: #414042;
+                border-top-left-radius: 3px;
+                border-top-right-radius: 3px;
+                border: 1px solid #414042;
+            }
+            
+            body.oauth .appWindow, body.inactive .appWindow {
+                background-color: #F1F2F2;                
+            }
+            
+            .appWindow {
+                height:360px;
+                width: 100%;
+                border: 1px solid #E6E7E8;
+                border-radius: 6px;
+                border-radius: 6px;
+            }
+            
+            div.title {
+                color: #FFF;
+                font-weight: 700;
+                margin-top: 7px;
+                margin-left: 10px;
+            }
+            
+            .appTitle > div {
+                display: inline-block;
+                vertical-align: middle;     
+            }
+            
+            .tags {
+                float: right;
+            }
+            
+            .tags > div {
+                margin-top: 5px;
+                margin-right: 8px;
+                display: inline-block;
+                vertical-align: middle;
+            }
+
+            .tag {
+                padding: 3px 5px 3px 5px;
+                display: inline-block;
+                border-radius: 3px;
+                font-size: 12px;
+                font-weight: 700;
+                color: #F1F2F2;
+                background-color: #8695AC;
+            }
+		
+
+
+            .RunBtn {
+	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	-ms-transition: opacity 0.2s ease-in-out;	
+	transition: opacity 0.2s ease-in-out;
+		  opacity: 0.7;
+		  display: none;
+		  position: absolute;
+		  z-index: 100;
+                width: 200px;
+                height: 60px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-image: url("images/runembed.png");
+                cursor: pointer;
+            }
+
+	     .RunBtn:hover {
+		 opacity: 1;
+	     }
+
+	.editor {
+		font-size: 15px;
+		margin-bottom: 20px;
+		margin-top: 20px;
+		background-color: #EEE;
+	}
+
+	.editor.additional {
+		height: 200px;
+	}
+
+body.oauth .RunBtn {
+	display: block;
+}
+
+body.oauth #appFrame, body.inactive #appFrame {
+	display: none;
+}
+
+body.oauth .toolbar, body.inactive .toolbar {
+	visibility: hidden;
+}
+
+
+	.toolbar {
+		visibility: hidden;
+		bottom: 5px;
+		position: fixed;
+		margin-left: 80px;
+		clear: both;
+		width: 550px;
+		height: 40px;
+		background-color: #414042;
+		border-radius: 6px;
+		z-index: 100;
+		opacity: 0.4;
+	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	-ms-transition: opacity 0.2s ease-in-out;	
+	transition: opacity 0.2s ease-in-out;
+	}
+
+	.toolbar.active, .toolbar:hover {
+		opacity: 1;
+	}
+
+.toolbar > div {
+	margin-top: 3px;
+	display: inline-block;
+}
+
+.toolbar .tb {
+	opacity: 0.7;
+	margin-right: 10px;
+}
+
+.toolbar .tb:hover {
+	opacity: 1;
+}
+
+.editor:hover .info {
+	height: 45px;
+}
+
+.info {
+       overflow: hidden;
+	-webkit-transition:  height 0.4s ease-in-out;
+	width: 100%;
+	height: 0px;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	background-color: #FFF;
+}
+
+
+.toolbar .run {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url("images/runtoolbar.png");
+	cursor: pointer;
+	width: 80px;
+	height: 35px;
+}
+
+.toolbar .fullscreen {
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-image: url("images/fullscreen.png");
+	cursor: pointer;
+	width: 120px;
+	height: 35px;
+}
+
+body.oauth .reloadCode {
+	opacity: hidden;
+}
+
+.editor:hover .reloadCode {
+	visibility: visible;
+}
+
+.editor.additional .reloadCode {
+	padding-right: 5px;
+}
+
+.reloadCode button > * {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.reloadCode button img {
+	margin: 0 0 !important;
+	padding-right: 5px;
+}
+
+.reloadCode {
+	z-index: 200;
+	visibility: hidden;
+	position: absolute;
+	padding-right: 20px;
+	padding-top: 5px;
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  25% { 
+    -webkit-transform: rotate(180deg);
+  }
+  50% { 
+    -webkit-transform: rotate(180deg);
+  }
+  75% { 
+    -webkit-transform: rotate(360deg);
+  }
+  100% { 
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+
+
+body.inactive .loading
+{
+    
+    -webkit-animation-name:             rotate; 
+    -webkit-animation-duration:         3s; 
+    -webkit-animation-iteration-count:  infinite;
+    -webkit-animation-timing-function: linear;
+
+    -moz-animation-name:             rotate; 
+    -moz-animation-duration:         3s; 
+    -moz-animation-iteration-count:  infinite;
+    -moz-animation-timing-function: linear;
+
+    -ms-animation-name:             rotate; 
+    -ms-animation-duration:         3s; 
+    -ms-animation-iteration-count:  infinite;
+    -ms-animation-timing-function: linear;
+
+
+}
+
+.loading {
+	position: absolute;
+	z-index: 100;
+	display: none;
+	background-image: url("images/loading.png");
+	width: 120px;
+	height: 117px;
+}
+
+body.inactive .loading {
+	display:block;
+}

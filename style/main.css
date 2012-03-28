@@ -1169,3 +1169,12 @@ body.oauth .facebook_oauth:hover {
 .twilioVerify .codeBox {
         padding-top: 10px;
 }
+
+.twilioPartner {
+	background-image: url("images/twiliopartner.png");
+	width: 210px;
+	height: 40px;
+	background-repeat: no-repeat;
+	background-position: center center;
+
+}

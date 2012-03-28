@@ -1,0 +1,588 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+    <head profile="http://www.w3.org/2005/10/profile">
+    <title>InitMe - {title}</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+	 <script src="{static}/socket.io/socket.io.js"></script>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/layout.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/tabs.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/logger.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/projectManagement.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-27720942-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+    	 <link href="{static}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    	 <link href="{static}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
+	 <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:bold,regular,medium,thin,italic,mediumitalic">
+        <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
+        <script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
+        <link rel="stylesheet" href="{static}/main.css">
+        <script src="{static}/scripts/codemirror/mode/xml/xml.js"></script>
+        <script src="{static}/scripts/codemirror/mode/php/php.js"></script>
+        <script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
+        <script src="{static}/scripts/codemirror/mode/javascript/javascript.js"></script>
+        <script src="{static}/scripts/codemirror/mode/css/css.js"></script>
+        <script src="{static}/scripts/async/lib/async.js"></script>
+        <script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
+        <script type="text/javascript">
+            io.util.uniqueUri = function(uri) {
+                var protocol = uri.protocol, host = uri.host, port = uri.port;
+                host = host || document.domain;
+                port = port || (protocol == 'https' && document.location.protocol !== 'https:' ? 443 : document.location.port);
+
+                return (protocol || 'http') + '://' + host + "/" + uri.directory;
+            };
+
+            document.projectId = "{projId}";
+            document.appUrl = "{appUrl}";
+            document.tags = "{tags}";
+            document.isOwner = {isOwner};
+            document.FacebookId = "{facebookId}";
+            document.twilioId = "{twilioSid}";
+
+
+	     var parts = document.domain.split(".");
+	     document.realDomain = parts[parts.length-2] + "." + parts[parts.length-1];
+		                  
+            $(function() {
+
+		  document.tags = (document.tags || "").split(",");
+		  var tagStr = "";
+		  for (var i=0; i<document.tags.length; i++) {
+			tagStr += '<div class="tag ' + document.tags[i] + '"><h3>' + document.tags[i] + '</h3></div>';
+		  }
+		  $(".tags").append(tagStr);
+		  
+                var alertFallback = false;
+                if( typeof console === "undefined" || typeof console.log === "undefined") {
+                    console = {};
+                    if(alertFallback) {
+                        console.log = function(msg) {
+                            alert(msg);
+                        };
+                    } else {
+                        console.log = function() {
+                        };
+                    }
+                }
+
+                function IsIE8Browser() {
+                    var rv = -1;
+                    var ua = navigator.userAgent;
+                    var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
+                    if(re.exec(ua) != null) {
+                        rv = parseFloat(RegExp.$1);
+                    }
+                    return (rv == 4);
+                };
+
+                if(IsIE8Browser()) {
+                    $("body").addClass("ie8");
+                }
+                $('body').layout({
+                    north__resizable : false,
+                    north__closable : false,
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false,
+                    east__size : "50%",
+                    east__closable : false,
+                });
+
+                $(".ui-layout-center").layout({
+                    north__resizable : false,
+                    north__closable : false,
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false,
+                    north__paneSelector : ".codearea-tabs",
+
+                    center__paneSelector : ".codearea-center",
+                    center__onresize : function() {
+                        document.CodeCommands.refresh("main");
+                    }
+                });
+
+		  $('.nav a:first').tab('show')
+
+                $(".ui-layout-east").layout({
+                    center__paneSelector : ".server-south",
+                })
+
+                var southPane = $(".server-south").layout({
+                    center__paneSelector : ".browser-center",
+                    south__paneSelector : ".browser-south",
+                    center__onresize : function() {
+			   if ($("body").hasClass("oauth") || $("body").hasClass("inactive")) {
+                        	positionLoading();
+			   }
+			   logBar.resizeAll();
+                    },
+		      onopen: function() {
+			   logBar.show();
+		      },
+                    south__resizable : false,
+                    south__closable : false,
+                    south__spacing_open : 0,
+                    south__spacing_closed : 0,
+                    south__slidable : false
+			
+                });
+
+                $(".browser-center").layout({
+                    north__paneSelector : ".browserToolbar",
+                    north__resizable : false,
+                    north__closable : false,
+                    center__paneSelector : ".browserWindow",
+                    north__spacing_open : 0,
+                    north__spacing_closed : 0,
+                    north__slidable : false,
+                })
+
+                var logBar = $(".logBar").layout({
+                    east__paneSelector : ".logTime",
+                    east__resizable : false,
+                    east__closable : false,
+                    east__size : 100,
+                    center__paneSelector : ".logText",
+                    east__spacing_open : 0,
+                    east__spacing_closed : 0,
+                    east__slidable : false,
+                    west__paneSelector : ".logIcon",
+                    west__resizable : false,
+                    west__closable : false,
+                    west__spacing_open : 0,
+                    west__spacing_closed : 0,
+                    west__slidable : false,
+                    west__size : 40
+                });
+
+		  $('.theBtn.Run').popover({
+				title: "Run and edit code",
+				content: "You can edit and re-run live code by clicking this button",
+				placement: "bottom"
+		  });
+		  $('.theBtn.Run').popover('show');
+
+
+                var positionLoading = function() {
+                    setTimeout(function() {
+                        $(".loading").position({
+                            of : $(".browser-center"),
+                            my : "center center",
+                            at : "center center"
+                        });
+                    }, 10);
+                    
+                };
+                positionLoading();
+                
+                document.CodeCommands = CodeModule($(".editor")); //load up editor
+                var challengeSession, projectSession;
+
+                document.logHandler = new Logger(southPane);     
+
+	         var isAuthRequired = true;
+                projectSession = new document.ProjectManagement();
+                window.accessToken = document.twilioId;
+		  projectSession.setState("active");
+                projectSession.loadProject();
+
+
+                
+                $("body").bind("vmConnected", function(e) {
+                    projectSession.setState("vmActive");
+                });
+                $("body").bind("vmDisconnected", function(e) {
+		      $("#appFrame").attr("src", "http://" + document.domain + "/loading");
+                    projectSession.setState("vmInactive");
+		      positionLoading();
+                });
+                
+
+                
+                var _save = function() {
+                    document.CodeCommands.save(function() {
+                        $.ajax({
+                            type : "GET",
+                            url : "http://" + document.domain + "/save/" + document.projectId + "?ts=" + (new Date()).getTime(),
+                            success : function(data) {
+                                $(".title h1").html(data.projectTitle);
+                                $(".subTitle h2").html(data.subTitle);
+
+                                $(".title h1").inlineEdit({
+                                    save : function(e, data) {
+                                        $.post("http://" + document.domain + "/title/" + document.projectId, data);
+                                        return true;
+                                    }
+                                });
+                                $(".title h1").addClass("owner");
+
+                    		    $(".subTitle h2").addClass("owner");
+                    		    $(".subTitle h2").inlineEdit({
+                        		save : function(e, data) {
+                            		$.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
+                            		return true;
+                        		}
+                    		    });
+                                window.location = "http://" + document.realDomain + "/" + document.projectId;
+                            },
+                            error : function(err) {
+                                console.log(err);
+                                window.location = "/?state=loginEditor";
+                            }
+                        });
+                    });
+                }
+
+                $(".theBtn.fork").mouseup(function() {
+                    if(!$(".theBtn.fork").hasClass("disabled")) {
+                        document.logHandler.clear();
+                        if(!document.isOwner) {
+                            projectSession.createProject(_save);
+                        } else if(document.isOwner && document.URL.indexOf(document.projectId) < 0) {
+                            _save();
+                        } else {
+                            document.CodeCommands.save();
+                        }
+                    }
+                });
+
+                $(".theBtn.Run").click(function() {
+                    if (!projectSession.isActive && isAuthRequired) {
+				$("#myModal").modal({backdrop: false});
+		      }
+		      else {
+				projectSession.setState("active");
+                    		document.logHandler.clear();
+				if (document.CodeCommands.isChanged()) {
+                   			if(document.isOwner) {
+                        			document.CodeCommands.push();
+                    			} else {
+                        			projectSession.createProject(function() {
+                            			document.CodeCommands.push();
+                        			});
+                    			}
+				} 
+				else {
+					frame.src = iframe.src;
+				}
+		      } 
+                });
+
+                $(".button.reset").mouseup(function() {
+                    if(!$(".button.reset").hasClass("disabled")) {
+                        document.CodeCommands.reset();
+                        $(".button.reset").addClass("disabled");
+                        if($(".button.save").hasClass("disabled")) {
+                            $(".button.save").removeClass("disabled");
+                        }
+                    }
+                });
+
+                $("body").bind("save", function(e, state) {
+                    if(!$(".theBtn.fork").hasClass("disabled")) {
+                        $(".theBtn.fork").addClass("disabled");
+                    }
+                });
+                $("body").bind("push", function(e, state) {
+                    if(!$(".theBtn.fork").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
+                        $(".theBtn.fork").addClass("disabled");
+                    }
+                    var iframe = document.getElementById("appFrame");
+                    iframe.src = iframe.src;
+                });
+
+
+                $("a.LOGOUT").mouseup(function() {
+                    window.location = "/logout?redirect=" + window.location;
+                });
+
+                $("a.LOGIN").mouseup(function() {
+                    window.location = "/?state=loginEditor&redirect=" + window.location;
+                });
+
+                $(".theBtn.newCode").mouseup(function() {
+                    window.location = "/?state=newCode";
+                });
+
+                $(".theBtn.discoverCode").mouseup(function() {
+                    window.location = "/?state=discoverCode";
+                });
+
+                $(".theBtn.download").mouseup(function() {
+                    window.location = "/?state=downloadCode";
+                });
+
+
+                $(".theBtn.share").click(function(e) {		      
+                    $("#sourceUrl").val("http://" + document.realDomain + "/" + document.projectId);
+                    $("#appUrl").val("http://" + document.appUrl);
+                    $(".shareDialog").css("top", "0px");
+                    $(".shareDialog").css("left", "0px");
+                    $(".shareDialog").position({
+                        of : $(".theBtn.share"),
+                        offset : "5 5",
+
+                        my : "right top",
+                        at : "right bottom"
+                    });
+                    $(".shareDialog").show();
+		
+		      setTimeout(function() {
+		      $("body").bind("click.share", function(e) {
+				var parents = $(e.target).parents("#shareDialog");
+				if (parents.length === 0) {
+					$("#shareDialog").hide();
+					$("body").unbind("click.share");
+				}
+		      });
+		      }, 10);
+
+                });
+
+                $(".headerWrapper").click(function(e) {
+                    if(!$(e.target).hasClass("share"))
+                        e.target = $(e.target).parents(".theBtn.share");
+
+                    if(!$(e.target).hasClass("share")) {
+                        $(".shareDialog").hide();
+                    }
+                });
+
+                $(".projAreaWrapper").click(function(e) {
+                    if(!$(e.target).hasClass("share"))
+                        e.target = $(e.target).parents(".theBtn.share");
+
+                    if(!$(e.target).hasClass("share")) {
+                        $(".shareDialog").hide();
+                    }
+                });
+
+                if(document.isOwner) {
+                    $(".title h1").addClass("owner");
+                    $(".title h1").inlineEdit({
+                        save : function(e, data) {
+                            $.post("http://" + document.domain + "/title/" + document.projectId, data);
+                            return true;
+                        }
+                    });
+                    $(".subTitle h2").addClass("owner");
+                    $(".subTitle h2").inlineEdit({
+                        save : function(e, data) {
+                            $.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
+                            return true;
+                        }
+                    });
+                }
+
+            });
+
+        </script>
+    </head>
+    <body>
+        <div class="ui-layout-center">
+	     <div class="codearea-tabs">
+			<div class="tabHolder">
+			<ul class="nav nav-tabs">
+  				<li><a href="#main" data-toggle="tab">PHP</a></li>
+ 				<li><a href="#javascript" data-toggle="tab">JavaScript</a></li>
+  				<li><a href="#additional" data-toggle="tab" style="{additionalStyle}">{additionalName}</a></li>
+  				<li><a href="#css" data-toggle="tab">CSS</a></li>
+			</ul>
+			</div>
+			<div class="floatBar">
+				Live Code
+			</div>
+	     </div>
+            <div class="codearea-center">
+                    <div class="editor html tab-pane active" fileName="main.php" id="main">
+                        <textarea class="code" mode="application/x-httpd-php" name="main">
+{main.php}
+</textarea>
+                    </div>
+                    <div class="editor javascript tab-pane" fileName="javascript.php" id="javascript">
+                        <textarea class="code" mode="javascript" name="javascript">
+{javascript.php}
+</textarea>
+                    </div>    
+                    <div class="editor additional tab-pane" fileName="additional.php" id="additional">
+                        <textarea class="code" mode="{additionalMode}" name="additional">
+{additional.php}
+</textarea>
+                    </div>    
+                    <div class="editor css tab-pane" fileName="css.php" id="css">
+                        <textarea class="code" mode="css" name="css">
+{css.php}
+</textarea>
+                    </div>  
+                </div>
+         </div>
+                    <div class="ui-layout-north">
+			   <div class="headerWrapper">
+                        <div class="header">
+                            <div class="logo"></div>
+				<div class="headerOptions">
+					<div class="theBtn newCode">
+						<div class="caption">
+							New Code
+						</div>
+						<div class="subText">
+							Build & share code
+						</div>
+					</div>
+					<div class="theBtn discoverCode">
+						<div class="caption">
+							Discover
+						</div>
+						<div class="subText">
+							Code snippets & apps
+						</div>
+					</div>
+				</div>
+                            <div class="toolbar rightBar">
+					<div class="twilioPartner"></div>
+                            </div>
+                        </div>
+			   </div>	
+			   <div class="projAreaWrapper">
+                        <div class="projArea">
+				<div class="projLeft"> 
+					<div class="info">
+						<div class="title">
+							<h1>{title}</h1>
+							<div class="tags">
+
+							</div>
+						</div>
+						<div class="subTitle">
+						<h2>{subTitle}</h2>
+						</div>
+					</div>
+					<div class="author">
+						<img src="/images/ykumar6.jpg"/>
+						<div class="text">{authorName}</div>
+					</div>
+				</div>
+				<div class="projRight">
+					<div class="commandBar">
+						<div class="theBtn Run">
+							<div class="img"></div>
+							<div class="caption">Run</div>
+						</div>
+						<div class="theBtn fork">
+							<div class="img"></div>
+							<div class="caption">Make a Copy</div>
+						</div>
+						<div class="theBtn share"  data-target="#shareDialog">
+							<div class="img"></div>
+							<div class="caption">Share</div>
+							<div class="dropdown"></div>
+
+						</div>					</div>
+				</div>
+                        </div>
+			   </div>
+                    </div>
+   <div class="ui-layout-east">
+                    <div class="server-south">
+                        <div class="browser-center">
+				<div class="browserToolbar">
+				<div class="browserBar">
+				<div class="saveStatus">Unsaved Changes... Click run</div>
+   			<div class="floatBar">
+				Output
+			</div>
+                            </div>
+				</div>
+				
+				<div class="browserWindow">
+                            <iframe id="appFrame" width="100%" height="100%" src="/loading" frameBorder="0">
+                            </iframe>
+				</div>
+                   		</div>
+                        <div class="browser-south">
+                            <div class="logBar">
+                                <div class="icon check logIcon"></div>
+                                <div class="logText">
+					<div class="logTextInner">
+                                    Your server is running at
+					</div>
+                                </div>
+                                <div class="logTime">
+                                    2 minutes ago
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+				<div class="loading">
+				</div>
+<div class="modal" id="myModal" style="display:none;">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">X</a>
+    <h3>Run this code in 60 seconds</h3>
+  </div>
+  <div class="modal-body">
+				<div class="challenge {challengeClass}">
+					<div class="twilioVerify">
+						<div class="logo">
+						</div>
+						<div class="box">
+							<div class="big">This code makes outbound calls</div>
+							<div class="small">Please verify your phone number</div>
+							<div class="phoneBox">
+							<div class="code">+1</div><input type="text" value="" /> <div class="button">Call</div>
+							</div>
+						</div>
+						<div class="verifyCode">
+							We're calling you, enter this number on your dialpad
+							<div class="codeBox">
+							<div class="verifyCodeNumber">12324242</div> <div class="button">Done</div>
+							</div>
+						</div>
+					</div>
+					<div class="dropboxVerify">
+						<div class="logo">
+						</div>
+						<div class="box">
+							<div class="big">Please login to Dropbox</div>
+							<div class="small">Permission is only requested to an init.me app folder, and not your root folder</div>
+						 	<button class="btn btn-large">Login</button>
+						</div>
+					</div>
+				</div>
+  </div>
+</div>
+
+			<div id="shareDialog" class="shareDialog dropdown-menu" style="display:none;">
+				<div class="field source">
+					<div class="text">Share this code</div>
+					<input id="sourceUrl" />
+				</div>
+				<div class="field app">
+					<div class="text">Share this app</div>
+					<input id="appUrl" />
+				</div>
+			</div>
+			<div id="fb-root"></div> 
+    <script src="{static}/scripts/bootstrap/js/bootstrap.min.js"></script>
+                    </body>
+                    </html> 

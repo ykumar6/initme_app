@@ -548,6 +548,8 @@ app.get('/:projectTitle', function(req, res, next) {
 });
 
 
+
+
 app.get('/:id/*', function(req, res, next) {
     //render user portal or ide
 
@@ -555,8 +557,7 @@ app.get('/:id/*', function(req, res, next) {
     var isOwner = (projList.indexOf(req.params.id) >= 0);
 
     AppChecker.activateApp(req.params.id, function(proj) {
-        if(proj && proj.getAuthorName() !== "Unknown") {
-		
+	   if (proj) {
 	     if (req.url.indexOf(proj.getProjectUrl()) < 0) {
 		 res.redirect("/" + proj.getProjectUrl());
 	     }
@@ -570,9 +571,10 @@ app.get('/:id/*', function(req, res, next) {
                 }
               });
 	     }
-        } else {
-            res.send(500);
-        }
+	  }
+	  else {
+		res.send(500);
+	  }
     });
 });
 
@@ -584,8 +586,7 @@ app.get('/:id/*', function(req, res, next) {
     var isOwner = (projList.indexOf(req.params.id) >= 0);
 
     AppChecker.activateApp(req.params.id, function(proj) {
-        if(proj && proj.getAuthorName() !== "Unknown") {
-		
+	   if (proj) {
 	     if (req.url.indexOf(proj.getProjectUrl()) < 0) {
 		 res.redirect("/" + proj.getProjectUrl());
 	     }
@@ -599,9 +600,11 @@ app.get('/:id/*', function(req, res, next) {
                 }
               });
 	     }
-        } else {
-            res.send(500);
-        }
+	  }
+	  else {
+		res.send(500);
+	  }
+
     });
 });
 
@@ -612,9 +615,8 @@ app.get('/:id', function(req, res, next) {
     var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
     var isOwner = (projList.indexOf(req.params.id) >= 0);
 
-    AppChecker.activateApp(req.params.id, function(proj) {
-        if(proj && proj.getAuthorName() !== "Unknown") {
-		
+    AppChecker.activateApp(req.params.id, function(proj) {	
+	   if (proj) {	
 	     if (req.url.indexOf(proj.getProjectUrl()) < 0) {
 		 res.redirect("/" + proj.getProjectUrl());
 	     }
@@ -628,9 +630,10 @@ app.get('/:id', function(req, res, next) {
                 }
               });
 	     }
-        } else {
-            res.send(500);
-        }
+	  }
+	  else {
+		res.send(500);
+	  }
     });
 });
 
