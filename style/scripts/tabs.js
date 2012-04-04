@@ -86,6 +86,7 @@ var CodeModule  = function(codeBoxes) {
 	$(".reloadCode .btn").removeClass("disabled");
 	$(".theBtn.fork").removeClass("disabled");
 	if (!$(".saveStatus").hasClass("active")) {
+		$(".saveStatus").text("Unsaved Changes... Click run");
 		$(".saveStatus").addClass("active");
 	}
    }
@@ -109,7 +110,7 @@ var CodeModule  = function(codeBoxes) {
 	};
 	
        var codeEditor = CodeMirror.fromTextArea(textArea[0], {
-	     lineNumbers: (document.projectId === "100011") ? false: true,
+	     lineNumbers: true,
             mode: editorMode,
 	     matchBrackets : true,
 	     onChange: function() {

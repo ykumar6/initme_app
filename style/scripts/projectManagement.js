@@ -25,7 +25,7 @@ document.ProjectManagement = function() {
     	     this.isVMActive = true;
             $("body").removeClass("inactive");
 	     if (this.isActive) {
-		   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken || "");
+		   $("#appFrame").attr("src", "http://" + $(".urlBar").val().replace("http://", ""));
 	     }
         } 
         else if (state === "oauth") {
@@ -38,7 +38,7 @@ document.ProjectManagement = function() {
             self.isActive = true;
             $("body").removeClass("oauth");
 	     if (this.isVMActive) {
-		   $("#appFrame").attr("src", "http://" + document.appUrl + "/?token=" + window.accessToken || "");
+		   $("#appFrame").attr("src","http://" + $(".urlBar").val().replace("http://", ""));
 	     }
         }
     };
@@ -128,6 +128,11 @@ document.ProjectManagement = function() {
             success : function(data) {
                 document.isOwner = true
                 document.projectId = data.projectId;
+
+		  var curUrl = $(".urlBar").val();
+		   console.log(curUrl);
+		  $(".urlBar").val(curUrl.replace(document.appUrl, data.appUrl) );
+
                 document.appUrl = data.appUrl;
                 console.log("loading project");
                 self.loadProject(cb);

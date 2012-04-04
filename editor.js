@@ -9,16 +9,8 @@ var frameworkFiles = {
 module.exports = {
     
     getIndex: function(proj, isOwner, user, callback) {        
-
-	 var file = "editor.html";
-	 if (proj.model.tags.indexOf("twilio") >= 0) {
-		file = "ide.html";
-	 }
-	 if (proj.getId() === "100011") {
-		file = "embed.html";
-	 }
 	 
-        fs.readFile(__dirname + "/view/" + file, "utf8", function(err, index) {
+        fs.readFile(__dirname + "/view/editor.html", "utf8", function(err, index) {
             
             if (err) {
                 callback(err);
@@ -50,6 +42,11 @@ module.exports = {
 			index = index.replace(/{additionalMode}/mig, "javascript");            
 			index = index.replace(/{additionalName}/mig, "JavaScript");   
 			index = index.replace(/{additionalStyle}/mig, "display:none;");  
+	     }
+            if (proj.model.tags.indexOf("twiml") >= 0) {
+			index = index.replace(/{jsStyle}/mig, "display:none;");  
+			index = index.replace(/{cssStyle}/mig, "display:none;");  
+
 	     }
 
             if (proj.model.tags.indexOf("facebook") >= 0) {

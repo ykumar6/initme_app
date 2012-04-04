@@ -213,18 +213,18 @@ passport.use(new GoogleStrategy({
 ));
 
 
-/*
-app.all("/", function(req, res, next) {
-    console.log(req.url);
-    var param = req.param("proxy");
-    if (typeof param === "string") {
-	 console.log("proxying");
-	 proxy(req, res, next);
+app.all("/*", function(req, res, next) {
+    var domainParts = req.headers.host.split(".");
+
+    if (!isNaN(domainParts[0])) {
+   	fs.readFile(__dirname + "/view/app404.html", "utf8", function(err, index) {
+		index = index.replace("{projectUrl}", "http://" + config.projDomain + "/" + domainParts[0]);
+       	res.end(index);
+   	});
     } else {
 	next();
     }
 });
-*/
 
 app.get('/', function(req, res, next) {
     //render user portal or ide
@@ -542,7 +542,9 @@ app.get('/:projectTitle', function(req, res, next) {
                 }
               });
         } else {
-            res.send(500);
+   		fs.readFile(__dirname + "/view/404.html", "utf8", function(err, index) {
+       		res.end(index);
+   		});
         }
     }, domainParts[0]);
 });
@@ -573,7 +575,9 @@ app.get('/:id/*', function(req, res, next) {
 	     }
 	  }
 	  else {
-		res.send(500);
+   		fs.readFile(__dirname + "/view/404.html", "utf8", function(err, index) {
+       		res.end(index);
+   		});
 	  }
     });
 });
@@ -602,7 +606,9 @@ app.get('/:id/*', function(req, res, next) {
 	     }
 	  }
 	  else {
-		res.send(500);
+   		fs.readFile(__dirname + "/view/404.html", "utf8", function(err, index) {
+       		res.end(index);
+   		});
 	  }
 
     });
@@ -632,7 +638,9 @@ app.get('/:id', function(req, res, next) {
 	     }
 	  }
 	  else {
-		res.send(500);
+   		fs.readFile(__dirname + "/view/404.html", "utf8", function(err, index) {
+       		res.end(index);
+   		});
 	  }
     });
 });

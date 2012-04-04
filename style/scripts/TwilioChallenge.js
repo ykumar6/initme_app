@@ -16,7 +16,7 @@ document.TwilioChallenge = function(project) {
 	});
 
 	project.addEvent("twilioAccount", function(data) {
-		window.accessToken = data + "&callerId=" + self.phoneNumber;
+		$(".urlBar").val(document.appUrl + "/?token=" + data + "&callerId=" + self.phoneNumber);
 	});
 	project.addEvent("outgoingVerifyCode", function(data) {
 		$(".verifyCodeNumber").text(data);

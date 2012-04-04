@@ -65,12 +65,14 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 		                  
             $(function() {
 
+		  $(".urlBar").val(document.appUrl);
 		  document.tags = (document.tags || "").split(",");
 		  var tagStr = "";
 		  for (var i=0; i<document.tags.length; i++) {
 			tagStr += '<div class="tag ' + document.tags[i] + '"><h3>' + document.tags[i] + '</h3></div>';
 		  }
 		  $(".tags").append(tagStr);
+		  
 		  
                 var alertFallback = false;
                 if( typeof console === "undefined" || typeof console.log === "undefined") {
@@ -108,7 +110,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     east__closable : false,
                 });
 
-                $(".ui-layout-center").layout({
+                var codeArea = $(".ui-layout-center").layout({
                     north__resizable : false,
                     north__closable : false,
                     north__spacing_open : 0,
@@ -121,6 +123,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                         document.CodeCommands.refresh("main");
                     }
                 });
+
 
 		  $('.nav a:first').tab('show')
 
@@ -157,6 +160,18 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     north__spacing_closed : 0,
                     north__slidable : false,
                 })
+
+                $(".browserToolbar").layout({
+                    east__paneSelector : ".browserToolbarRight",
+                    east__resizable : false,
+                    east__closable : false,
+                    east__size : 100,
+                    center__paneSelector : ".browserToolbarLeft",
+                    east__spacing_open : 0,
+                    east__spacing_closed : 0,
+                    east__slidable : false,
+                })
+
 
                 var logBar = $(".logBar").layout({
                     east__paneSelector : ".logTime",
@@ -212,7 +227,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     $("body").bind("oauthLogin", function(e, token) {
 			   $("#myModal").modal("hide");
 			   document.logHandler.show();
-			   window.accessToken = token;
+			   $(".urlBar").val(document.appUrl + "/?token=" + token);
                         projectSession.setState("active");
 			   document.CodeCommands.focus();
                     });
@@ -243,6 +258,11 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                 }
 		  else {
 			isAuthRequired = false;
+		  }
+
+ 
+                if ($.inArray("twiml", document.tags) >= 0) {
+			$(".urlBar").val(document.appUrl + "/?CallerId=NA&PhoneNumber=NA");
 		  }
 
                 projectSession.loadProject();
@@ -324,7 +344,8 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     			}
 				} 
 				else {
-					frame.src = iframe.src;
+					$(".saveStatus").removeClass("active");
+					$("#appFrame").src = "http://" + $(".urlBar").val().replace("http://", "");
 				}
 		      } 
                 });
@@ -434,24 +455,27 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                         }
                     });
                 }
-
-            });
+		  $(".urlBar").change(function(e) {
+			$(".saveStatus").text("Press Run to Reload URL");
+			$(".saveStatus").addClass("active");
+		  });
+	   });
 
         </script>
     </head>
     <body>
         <div class="ui-layout-center">
 	     <div class="codearea-tabs">
+				<div class="floatBar">
+					Live Code
+				</div>
 			<div class="tabHolder">
 			<ul class="nav nav-tabs">
   				<li><a href="#main" data-toggle="tab">PHP</a></li>
- 				<li><a href="#javascript" data-toggle="tab">JavaScript</a></li>
+ 				<li><a href="#javascript" data-toggle="tab" style="{jsStyle}">JavaScript</a></li>
   				<li><a href="#additional" data-toggle="tab" style="{additionalStyle}">{additionalName}</a></li>
-  				<li><a href="#css" data-toggle="tab">CSS</a></li>
+  				<li><a href="#css" data-toggle="tab" style="{cssStyle}">CSS</a></li>
 			</ul>
-			</div>
-			<div class="floatBar">
-				Live Code
 			</div>
 	     </div>
             <div class="codearea-center">
@@ -527,6 +551,8 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 					</div>
 				</div>
 				<div class="projRight">
+				<div class="saveStatus">Unsaved Changes... Click run</div>
+
 					<div class="commandBar">
 						<div class="theBtn Run">
 							<div class="img"></div>
@@ -550,12 +576,15 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     <div class="server-south">
                         <div class="browser-center">
 				<div class="browserToolbar">
-				<div class="browserBar">
-				<div class="saveStatus">Unsaved Changes... Click run</div>
-   			<div class="floatBar">
-				Output
-			</div>
-                            </div>
+					<div class="browserToolbarLeft">
+						<div class="URLLabel"><span class="label">URL</span></div>
+						<input class="urlBar" spellcheck="false" type="text" data-provide="typeahead">
+					</div>
+					<div class="browserToolbarRight">
+   						<div class="floatBar">
+							Output
+						</div>
+                            	</div>
 				</div>
 				
 				<div class="browserWindow">
@@ -630,4 +659,5 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 			<div id="fb-root"></div> 
     <script src="{static}/scripts/bootstrap/js/bootstrap.min.js"></script>
                     </body>
+
                     </html> 
