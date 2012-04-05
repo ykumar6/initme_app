@@ -32,6 +32,12 @@ body p {
 	height: 50px;
 }
 
+.toolbarContainer {
+	overflow: hidden;
+	width: 100%;
+	min-width: 500px;
+}
+
 .tabHolder .active a, .tabHolder .active a:hover {
 	border: 1px solid #F1F2F2 !important;
 	border-bottom: 1px solid #FFF !important;
@@ -188,19 +194,9 @@ body.inactive .commandBar .theBtn.run:hover {
 	cursor: pointer;
 }
 
-body.inactive .theBtn.pop {
-	opacity: 0.5;
-	-ms-filter: "alpha(opacity=50)";
-	cursor: default;
+body.inactive .theBtn.pop, body.oauth  .theBtn.pop {
+	display: none;
 }
-
-body.inactive .theBtn.pop:hover {
-	opacity: 0.5;
-	-ms-filter: "alpha(opacity=50)";
-	cursor: default;
-
-}
-
 
 .theBtn.pop {
 	float: right;
@@ -210,7 +206,7 @@ body.inactive .theBtn.pop:hover {
    	width: 25px;
     	height: 25px;
 	margin-right: 10px;
-	margin-top: 10px;
+	margin-top: 17px;
 	opacity: 0.75;
 	-ms-filter: "alpha(opacity=75)";
 	cursor: pointer;
@@ -626,6 +622,11 @@ background-color: #D3E5EC;
 .tag.twilio {
 	background-color: #DAD3E3;
 }
+
+.tag.twiml {
+	background-color: #E6E7E8;
+}
+
 
 .tag.php {
 	background-color: #FFE6CB;
@@ -1225,3 +1226,4 @@ border-radius: 4px;
 -webkit-border-radius: 4px;
 box-shadow: inset rgba(0,0,0,0.2) 0px 2px 5px;
 }
+

@@ -38,6 +38,8 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
         <link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
         <script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
         <link rel="stylesheet" href="{static}/main.css">
+        <script src="{static}/scripts/URI/src/URI.js"></script>
+
         <script src="{static}/scripts/codemirror/mode/xml/xml.js"></script>
         <script src="{static}/scripts/codemirror/mode/php/php.js"></script>
         <script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
@@ -57,13 +59,22 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
             document.projectId = "{projId}";
             document.appUrl = "{appUrl}";
             document.tags = "{tags}";
-            document.isOwner = {isOwner};
+            document.projOwner = document.isOwner = {isOwner};
             document.FacebookId = "{facebookId}";
 
 	     var parts = document.domain.split(".");
-	     document.realDomain = parts[parts.length-2] + "." + parts[parts.length-1];
+	     if (parts.length === 3) {
+	     	document.realDomain = parts[parts.length-2] + "." + parts[parts.length-1];
+	     }
+	     else {
+		document.realDomain = document.domain;
+	     }
 		                  
             $(function() {
+		
+		  if (document.projOwner) {
+			$(".theBtn.fork").addClass("disabled");
+		  }
 
 		  $(".urlBar").val(document.appUrl);
 		  document.tags = (document.tags || "").split(",");
@@ -165,7 +176,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     east__paneSelector : ".browserToolbarRight",
                     east__resizable : false,
                     east__closable : false,
-                    east__size : 100,
+                    east__size : 60,
                     center__paneSelector : ".browserToolbarLeft",
                     east__spacing_open : 0,
                     east__spacing_closed : 0,
@@ -262,7 +273,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 
  
                 if ($.inArray("twiml", document.tags) >= 0) {
-			$(".urlBar").val(document.appUrl + "/?CallerId=NA&PhoneNumber=NA");
+			$(".urlBar").val($(".urlBar").val().replace("http://", "") + "/?CallerId=123&PhoneNumber=123");
 		  }
 
                 projectSession.loadProject();
@@ -286,25 +297,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                             type : "GET",
                             url : "http://" + document.domain + "/save/" + document.projectId + "?ts=" + (new Date()).getTime(),
                             success : function(data) {
-                                $(".title h1").html(data.projectTitle);
-                                $(".subTitle h2").html(data.subTitle);
-
-                                $(".title h1").inlineEdit({
-                                    save : function(e, data) {
-                                        $.post("http://" + document.domain + "/title/" + document.projectId, data);
-                                        return true;
-                                    }
-                                });
-                                $(".title h1").addClass("owner");
-
-                    		    $(".subTitle h2").addClass("owner");
-                    		    $(".subTitle h2").inlineEdit({
-                        		save : function(e, data) {
-                            		$.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
-                            		return true;
-                        		}
-                    		    });
-                                window.location = "http://" + document.realDomain + "/" + document.projectId;
+                                window.location = "http://" + document.domain + "/" + document.projectId;
                             },
                             error : function(err) {
                                 console.log(err);
@@ -315,14 +308,11 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                 }
 
                 $(".theBtn.fork").mouseup(function() {
-                    if(!$(".theBtn.fork").hasClass("disabled")) {
-                        document.logHandler.clear();
+                    if(!document.projOwner) {
                         if(!document.isOwner) {
                             projectSession.createProject(_save);
-                        } else if(document.isOwner && document.URL.indexOf(document.projectId) < 0) {
+                        } else  {
                             _save();
-                        } else {
-                            document.CodeCommands.save();
                         }
                     }
                 });
@@ -345,7 +335,10 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 				} 
 				else {
 					$(".saveStatus").removeClass("active");
-					$("#appFrame").src = "http://" + $(".urlBar").val().replace("http://", "");
+					var url = new URI($(".urlBar").val());
+					url.protocol("http");
+					url.addSearch("iframe", "true");
+					$("#appFrame").attr("src", url.toString());
 				}
 		      } 
                 });
@@ -361,25 +354,20 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                 });
 
                 $("body").bind("save", function(e, state) {
-                    if(!$(".theBtn.fork").hasClass("disabled")) {
-                        $(".theBtn.fork").addClass("disabled");
-                    }
+
                 });
                 $("body").bind("push", function(e, state) {
-                    if(!$(".theBtn.fork").hasClass("disabled") && document.URL.indexOf(document.projectId) >= 0) {
-                        $(".theBtn.fork").addClass("disabled");
-                    }
                     var iframe = document.getElementById("appFrame");
                     iframe.src = iframe.src;
                 });
 
 
                 $("a.LOGOUT").mouseup(function() {
-                    window.location = "/logout?redirect=" + window.location;
+                    window.location = "http://" + document.realDomain + "/";
                 });
 
                 $("a.LOGIN").mouseup(function() {
-                    window.location = "/?state=loginEditor&redirect=" + window.location;
+                    window.location = "http://" + document.realDomain + "/";
                 });
 
                 $(".theBtn.newCode").mouseup(function() {
@@ -392,6 +380,12 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 
                 $(".theBtn.download").mouseup(function() {
                     window.location = "/?state=downloadCode";
+                });
+
+                $(".theBtn.pop").click(function() {
+			var url = new URI($(".urlBar").val());
+			url.protocol("http");
+                     window.open(url.toString());
                 });
 
 
@@ -525,8 +519,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 				</div>
                             <div class="toolbar rightBar">
 					<a href="/?state=Blog">BLOG</a>
-					<a href="/?state=loginDirect">SIGN UP</a>
-					<a class="{login}" href="javascript:void(0)">{login}</a>
+					<a class="{login}" href="javascript:void(0)">SIGN UP</a>
 
                             </div>
                         </div>
@@ -560,7 +553,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 						</div>
 						<div class="theBtn fork">
 							<div class="img"></div>
-							<div class="caption">Make a Copy</div>
+							<div class="caption">Save</div>
 						</div>
 						<div class="theBtn share"  data-target="#shareDialog">
 							<div class="img"></div>
@@ -577,13 +570,13 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                         <div class="browser-center">
 				<div class="browserToolbar">
 					<div class="browserToolbarLeft">
-						<div class="URLLabel"><span class="label">URL</span></div>
-						<input class="urlBar" spellcheck="false" type="text" data-provide="typeahead">
+						<div class="toolbarContainer">
+							<div class="URLLabel"><span class="label">URL</span></div>
+							<input class="urlBar" spellcheck="false" type="text" data-provide="typeahead">
+						</div>
 					</div>
 					<div class="browserToolbarRight">
-   						<div class="floatBar">
-							Output
-						</div>
+						<div class="theBtn pop"></div>
                             	</div>
 				</div>
 				

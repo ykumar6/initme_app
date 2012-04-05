@@ -37,3 +37,6 @@
 [submodule "style/scripts/jquery-tags"]
 	path = style/scripts/jquery-tags
 	url = https://github.com/xoxco/jQuery-Tags-Input
+[submodule "style/scripts/URI"]
+	path = style/scripts/URI
+	url = https://github.com/medialize/URI.js.git

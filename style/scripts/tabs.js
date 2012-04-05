@@ -30,7 +30,6 @@ var CodeModule  = function(codeBoxes) {
 					codeEditors[i].changed = false;
 				}
 				isCodeChanged = false;
-				$(".reloadCode button").addClass("disabled");
 				$(".saveStatus").removeClass("active");
 			}
 			cb(err);
@@ -84,7 +83,6 @@ var CodeModule  = function(codeBoxes) {
 	codeEditors[index].changed = true;
 	isCodeChanged = true;
 	$(".reloadCode .btn").removeClass("disabled");
-	$(".theBtn.fork").removeClass("disabled");
 	if (!$(".saveStatus").hasClass("active")) {
 		$(".saveStatus").text("Unsaved Changes... Click run");
 		$(".saveStatus").addClass("active");

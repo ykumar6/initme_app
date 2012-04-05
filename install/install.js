@@ -56,7 +56,19 @@ var projects = [
                 copyFrom: __dirname + "/dropbox-upload-php",
                 keepAlive: true
         },
-
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100012,
+                namespace: "twiml",
+                namespaceUrl: "php",
+                proposedTitle: "Simple TwiML Server",
+                subTitle: "Your TwiML Playground",
+                tags: ["php", "twiml"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/twiml-php",
+                keepAlive: true
+        },
 
 ];
 

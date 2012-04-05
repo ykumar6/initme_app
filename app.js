@@ -216,14 +216,26 @@ passport.use(new GoogleStrategy({
 app.all("/*", function(req, res, next) {
     var domainParts = req.headers.host.split(".");
 
-    if (!isNaN(domainParts[0])) {
-   	fs.readFile(__dirname + "/view/app404.html", "utf8", function(err, index) {
-		index = index.replace("{projectUrl}", "http://" + config.projDomain + "/" + domainParts[0]);
-       	res.end(index);
-   	});
-    } else {
-	next();
+    if (isNaN(domainParts[0])) {
+	 next();
+	 return;
     }
+
+    AppChecker.findProject(domainParts[0], function(proj) {
+	  if (proj) {
+		var projDomain = config.projDomain;
+		if (proj.namespace) {
+			projDomain = proj.namespace + "." + config.projDomain;
+		}
+   		fs.readFile(__dirname + "/view/app404.html", "utf8", function(err, index) {
+			index = index.replace("{projectUrl}", "http://" + projDomain + "/" + domainParts[0]);
+       		res.end(index);
+   		});
+	  }
+	  else {
+		next();
+	  }
+    });
 });
 
 app.get('/', function(req, res, next) {
@@ -449,14 +461,13 @@ app.post("/subTitle/:projectId", function(req, res, next) {
 
 
 app.get("/save/:projectId", function(req, res, next) {	
-    if (!req.user) {
-	req.session.recoverProjId = req.params.projectId;
-        res.send(401); //unauthorized, user must login
-    } else {
+  //  if (!req.user) {
+//	req.session.recoverProjId = req.params.projectId;
+  //      res.send(401); //unauthorized, user must login
+  //  } else {
 	AppChecker.activateApp(req.params.projectId, function(proj) {
 		if (proj) {
-			console.log("sds" + req.user.displayName);
-			proj.model.authorName = req.user.displayName;
+			proj.model.authorName = "";
 			proj.model.save(function(err, doc){
 				if (err) {
 					res.send(500);
@@ -470,19 +481,24 @@ app.get("/save/:projectId", function(req, res, next) {
 			res.send(500);
 		}
 	});
-    }
+    //}
 });
 
 app.get('/fork/:projectId', function(req, res, next) {
+
     //fork new root app
+
+	
+
     var framework = "php";
 
-	var createFork = function(tags) {
+	var createFork = function(tags, namespace) {
 	 console.log("Received fork request........!!!");
         var proj = new Project({
            "framework" : framework,
            "authorName":  "Unknown",
 	    "proposedTitle": "Untitled",
+	    "namespace": namespace || null,
 	    "tags": tags,
 	    "subTitle": "Please add a description",
             clone : req.params.projectId,
@@ -491,11 +507,16 @@ app.get('/fork/:projectId', function(req, res, next) {
                     console.log(err);
                     res.send(500);
                 } else {
-			console.log(req.headers);
-                    var projList = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
+                    var list = req.headers["x-vcap_projects"] ? req.headers["x-vcap_projects"].split(",") : [];
+		      var projList = [];
+		      for (var i=0; i<list.length; i++) {
+				if (!isNaN(list[i])) {
+					projList.push(list[i]);
+				}
+		      }
                     projList.push(proj.getId());
                     AppChecker.addActiveApp(proj);
-    		   // console.log(projList);	
+    		      console.log(projList);	
                     res.setHeader("Set-Cookie", "INITME=," + projList.join(","));
                     res.writeHead(200);
 		    
@@ -512,7 +533,8 @@ app.get('/fork/:projectId', function(req, res, next) {
 
 	var exitingProj = AppChecker.activateApp(req.params.projectId, function(proj) {
 		var tags = proj.model.tags;
-		createFork(tags);
+		var namespace = proj.model.namespace;
+		createFork(tags, namespace);
 	});
 
 
@@ -524,6 +546,10 @@ app.get('/:projectTitle', function(req, res, next) {
 
     var domainParts = req.headers.host.split(".");
     if (domainParts.length !== 3 || req.params.projectTitle == "favicon.ico") {
+	 next();
+	 return;
+    }
+    if (!isNaN(req.params.projectTitle)) {
 	 next();
 	 return;
     }

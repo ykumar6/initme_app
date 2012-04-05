@@ -25,7 +25,10 @@ document.ProjectManagement = function() {
     	     this.isVMActive = true;
             $("body").removeClass("inactive");
 	     if (this.isActive) {
-		   $("#appFrame").attr("src", "http://" + $(".urlBar").val().replace("http://", ""));
+			var url = new URI($(".urlBar").val());
+			url.protocol("http");
+			url.addSearch("iframe", "true");
+			$("#appFrame").attr("src", url.toString());
 	     }
         } 
         else if (state === "oauth") {
@@ -38,7 +41,10 @@ document.ProjectManagement = function() {
             self.isActive = true;
             $("body").removeClass("oauth");
 	     if (this.isVMActive) {
-		   $("#appFrame").attr("src","http://" + $(".urlBar").val().replace("http://", ""));
+			var url = new URI($(".urlBar").val());
+			url.protocol("http");
+			url.addSearch("iframe", "true");
+			$("#appFrame").attr("src", url.toString());;
 	     }
         }
     };
@@ -48,6 +54,7 @@ document.ProjectManagement = function() {
 
         if(self.socketVM) {
             self.socketVM.disconnect();
+	     self.socketVM = null;
         }
         if(self.socketMain) {
                 self.socketMain.emit("detach", {
@@ -72,14 +79,22 @@ document.ProjectManagement = function() {
                 resource : "" + document.projectId + "-portal/socket.io",
                 "force new connection" : true
             });
-
+	     self.socketVM.on('connect_failed', function(err) {
+		  console.log('connect_failed');
+		  if (self.vmErrorTimer) {
+			clearInterval(self.vmErrorTimer);
+		  }
+                self.vmErrorTimer = setTimeout(tryVMConnect, 5000);
+	     });
             self.socketVM.on("error", function(err) {
+		  console.log('connect_error');
 		  if (self.vmErrorTimer) {
 			clearInterval(self.vmErrorTimer);
 		  }
                 self.vmErrorTimer = setTimeout(tryVMConnect, 5000);
             });
             self.socketVM.on("connect", function(err) {
+		  console.log("connect VM");
                 if(cb)
                     cb();
             });
@@ -98,6 +113,12 @@ document.ProjectManagement = function() {
                 self.socketMain.emit("attach", {
                     "projectId" : document.projectId
                 });
+            });
+            self.socketMain.on("connect_failed", function(err) {
+		  if (self.mainErrorTimer) {
+			clearInterval(self.mainErrorTimer);
+		  }
+                self.mainErrorTimer = setTimeout(tryMainConnect, 1000);
             });
             self.socketMain.on("error", function(err) {
 		  if (self.mainErrorTimer) {
@@ -138,7 +159,8 @@ document.ProjectManagement = function() {
                 self.loadProject(cb);
                 //reload project connections
             },
-            error : function() {
+            error : function(e) {
+		  console.log(e);
                 document.logHandler.handleMsg({
                     type : "warn",
                     text : "Unable to run your code. Please try again",

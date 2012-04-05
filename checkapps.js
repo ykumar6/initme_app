@@ -57,6 +57,19 @@ module.exports = {
         activeApps[proj.getId()] = proj;
     },
 
+    findProject: function(appId, cb) {
+	 ProjectModel.findOne({"projectId": appId}, function(err, doc) {
+		console.log(err);
+		console.log(doc);
+		if (doc) {
+			cb(doc);
+		}
+		else {
+			cb(null);
+		}
+	 });
+    },
+
     activateApp: function(appName, cb, namespace) {
         var self = this;
 
