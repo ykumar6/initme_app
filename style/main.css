@@ -159,16 +159,16 @@ body.inactive .saveStatus {
 	display: none;
 }
 
-.projRight .saveStatus.active {
+.codearea-tabs .saveStatus.active {
 	display: inline-block;
 }
 
-.projRight .saveStatus {
+.codearea-tabs .saveStatus {
 	display: none;
 	color: #BFBFBF;
-	float: left;
-	margin-top: 28px;
-	margin-right: 30px;
+	position: absolute;
+	right: 100px;
+	top: 13px;
 }
 
 body.inactive .commandBar .theBtn.run {
