@@ -1,0 +1,198 @@
+.howto
+h3{color:#F00000;font-weight:bold;margin:15px
+0}#howto-home  ul
+h2{color:red;float:left;padding:10px}#howto-home
+h2{padding-bottom:20px}.howto .tutorial_holder ul
+li{clear:none;float:left}#howto-home{height:330px;position:relative;width:709px}#holder{width:765px}#featured_holder{width:720px;height:340px;border-top:1px solid #adadad;border-bottom:1px solid #adadad;position:absolute;top:42px;left:0;display:block}#featured_holder2{width:720px;height:340px;border-top:1px solid #adadad;border-bottom:1px solid #adadad;position:absolute;top:42px;left:0;display:none}#featured_holder3{width:720px;height:340px;border-top:1px solid #adadad;border-bottom:1px solid #adadad;position:absolute;top:42px;left:0;display:none}#featured_left{width:205px;float:left}#featured_right{width:515px;float:left;padding-top:20px}#video_player{}#featured_holder h3, #featured_holder2 h3, #featured_holder3
+h3{color:#000;font-size:14pt;line-height:31px;width:199px;float:left;padding-left:10px;letter-spacing: -.5px;line-height:25px;width:189px;font-weight:100}#featured_bug{padding-left:10px;color:#cbcbcb;font-size:16px;float:left;margin-top:20px}.star{padding-right:4px}.next{font-size:10pt;color:#a7a7a7;position:absolute;left:111px;bottom:18px;cursor:pointer}.prev{font-size:10pt;color:#a7a7a7;position:absolute;left:0px;bottom:18px;cursor:pointer}#featured_left ul
+li{background:transparent url('/packages/docs/img/howto/buttons.png') no-repeat scroll 0 0;font-size:12px;height:23px;float:left;margin-right:10px}#featured_left
+ul{position:absolute;bottom:11px;left:45px}#featured_left li
+a{color:#3C3C3C;display:block;line-height:23px;padding-left:0px;width:10px;height:10px;margin-right:10px}#featured_left ul
+.selected_button{background-position:-13px 0;width:10px}#featured_left ul
+.not_selected{background-position:0 0;width:10px}#basic_holder{width:726px;margin-top:56px;margin-bottom:10px}#basic_holder
+h3{color:#272727;font-size:24pt;padding-bottom:12px;margin-bottom:20px;padding-top:20px}#advanced_holder{float:left;width:726px;margin-top:10px;margin-bottom:10px}#advanced_holder
+h3{padding-bottom:12px;margin-bottom:20px;margin-top:20px}#client_holder{float:left;width:726px;margin-top:10px;margin-bottom:10px}#client_holder
+h3{padding-bottom:12px;margin-bottom:20px;margin-top:20px}.tutorial_holder{padding:8px
+28px 8px 10px;width:317px;float:left}.tutorial_holder
+h4{color:#545454;font-size:17pt;font-weight:normal;letter-spacing: -1px;margin-bottom:10px;text-decoration:none}h4
+a{text-decoration:underline}.tutorial_holder
+p{font-size:10pt;line-height:1.5em}.tutorial_holder h4
+ul{float:right}.tutorial_holder
+ul{margin-top:12px;width:100%}.tutorial_holder
+li{display:inline-block;cursor:pointer}.tutorial_holder ul
+span{display:none}ul.languages{float:right}ul.languages
+li{display:inline-block;background:url('/packages/docs/img/howto/howto_sprites.png') no-repeat;text-indent: -9999px}ul.languages
+.python{width:22px;height:23px;background-position:-50px 0;margin-right:10px}ul.languages
+.java{width:22px;height:23px;background-position:-90px -7px;margin-right:10px}ul.languages
+.php{width:38px;height:23px;background-position:-246px -6px;margin-right:10px}ul.languages
+.coldfusion{width:20px;height:23px;background-position:-206px -6px;margin-right:10px}ul.languages
+.ruby{width:15px;height:23px;background-position:-132px -6px;margin-right:10px}ul.languages
+.demo{width:26px;height:23px;background-position:-11px -4px;margin-right:10px}ul.languages
+.mysql{width:53px;height:23px;background-position:-329px 0;margin-right:10px}ul.languages
+.app_engine{width:38px;height:23px;background-position:-394px 0;margin-right:10px}ul.languages
+.xml{width:38px;height:23px;background-position:-436px -7px;margin-right:10px}#advanced_holder
+h3{color:#272727;font-size:24pt}#client_holder
+h3{color:#272727;font-size:24pt}.data{float:left}#tuts_line{float:left;margin-bottom:10px;min-height:100px;width:98%}.howto
+p{clear:none;line-height:1.5em;margin:15px
+0 !important;padding:0px}#navlist{border-bottom:1px solid #ccc;margin:0;padding-bottom:19px;padding-left:10px}#navlist ul, #navlist
+li{display:inline;list-style-type:none;margin:0;padding:0}#navlist a:link, #navlist a:visited{background:#E8EBF0;border:1px
+solid #ccc;color:#666;float:left;font-size:small;font-weight:normal;line-height:14px;margin-right:8px;padding:2px
+10px 2px 10px;text-decoration:none}#navlist a:link#current, #navlist a:visited#current{background:#fff;border-bottom:1px solid #fff;color:#000}#navlist a:hover{color:#f00}#graph{-webkit-border-radius:15px;-moz-border-radius:15px;list-style-type:none;background:#F9F6EF;margin:10px
+0;padding:20px
+0}#graph
+img{width:70px}#graph
+.client{float:left;margin:10px
+0 10px 10px}#graph
+.twilio{float:right;margin:10px
+10px 10px 0}#documentation #graph
+ul{list-style:none;width:490px;margin:0
+auto;padding:0}#documentation #graph ul
+li{text-align:center;clear:none;list-style:none;margin:0}#graph ul li
+a{color:#494949;text-decoration:none;display:block}#graph ul li a
+em{font-style:normal;display:block}#graph ul li a:hover
+em{color:black}#graph ul
+li.even{clear:none}#graph ul
+li.odd{clear:none}#graph ul
+strong{display:block;color:red;font-size:12px;padding-top:7px;padding-bottom:7px}#graph ul .even
+strong{background:url('/packages/docs/img/howto/arrow_left.jpg') no-repeat;text-align:right;padding-right:10px}#graph ul .odd
+strong{background:url('/packages/docs/img/howto/arrow_right.jpg') no-repeat;text-align:left;padding-left:13px}#documentation .howto
+ul{margin:0;padding:0}#documentation .howto ul li ul
+li{clear:none;list-style:none}#documentation .howto ul
+li{clear:both;list-style:none;margin:0}#documentation #howto-frontpage>ul>li{margin:1em}.howto ul
+h2{color:red;float:left;padding:10px}#documentation .howto ul li
+h4{width:25px;padding:5px;margin:0
+10px 10px 0;border:solid 1px black;float:left;text-align:center}#infobox{width:580px;padding:5px
+20px;margin-left:auto;margin-right:auto;border:2px
+solid #999;background-color:#FFF;color:#333;-webkit-border-radius:10px;-moz-border-radius:10px}#infobox
+a{font-size:12px;color:#2c75fa}#infobox
+tr{height:30px}#infobox
+.difficulty{padding-left:45px;background:url('/packages/docs/img/howto/difficulty.png') no-repeat}#infobox
+.source_code{padding-left:45px;background:url('/packages/docs/img/howto/source_code.png') no-repeat}#infobox
+.spacer{width:30px}.infobox_headers{font-weight:bold;font-size:14px}#infobox
+td{background:transparent;text-align:center}#video-holder{width:960px}#video-nav{float:left;width:185px}#video-nav
+li{cursor:pointer;float:left;height:103px;padding:10px;width:165px}#video-nav li:hover{cursor:pointer}#video-nav .video-selected{-moz-border-radius-bottomleft:3px;-moz-border-radius-topleft:3px;background:transparent url('/packages/docs/img/howto/tiny-squares.png') repeat scroll 0 0;cursor:pointer;float:left;height:103px;padding:10px;width:165px}#main-video{-moz-border-radius-bottomleft:3px;-moz-border-radius-bottomright:3px;-moz-border-radius-topleft:0px;-moz-border-radius-topright:3px;background:url('/packages/docs/img/howto/tiny-squares.png');float:left;padding:10px;width:495px}.howto{width:716px;float:left;margin-right:0px}#quickstart-section,#api-reference{text-align:center;margin:0
+!important;padding:0
+!important}#quickstart-section
+li{width:186px;padding:15px;display:inline-block;vertical-align:top}#quickstart-section
+p{font-size:14px !important}#quickstart-section
+p{margin-bottom:20px !important;text-align:left}#quickstart-section
+a{margin:0
+auto;width:120px;font-weight:normal}#quickstart-section
+h3{margin:0;text-align:left}#wrapper #quickstart-section h3
+a{color:#000;font-size:22px;text-decoration:none}#api-reference
+li{width:186px;padding:15px;display:inline-block;text-align:center;vertical-align:top}#api-reference li
+p{text-align:center}#api-reference li
+h3{text-align:left}#markdown #api-reference li
+a{display:block;background-color:#ff1308;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ff1308), to(#d40f06));background-image: -moz-linear-gradient(#ff1308, #d40f06);background-image: -o-linear-gradient(#ff1308, #d40f06);background-image:linear-gradient(#ff1308, #d40f06);-webkit-border-radius:15px;-moz-border-radius:15px;border-radius:15px;padding:10px
+10px 20px 10px;text-decoration:none;color:white;font-size:22px;text-align:center;font-weight:bold}#markdown #api-reference li a:hover,
+#markdown #api-reference li a:focus{background-color:#cd1208;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#cd1208), to(#ac0f06));background-image: -moz-linear-gradient(#cd1208, #ac0f06);background-image: -o-linear-gradient(#cd1208, #ac0f06);background-image:linear-gradient(#cd1208, #ac0f06)}#markdown #api-reference li a:active{background-color:#cd1208;background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ac0f06), to(#cd1208));background-image: -moz-linear-gradient(#ac0f06, #cd1208);background-image: -o-linear-gradient(#ac0f06, #cd1208);background-image:linear-gradient(#ac0f06, #cd1208)}#api-reference li a
+img{display:block;height:117px;margin:0
+auto 10px auto}#wrapper{background-color:#fff}#docs .inner-content{margin-top:0}#docs .docs-page-heading{font-size:28px}#docs .docs-page-heading
+span{font-size:18px;color:#999}#docs .sub-section{padding-bottom:5px;border-bottom:1px dotted #eee;margin:10px
+0 2px 0;overflow:auto}#docs .sub-section
+h3{margin:0;font-size:26px;font-weight:normal;color:#444}#docs .sub-section
+p{width:380px;line-height:1.5em;font-size:14px;color:#888;overflow:auto}#docs #howto-sub-section{margin-bottom:25px}#docs #twiml-sub-section{padding-top:0px}#docs #twiml-sub-section p#twiml-section-description{color:#888;margin-top:0;font-size:15pt}#docs #rest-sub-section p#rest-section-description{color:#888;margin-top:0;font-size:15pt}#docs #rest-sub-section img#rest-infographic{display:block;margin:0
+auto}#docs #rest-sub-section p#rest-infographic-description{display:block;margin:0;text-align:center}#docs #twiml-sub-section img#twiml-infographic{display:block;text-align:center;margin:0
+auto}#docs #twiml-sub-section p#twiml-infographic-description{display:block;text-align:center;margin:0
+auto}#docs #twiml-sub-section .docs-page-heading{margin-bottom:20px}#docs #twiml-sub-section img,
+#docs #rest-sub-section
+img{margin:20px
+0 0px 0}#docs #helper-libs .more-link,
+#docs #twiml-sub-section .more-link,
+#docs #rest-sub-section .more-link{float:right;margin-right:30px;font-size:18px;color:#F00}#docs #helper-libs p,
+#docs #twiml-sub-section p,
+#docs #rest-sub-section
+p{width:100%}#docs a.link-button{display:block;float:right;width:200px;padding:15px
+40px 10px 15px;font-size:20px;font-weight:bold;color:#FFF;text-decoration:none;background:#F00 url('/packages/docs/img/docs/link-button-arrow.png') no-repeat 225px center}#docs #helper-libs{margin:30px
+0}#docs #helper-libs
+ul{margin:0;padding:0}#docs #helper-libs ul
+li{display:inline;margin:0}#php-lib a,
+#python-lib a,
+#ruby-lib a,
+#dotnet-lib
+a{padding-top:40px}#docs #helper-libs li
+a{display:block;float:left;margin-right:45px}#version-info{font-size:14px;font-style:italic;margin-left:8px}#doc_menu{list-style-type:none;margin:0;padding:0
+0 0 10px}#doc_link{color:#F00000;font-size:1.2em}.side_nav{float:right;width:210px;margin:35px
+5px 5px 15px;border-left:1px solid #ADADAD;padding:0px;font-family:arial}.side_nav
+ul{list-style:none}.side_nav
+li{margin-top:0em}#doc_menu>li{padding:10px}#markdown #doc_menu > li > ul > li,
+#markdown #doc_menu > li > ul > li a,
+#markdown #doc_menu > li > ul > li a:visited,
+#markdown #doc_menu .third > li,
+#markdown #doc_menu .third > li a
+#markdown #doc_menu .third > li a:visited{font-size:12px;color:#000;margin-top:10px}#markdown #doc_menu > li.menu_selected > ul > li a:hover{color:#f00000;text-decoration:underline}#doc_menu>li,#doc_menu>li>ul>li>ul>li{list-style:none}#doc_menu>li>ul>li>ol{margin-top:5px}#doc_menu>li>ul>li>ol>li{color:#ccc;padding:2px
+0;list-style:decimal}#doc_menu>li>ul>li>ul{margin-left:0}#markdown #doc_menu > li > ul > li > ul > li > a,
+#markdown #doc_menu > li > ul > li > ol > li > a,
+#markdown #doc_menu > li > ul > li > ul > li > a:hover,
+#markdown #doc_menu>li>ul>li>ol>li>a:hover{color:#222}#doc_menu>li>a:first-child{text-decoration:none;font-size:16px}#doc_menu>li>a:first-child:hover{color:black}#doc_menu
+.menu_selected{border-bottom:1px solid #ADADAD;border-top:1px solid #ADADAD}#documentation .docs a,
+#documentation .docs a:visited,
+#markdown #doc_menu > li > a,
+#markdown #doc_menu>li>a:visited{color:#494949}#documentation
+img{margin:15px
+0px}#apilibraries
+img{border:none;margin:0}#markdown #doc_menu>li.menu_selected>a{font-weight:bold;color:#f00000}#markdown #doc_menu>li.menu_selected>ul>li>a{color:#000;text-decoration:none;font-weight:bold}.side_nav .download-link{padding:10px
+20px;font-size:12px;color:#494949}#markdown .side_nav .download-link
+a{color:#494949}#doc_menu
+.section{list-style-type:disc}#doc_menu>li>ul{padding-left:0;margin:0}#doc_menu>li>ul>li>ul{padding-left:20px}#doc_menu>li>ul>li{list-style-type:none}#doc_menu>li>ul>li>ul>li{margin-top:2px}#doc_menu>li>ul>li>ul>li>ul>li{margin-top:2px;list-style:none}#doc_menu
+li.subresource{padding-left:10px}strong{font-weight:bold}blockquote{background:#F0F0F0 none repeat scroll 0 0;margin:15px
+0;padding:10px;width:auto}blockquote>p{clear:none;margin:0;padding:0}#documentation ol, #documentation  ol ol, #documentation ol
+ul{list-style-position:outside;list-style-type:decimal;margin-left:1em;margin-right:1em;padding-left:1em}#documentation ul, #documentation ul ul, #documentation ul
+ol{list-style-position:outside;list-style-type:circle;margin-left:1em;margin-right:1em;padding-left:1em}#documentation ul li, #documentation ol
+li{line-height:1.5em;margin:0.5em}#documentation ul, #documentation
+ol{margin:15px
+0 15px 15px}#documentation{margin-right:250px;font-size:12px;margin-left:8px}#documentation,#howto{font-family:arial}#docs p,#md>p{margin:7px
+0;padding:0;line-height:1.5em}#md
+table{width:auto}#documentation .docs h2,
+.inner-content
+h2{color:#616161;font-size:32px;text-align:left;letter-spacing: -1px;width:640px;border:0px;margin:18px
+0}.inner-content
+h2{margin-left:45px}#documentation .docs h2
+a{text-decoration:none;color:#616161}#documentation .docs
+h3{color:#F00000;margin:25px
+0 10px 0;font-size:22px}#documentation .docs h3
+a{text-decoration:none;color:#F00000}#documentation .docs
+h4{color:#616161;margin:15px
+0;font-size:18px}#documentation .docs h4
+a{color:#616161;text-decoration:none}#documentation .docs
+h5{margin:10px
+0;font-size:14px;font-weight:bold;color:#616161}#documentation .docs h5
+a{color:#616161;text-decoration:none}#documentation .docs p,
+#documentation .docs
+li{color:#494949}#documentation .docs-tm{position:relative;font-size:10px;top: -20px;left: -10px}#documentation
+.sms{left:0px}#markdown{padding-left:8px}.doc_wrap{clear:both;margin-bottom:30px}.example-chooser .picker li
+a{width:50px;float:left;padding:5px;margin:0
+0 15px 0 ! important;text-align:center;background:grey;border-radius:10px;-webkit-border-radius:10px;-moz-border-radius:10px;text-decoration:none;color:white;font-weight:bold;margin-right:10px}.example-chooser .api-explorer{display:block;float:right;line-height:16px;margin:15px
+10px 0 0;padding:0
+0 0 22px;color:#F00;font-weight:bold;background:#FFF url("/packages/api-explorer/img/api-explorer-icon-16.png") no-repeat left center}.example-chooser .picker .picked
+a{background:red}.example-chooser
+.examples{clear:left}#documentation .example-chooser .picker, #documentation .example-chooser .examples, #documentation .example-chooser .examples
+li{list-style-type:none;margin:0px;padding:0px}#documentation .example-chooser .picker
+li{list-style:none;float:left;width:60px;margin:0
+10px 0 0}.Title{font-size:40px;color:#404040}.Links{margin-bottom:40px}.Links
+.Title{color:#404040;font-size:20px}.Links
+.DownloadLink{color:#f00}.Links
+.Separator{color:#a0a0a0;margin-left:5px;margin-right:5px}#apilibraries{font-size:13px}#apilibraries
+em{font-style:italic;color:#888}#apilibraries
+li{list-style-type:disc}#apilibraries li strong a, #apilibraries li strong img, #apilibraries li strong
+em{display:inline-block;vertical-align:middle}#documentation #apilibraries
+a{color:#000;text-decoration:none}#documentation #apilibraries a:hover{color:red}#documentation #apilibraries
+a.download{color:#F00000}#apilibraries strong
+a{text-decoration:underline}.docs dl
+dt{font-weight:bold;font-size:14px;font-family:monospace}.docs dl
+dd{padding:20px}.docs dl dd
+p{padding:0px;margin:0px}.docs h4
+code{color:#F55}.docs
+code{font-family:monospace}.information{margin:10px;padding:10px;background:#ffc;border-width:2px;border-style:dashed;border-color:#fc6}#howto-frontpage>ul{padding:0px;margin:0px}#howto-frontpage>ul>li{display:inline-block;vertical-align:top;width:320px;margin:0
+20px 20px 0}#howto-frontpage>ul>li>p,#howto-frontpage>ul>li>ul{padding-top:6px}#howto-frontpage
+a{font-size:18px;color:#494949}#lion-warning{background:url(/packages/docs/img/docs/lion.png) top right no-repeat;padding-right:220px;height:150px}.information,.doc_attention{margin:10px;padding:10px;border-width:2px;border-style:dashed}.doc_attention{background:#fee;border-color:#f00000}.information{background:#ffc;border-color:#fc6}a.newbutton{display:inline-block}select{background-color:#fff;border:1px
+solid #8a7f71;display:block;font-size:12px;margin:12px
+0 20px 0;padding:3px}.doc_wrap
+table{border-collapse:collapse;margin:15px
+0;color:#494949}.doc_wrap
+th{background:none repeat scroll 0 0 #F0F0F0;border:1px
+solid #CCC;font-weight:bold;padding:5px}.doc_wrap td:first-child{font-family:monospace}.doc_wrap
+td{background:none repeat scroll 0 0 #fff;border:1px
+solid #ccc;padding:5px}.doc_wrap td
+p{margin:0;padding:0}#markdown .picker
+a{color:#fff}#markdown .picker a:hover{color:#ccc}

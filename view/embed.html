@@ -13,6 +13,7 @@
         <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
         <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
         <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+        <script src="{static}/scripts/URI/src/URI.js"></script>
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-27720942-1']);
@@ -95,16 +96,7 @@
                 }
 
 		  $(".app").mouseenter(function() {
-                   	   $(".appToolbar").position({
-                        	of : $(".appWindow"),
-                        	my : "right bottom",
-                        	at : "right bottom"
-                   	   });
-                   	   $(".poweredBy").position({
-                        	of : $(".appWindow"),
-                        	my : "left bottom",
-                        	at : "left bottom"
-                   	   });
+
 		  });
 
 		  $(".editor").mouseenter(function() {
@@ -143,6 +135,7 @@
 		  window.onresize = function(event) {
 	                positionLoading();
 		  }
+		  $(".urlBar").val(document.appUrl);
 
                 document.CodeCommands = CodeModule($(".editor"));
                 //load up editor
@@ -235,8 +228,13 @@
                     });
                 }
 
-		  $(".appToolbar .edit").click(function() {
+		  $(".appToolbar .ideBtn").click(function() {
 			window.open("http://" + document.realDomain + "/" + document.projectId);
+		  });
+
+
+		  $(".appToolbar .edit").click(function() {
+			window.open("http://" + document.appUrl);
 		  });
 
                 $(".appToolbar .share").click(function(e) {		      
@@ -387,7 +385,7 @@
         </script>
     </head>
     <body>
-
+			<input class="urlBar" spellcheck="false" type="text" style="display:none;">
        <div class="loading"></div>
 	<div id="wrap-header">
 		<div id="main-header">
@@ -520,27 +518,9 @@
             <div class="RunBtn"></div>
             <div class="app">
 		      <div class="appToolbar">
-<div class="btn-group">
-          <button class="btn dropdown-toggle share" data-toggle="dropdown">Action <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-			<li>
-				<div class="field source">
-					<div class="text">Share this code</div>
-					<input id="sourceUrl" />
-				</div>
-			</li>
-	              <li class="divider"></li>
-			<li>
-				<div class="field app">
-					<div class="text">Share this app</div>
-					<input id="appUrl" />
-				</div>
-			</li>
-          </ul>
-        </div>
+		      	<button class="btn ide"><div class="ideBtn"></div></button>
 				<button class="btn edit"><div class="editorBtn"></div></button>
 		      </div>
-		      <div class="poweredBy"></div>
                 <div class="appWindow">
                     <iframe id="appFrame" width="100%" height="100%" src="/loading" frameBorder="0">
                     </iframe>
@@ -584,7 +564,7 @@
     <div>
                     <div class="editor html active main" fileName="main.php" id="main">
 	<div class="reloadCode main">
-		<button class="btn disabled"><img src="images/greenplay.png"/><div>Reload App</div></button> 
+		<button class="btn disabled"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
 	</div>
                         <textarea class="code" mode="application/x-httpd-php" name="main">
 {main.php}
@@ -622,7 +602,7 @@
     <div>
                     <div class="editor javascript" fileName="javascript.php" id="javascript">
 	<div class="reloadCode javascript">
-		<button class="btn disabled"><img src="images/greenplay.png"/><div>Reload App</div></button> 
+		<button class="btn disabled"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
 	</div>
                         <textarea class="code" mode="javascript" name="javascript">
 {javascript.php}
@@ -665,7 +645,7 @@
     <div>
                     <div class="editor additional tab-pane" fileName="additional.php" id="additional">
 	<div class="reloadCode additional">
-		<button class="btn disabled"><img src="images/greenplay.png"/><div>Reload App</div></button> 
+		<button class="btn disabled"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
 	</div>
                         <textarea class="code" mode="{additionalMode}" name="additional">
 {additional.php}

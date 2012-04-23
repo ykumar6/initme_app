@@ -47,13 +47,14 @@ body.oauth .poweredByTwilio, body.inactive .poweredByTwilio {
 }
 
 .appToolbar {
-	width: 120px;
-	-webkit-transition:  opacity 0.1s ease-in-out;
-	position: absolute;
-	opacity: 0.5;
-	padding-bottom: 10px;
-	padding-right: 10px;
-	float: right;
+width: 120px;
+-webkit-transition: opacity 0.1s ease-in-out;
+position: absolute;
+opacity: 0.5;
+padding-bottom: 10px;
+padding-right: 10px;
+top: 490px;
+padding-left: 10px;
 }
 .appToolbar:hover {
 	opacity: 1;
@@ -111,6 +112,14 @@ margin-top: 0px !important;
                 background-position: center center;
                 background-repeat: no-repeat;
                 background-image: url("images/editorbtn.png");
+}
+
+.appToolbar .ideBtn {
+                width: 20px;
+                height: 20px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-image: url("images/idebtn.png");
 }
             
             .appTitle {
@@ -199,7 +208,7 @@ margin-top: 0px !important;
 	}
 
 	.editor.additional {
-		height: 200px;
+
 	}
 
 body.oauth .RunBtn {
