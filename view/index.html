@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
     <head profile="http://www.w3.org/2005/10/profile">
+    	<title>Live Projects. Start coding now</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 <script type="text/javascript">
@@ -41,6 +42,28 @@
                 font-size: 24px;
                 font-weight:300;
                 color: #414042;
+            }
+            
+            .prevText {
+            	color: #666666;
+            	font-size: 18px;
+            	width: 1100px;
+            	margin: 0 auto;
+            }
+            
+            .preview {
+            	
+            	width: 1100px;
+            	height: 800px;
+            	background-image: url("images/fullpage.png");
+            	background-repeat: no-repeat;
+            	margin: 0 auto;
+            	opacity: 0.5;
+            	
+            }
+            
+            .preview:hover {
+            	opacity: 1;
             }
 
 	     a {
@@ -254,6 +277,8 @@
             }
             
             var state = getURLParameter("state");
+            
+            
 
 	     if (typeof(state) === "string") {
 			if (state === "loginMain") {
@@ -275,7 +300,10 @@
 	     }
             
             $(".button.join").click(function(e){
-		  window.location = "/?state=loginMain";
+		  		$.get("/user/" + $("#u").val());
+		  		$(".signUp").hide();
+		  		$(".successUser").show();
+
             });     
 
 	     $("#loginBtn").click(function(e) {
@@ -286,10 +314,9 @@
     </head>
     <body>
 	 <div class="header">
-		<a id="loginBtn" href="javascript:void(0);">Login</a>
-		</div>
-
-	 </div>
+<a href="https://twitter.com/codenowapp" class="twitter-follow-button" data-show-count="false">Follow @codenowapp</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+	 	</div>
         <div class="main">
             <div class="left">
                 <div class="logo">
@@ -307,35 +334,10 @@
             </div><div class="right">
 
                 
-                <div class="registerUser" style="display:none;">
-                    <div class="mainText">
-                        You're almost done
-                    </div>
-                    <div class="subText">
-                        Please link your account with one of these services
-                    </div>
-                    
-                    <div class="options">
-                        <div class="arrowPointer">
-                            <img src="images/arrow.png" />
-                        </div>
-                        <div class="loginBtn">
-                            <a href="/auth/github"><img src="images/github.png" /></a>
-                        </div>
-                        <div class="loginBtn facebook">
-                            <a href="/auth/facebook"><img src="images/facebook.png" /></a>
-                        </div>
-                        <div class="loginBtn google">
-                            <a href="/auth/google"><img src="images/google.png" /></a>
-                        </div>
-                    </div>
-                    <div class="noSpam">init.me does not spam or post to your wall</div>
-                </div>
-                
                 <div class="landing">
                     <div class="title">
                         <h1>Build, share & discover</h1>
-                        <h2>"Live" code snippets in php, ruby and javascript</h2>
+                        <h2>"Live" code snippets for Web, iOS & Android</h2>
                     </div>
                     
                     <div class="successUser" style="display:none;">
@@ -347,15 +349,32 @@
                     
                     <div class="signUp">
                         <div class="field">
-                            <input type="text" size="16" name="u" id="u" placeholder="Your Name">
+                            <input type="text" size="16" name="u" id="u" placeholder="Your Email Address">
                             <div><span></span></div>
                         </div>
                         <div class="button join">
                             Request Invite
                         </div>
                     </div>
+                    
                 </div>
             </div>
+  
+  
         </div>
+        
+        <br/>
+        <br/>
+        <br/>
+                
+        <br/>
+        <br/>
+        <br/>
+
+    		<div class="preview">
+  			
+  		</div>      
+        
+        
     </body>
 </html>

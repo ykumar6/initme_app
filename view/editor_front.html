@@ -74,7 +74,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 		                  
             $(function() {
 		 
-				//mixpanel.track("Code Snippet Load", {"projId": document.projectId});
+				mixpanel.track("Code Snippet Load", {"projId": document.projectId});
 		  if (document.projOwner) {
 			$(".theBtn.fork").addClass("disabled");
 		  }
@@ -321,7 +321,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                 });
 
                 $(".theBtn.Run").click(function() {
-                	//mixpanel.track("Run btn clicked", {"projId": document.projectId});
+                	mixpanel.track("Run btn clicked", {"projId": document.projectId});
                 	
                     if (!projectSession.isActive && isAuthRequired) {
 				$("#myModal").modal({backdrop: false});
@@ -395,7 +395,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 
 
                 $(".theBtn.share").click(function(e) {	
-                	//mixpanel.track("Share btn clicked", {"projId": document.projectId});	  
+                	mixpanel.track("Share btn clicked", {"projId": document.projectId});	  
                     $("#sourceUrl").val("http://" + document.realDomain + "/" + document.projectId);
                     $("#appUrl").val("http://" + document.appUrl);
                     $(".shareDialog").css("top", "0px");
@@ -475,30 +475,24 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 			<ul class="nav nav-tabs">
   				<li><a href="#main" data-toggle="tab">HTML</a></li>
  				<li><a href="#javascript" data-toggle="tab" style="{jsStyle}">JavaScript</a></li>
-  				<li><a href="#additional" data-toggle="tab" style="{additionalStyle}">{additionalName}</a></li>
   				<li><a href="#css" data-toggle="tab" style="{cssStyle}">CSS</a></li>
 			</ul>
 			</div>
 	     </div>
             <div class="codearea-center">
-                    <div class="editor html tab-pane active" fileName="main.php" id="main">
-                        <textarea class="code" mode="application/x-httpd-php" name="main">
-{main.php}
+                    <div class="editor html tab-pane active" fileName="html" id="main">
+                        <textarea class="code" mode="html" name="main">
+{html}
 </textarea>
                     </div>
-                    <div class="editor javascript tab-pane" fileName="javascript.php" id="javascript">
+                    <div class="editor javascript tab-pane" fileName="javascript" id="javascript">
                         <textarea class="code" mode="javascript" name="javascript">
-{javascript.php}
+{javascript}
 </textarea>
-                    </div>    
-                    <div class="editor additional tab-pane" fileName="additional.php" id="additional">
-                        <textarea class="code" mode="{additionalMode}" name="additional">
-{additional.php}
-</textarea>
-                    </div>    
-                    <div class="editor css tab-pane" fileName="css.php" id="css">
+                    </div>
+                    <div class="editor css tab-pane" fileName="css" id="css">
                         <textarea class="code" mode="css" name="css">
-{css.php}
+{css}
 </textarea>
                     </div>  
                 </div>
