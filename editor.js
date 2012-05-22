@@ -12,6 +12,8 @@ module.exports = {
 		fs.readFile(__dirname + "/view/" + pageName, "utf8", function(err, index) {
 			index = index.replace(/{facebookId}/mig, config.facebookId);
 			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
+			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
+
 			res.end(index);
 		});
 	},
@@ -35,6 +37,8 @@ module.exports = {
 
 			index = index.toString();
 			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
+			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
+
 			index = index.replace(/{projId}/mig, proj.getId());
 			index = index.replace(/{appUrl}/mig, proj.getUrl());
 			index = index.replace(/{static}/mig, "http://" + config.appDomain);
