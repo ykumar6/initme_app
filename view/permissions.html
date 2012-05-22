@@ -8,6 +8,20 @@
 		<link href="/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 
 		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+		<script type="text/javascript">
+		    (function(d,c){var a,b,g,e;a=d.createElement("script");a.type="text/javascript";
+		    a.async=!0;a.src=("https:"===d.location.protocol?"https:":"http:")+
+		    '//api.mixpanel.com/site_media/js/api/mixpanel.2.js';b=d.getElementsByTagName("script")[0];
+		    b.parentNode.insertBefore(a,b);c._i=[];c.init=function(a,d,f){var b=c;
+		    "undefined"!==typeof f?b=c[f]=[]:f="mixpanel";g=['disable','track','track_pageview',
+		    'track_links','track_forms','register','register_once','unregister','identify',
+		    'name_tag','set_config'];
+		    for(e=0;e<g.length;e++)(function(a){b[a]=function(){b.push([a].concat(
+		    Array.prototype.slice.call(arguments,0)))}})(g[e]);c._i.push([a,d,f])};window.mixpanel=c}
+		    )(document,[]);
+		    mixpanel.init("{mixpanelToken}");
+		</script>
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', 'UA-27720942-1']);
@@ -185,11 +199,6 @@
 			}
 
 		</style>
-<!-- start Mixpanel -->
-	<script type="text/javascript">(function(d,c){var a,b,g,e;a=d.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===d.location.protocol?"https:":"http:")+'//api.mixpanel.com/site_media/js/api/mixpanel.2.js';b=d.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b);c._i=[];c.init=function(a,d,f){var b=c;"undefined"!==typeof f?b=c[f]=[]:f="mixpanel";g="disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
-for(e=0;e<g.length;e++)(function(a){b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,0)))}})(g[e]);c._i.push([a,d,f])};window.mixpanel=c})(document,[]);
-mixpanel.init("f88d8915037fd7766bc28fffdd0823b6");</script>
-<!-- end Mixpanel -->
 	</head>
 <body>
 	<div class="headerWrapper">

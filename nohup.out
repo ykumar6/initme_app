@@ -49897,3 +49897,20 @@ TypeError: Cannot call method 'indexOf' of undefined
     at next (/home/ec2-user/node_modules/connect/lib/http.js:203:15)
     at Object.handle (/home/ec2-user/node_modules/express/lib/http.js:84:5)
     at next (/home/ec2-user/node_modules/connect/lib/http.js:203:15)
+Trace: http.Client is a legacy interface and will be removed in the near future. Do not use it.
+    at new Client (http.js:1560:11)
+    at Object.createClient (http.js:1600:10)
+    at Object.<anonymous> (/home/ubuntu/initme_app/ajax.js:3:19)
+    at Module._compile (module.js:434:26)
+    at Object..js (module.js:452:10)
+    at Module.load (module.js:353:31)
+    at Function._load (module.js:310:12)
+    at Module.require (module.js:359:17)
+    at require (module.js:370:17)
+    at Object.<anonymous> (/home/ubuntu/initme_app/cloudfoundry.js:1:74)
+checkapp init
+   [36minfo  -[39m socket.io started
+AP5efd6d56f80e44efbc50647b3364571f
+kicking app 150304
+kicking app 100003
+undefined

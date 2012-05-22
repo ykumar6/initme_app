@@ -28,7 +28,7 @@
 				};
 				window.mixpanel = c
 			})(document, []);
-			mixpanel.init("bb4cbc776b5dac0262724e2c904d976a");
+			mixpanel.init("{mixpanelToken}");
 		</script><!-- end Mixpanel -->
 		<script src="{static}/socket.io/socket.io.js"></script>
 		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -100,7 +100,8 @@
 
 			$(function() {
 
-				//mixpanel.track("Code Snippet Load", {"projId": document.projectId});
+				mixpanel.track("Code Snippet Load", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+				
 				if(document.projOwner) {
 					$(".theBtn.fork").addClass("disabled");
 				}
@@ -369,6 +370,9 @@
 				
 				if (document.projectId === "100003") {
 				 	$("button.mix1").click(function() {
+				 		mixpanel.track("Code Snippet - Remix1 Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+
+				 		
 				 		document.CodeCommands.setLine("javascript", 12, "            htmlString += '<div class=\"picName\">' + friendData.name + ' is a monkey</div>';");
 				 		
 						$(".commandSpace").hide();						
@@ -385,6 +389,8 @@
 						});
 				 	});
 				 	$("button.mix2").click(function() {
+				 		mixpanel.track("Code Snippet - Remix2 Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+				 		
 				 		document.CodeCommands.setLine("javascript", 12, "            htmlString += '<div class=\"picName\">' + friendData.name + ' is awesome</div>';");
 				 		
 						$(".commandSpace").hide();						
@@ -403,6 +409,7 @@
 				}
 				
 				$("button.continue").click(function() {
+					mixpanel.track("Code Snippet - Continue Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
 					doProjectCreate();
 				});
 				
@@ -414,6 +421,8 @@
 				  $('button.continue').popover('show');
 				
 				$("button.shareApp").click(function() {
+					mixpanel.track("Code Snippet - Share App Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+
 			        var obj = {
 			          method: 'feed',
 			          link: document.URL,
@@ -432,6 +441,8 @@
 
 				$("button.changeCode").click(function() {
 					
+					mixpanel.track("Code Snippet - Change Code Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+
 					if(document.projectId === "100003") {
 						$(".commandSpace").removeClass("step1").removeClass("step2").addClass("step3");
 						positionCommands();	
@@ -450,6 +461,8 @@
 				});
 				
 				$("button.seeCode").click(function() {
+						mixpanel.track("Code Snippet - See Code Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+
 						$(".commandSpace").hide();						
 						$(".projRight").show();
 						
@@ -461,6 +474,8 @@
 				});
 
 				$(".theBtn.fork").mouseup(function() {
+					mixpanel.track("Code Snippet - Fork Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+
 					if(!document.projOwner) {
 						if(!document.isOwner) {
 							projectSession.createProject(_save);
@@ -471,7 +486,7 @@
 				});
 
 				$(".theBtn.Run").click(function() {
-					//mixpanel.track("Run btn clicked", {"projId": document.projectId});
+					mixpanel.track("Code Snippet - Run Code Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
 
 					if(!projectSession.isActive && isAuthRequired) {
 						$("#myModal").modal({
@@ -543,7 +558,8 @@
 				});
 
 				$(".theBtn.share").click(function(e) {
-					//mixpanel.track("Share btn clicked", {"projId": document.projectId});
+				 	mixpanel.track("Code Snippet - Share Btn Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+
 			        var obj = {
 			          method: 'feed',
 			          link: document.URL,
@@ -554,6 +570,7 @@
 			        };
 			
 			        function callback(response) {
+			        	console.log(response);
 						//share complete
 			        }
 			

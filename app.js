@@ -236,14 +236,9 @@ app.get('/', function(req, res, next) {
 
 	if(req.session && req.session.isBetaUser) {
 		console.log("access granted");
-		fs.readFile(__dirname + "/view/index_enabled.html", "utf8", function(err, index) {
-			index = index.replace(/{facebookId}/mig, config.facebookId);
-			res.end(index);
-		});
+		Editor.servePage('index_enabled.html', res);
 	} else {
-		fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
-			res.end(index);
-		});
+		Editor.servePage('index.html', res);
 	}
 });
 
@@ -251,13 +246,9 @@ app.get('/choose', function(req, res, next) {
 	//render user portal or ide
 
 	if(req.session && req.session.isBetaUser) {
-		fs.readFile(__dirname + "/view/choose.html", "utf8", function(err, index) {
-			res.end(index);
-		});
+		Editor.servePage('choose.html', res);
 	} else {
-		fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
-			res.end(index);
-		});
+		Editor.servePage('index.html', res);
 	}
 });
 
@@ -265,13 +256,10 @@ app.get('/permissions', function(req, res, next) {
 	//render user portal or ide
 
 	if(req.session && req.session.isBetaUser) {
-		fs.readFile(__dirname + "/view/permissions.html", "utf8", function(err, index) {
-			res.end(index);
-		});
+		Editor.servePage('permissions.html', res);
+
 	} else {
-		fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
-			res.end(index);
-		});
+		Editor.servePage('index.html', res);
 	}
 });
 

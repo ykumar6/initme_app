@@ -8,6 +8,14 @@ var frameworkFiles = {
 
 module.exports = {
 
+	servePage : function(pageName, res) {
+		fs.readFile(__dirname + "/view/" + pageName, "utf8", function(err, index) {
+			index = index.replace(/{facebookId}/mig, config.facebookId);
+			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
+			res.end(index);
+		});
+	},
+
 	getIndex : function(proj, isOwner, req, callback) {
 
 		var file = "editor.html";
@@ -26,6 +34,7 @@ module.exports = {
 			}
 
 			index = index.toString();
+			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
 			index = index.replace(/{projId}/mig, proj.getId());
 			index = index.replace(/{appUrl}/mig, proj.getUrl());
 			index = index.replace(/{static}/mig, "http://" + config.appDomain);
