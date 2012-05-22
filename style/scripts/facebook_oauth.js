@@ -16,10 +16,18 @@ document.FacebookOAuth = function() {
 
     this.fbLoginStatus = function(response) {
 	     var self = this;
-	     console.log(response);
+	     	console.log(response);
 
             if(response.status === "connected") {
-                self.handleLoginState(true, response.authResponse.accessToken);
+            	    FB.api('/me', function(profile) {
+      					 var nameStr = profile.name;
+      					 var nameParts = (nameStr || "").split(" ");
+      					 
+      					 document.fbName = nameParts[0];
+      					 
+      					 console.log(document.fbName);
+      					 self.handleLoginState(true, response.authResponse.accessToken);
+    				});
             } else {
                 self.handleLoginState(false);
             }

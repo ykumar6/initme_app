@@ -199,6 +199,35 @@
 			}
 
 		</style>
+		<script type="text/javascript">
+			$(function() {
+				
+				console.log("here");
+				
+				mixpanel.track("Permission Denied - Loaded");
+				
+				
+				$(".continueBtn").click(function() {
+					
+					console.log("continue clicked");
+					mixpanel.track("Permission Denied - Continue - Click");
+
+					FB.login(function(response) {
+						
+						if (response.status === "connected") {
+							mixpanel.track("Permission Denied - Facebook Login - Success", {}, function() {
+								window.location = '/choose';	
+							});
+						}
+						else {
+							mixpanel.track("Permission Denied - Facebook Login - Deny", {}, function() {
+								window.location = "/permissions"							
+							});
+						}
+					}, {scope: 'friends_birthday,user_photos'});
+				});	
+			});
+		</script>
 	</head>
 <body>
 	<div class="headerWrapper">
@@ -212,16 +241,39 @@
 			  <p>These permissions allow you to login to CodeNow and try fun example apps to learn programming</p>
 			    </br>
 			  <p>
-			    <a class="btn btn-primary btn-large" style="font-size: 25px;">
+			    <a class="btn btn-primary btn-large continueBtn" style="font-size: 25px;">
 			      Continue
 			    </a>
 			  </p>
 			</div>
 	</div>
 
+		<div id="fb-root"></div>
+		<script>
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId : '{facebookId}', // App ID
+					status : true, // check login status
+					cookie : true, // enable cookies to allow the server to access the session
+					xfbml : true  // parse XFBML
+				});
 
+				// Additional initialization code here
+			};
 
-
+			// Load the SDK Asynchronously
+			( function(d) {
+					var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+					if(d.getElementById(id)) {
+						return;
+					}
+					js = d.createElement('script');
+					js.id = id;
+					js.async = true;
+					js.src = "//connect.facebook.net/en_US/all.js";
+					ref.parentNode.insertBefore(js, ref);
+				}(document));
+		</script>
 
 </body>
 </html>

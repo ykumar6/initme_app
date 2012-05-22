@@ -41,7 +41,7 @@ body {
 }
 
 .commandSpace.step2 .innerSpace {
-	width: 250px;
+	width: 300px;
 }
 
 
@@ -57,6 +57,16 @@ body {
 
 .commandSpace .step3 .orDivider {
 	width: 350px;
+}
+
+.commandSpace .step2 button.shareApp {
+	font-size: 30px;
+	width: 300px;
+	height: 80px;
+}
+
+.commandSpace .step2 button.changeCode {
+	margin-left: 25px;
 }
 
 .commandSpace .step2 button {

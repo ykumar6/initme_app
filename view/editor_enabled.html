@@ -426,14 +426,20 @@
 
 			        var obj = {
 			          method: 'feed',
-			          link: document.URL,
-			          picture: 'http://codenow.com/images/logobig.png',
-			          name: $(".title h1").html() + " (on CodeNow)",
-			          caption:  $(".subTitle h2").html(),
-			          description: "Edit and play live code in your browser"
+			          link: document.URL + "?betaCode=beta_1912",
+			          picture: 'http://' + document.realDomain  + '/images/codeNowLogoWall.png',
+			          name: document.fbName + " just created a Facebook App",
+			          caption: document.fbName + "'s app will " + $(".title h1").html().toLowerCase(),
+			          description: "Click to see this app"
 			        };
 			
 			        function callback(response) {
+			        	if (response) {
+							mixpanel.track("Code Snippet - Share Posted", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+			        	}
+			        	else {
+			        		mixpanel.track("Code Snippet - Not Share Posted", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+			        	}
 						//share complete
 			        }
 			
@@ -656,7 +662,7 @@
 						</div>
 						
 						<div class="step step2">
-							<button class="btn btn-large btn-info shareApp">Share</button>	
+							<button class="btn btn-large btn-primary shareApp">Share</button>	
 							<div class="orDivider"><br/>or
 							<br/><br/>
 							</div>
