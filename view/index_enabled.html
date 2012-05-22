@@ -1,0 +1,251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+	<head profile="http://www.w3.org/2005/10/profile">
+		<script src="//cdn.optimizely.com/js/54626125.js"></script>
+		<title>Live Projects. Start coding now</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link href="/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-27720942-1']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<style>
+			body {
+				background-color: #F8F8F8;
+				margin: 0px;
+				font-family: "LatoWebSymbol", Lato, Verdana, sans-serif;
+				font-size: 16px;
+				background-image: url("images/grid.png");
+			}
+			
+			.headerWrapper {
+				width: 100%;
+				height: 55px;
+				background-color: #1A1A1A;
+				
+			}
+
+			.header {				
+				width: 900px;
+				margin: 0 auto;
+			}
+			
+			.appLogo {
+				background-image: url("images/codenowblack.png");
+				width: 200px;
+				height: 50px;
+				background-position: left center;
+				background-repeat: no-repeat;
+			}
+
+			.header > * {
+				padding: 10px;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			
+			.header .twitterBtn {
+				margin-top: 8px;
+				float: right;
+			}
+
+			h1.jumbotron {
+			margin-bottom: 9px;
+			font-size: 81px;
+			font-weight: bold;
+			letter-spacing: -1px;
+			line-height: 1;
+			}
+			.continue {
+				margin-top: 30px;
+			}
+
+			.fbicon {
+				margin-left: 20px;
+			}
+			
+			.mainBody {
+				
+				padding-top: 120px;
+				width: 900px;
+				margin: 0 auto;
+				text-align: center;
+			}
+			
+			.mainBody p.main {
+				margin-left: 5%;
+				margin-right: 5%;
+				font-size: 30px;
+				line-height: 36px;
+			}
+			
+			.mainBody button {
+				margin-top: 20px;
+				font-size: 20px;
+				font-weight: normal;
+				padding: 14px 24px;
+				margin-right: 10px;
+				-webkit-border-radius: 6px;
+				-moz-border-radius: 6px;
+				border-radius: 6px;
+			}
+
+			p.speech
+			{
+				color: #4D4D4D;
+				font-weight: 700;
+				margin: 0 auto;
+				font-size: 18px;
+				width: 600px;
+				position: relative;
+				height: 100px;
+				text-align: center;
+				line-height: 100px;
+				background-color: #fff;
+				border: 8px solid #666;
+				-webkit-border-radius: 30px;
+				-moz-border-radius: 30px;
+				border-radius: 30px;
+				-webkit-box-shadow: 2px 2px 4px #888;
+				-moz-box-shadow: 2px 2px 4px #888;
+				box-shadow: 2px 2px 4px #888;
+			}
+
+			p.speech:before
+			{
+				content: ' ';
+				position: absolute;
+				width: 0;
+				height: 0;
+				left: 200px;
+				top: 100px;
+				border: 25px solid;
+				border-color: #666 transparent transparent #666;
+			}
+			
+			p.speech:after
+			{
+				content: ' ';
+				position: absolute;
+				width: 0;
+				height: 0;
+				left: 208px;
+				top: 100px;
+				border: 15px solid;
+				border-color: #fff transparent transparent #fff;
+			}
+			
+			.tclogo {
+				margin-top: 30px;
+			}
+			
+			.continueBtn {
+				background-image: url("images/continue_btn.png");
+				width: 195px;
+				height: 55px;
+				background-repeat: no-repeat;	
+				opacity: 0.95;
+				margin: 0 auto;
+				cursor: pointer;
+			}
+			
+			.continueBtn:hover {
+				opacity: 1;
+			}
+
+		</style>
+		<script type="text/javascript">
+			$(function() {
+
+				$(".continueBtn").click(function() {
+
+					FB.login(function(response) {
+						
+						if (response.status === "connected") {
+							window.location = '/choose';
+						}
+						else {
+							window.location = "/permissions"
+						}
+					}, {scope: 'friends_birthday,user_photos'});
+				});
+			});
+		</script>
+<!-- start Mixpanel -->
+	<script type="text/javascript">(function(d,c){var a,b,g,e;a=d.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===d.location.protocol?"https:":"http:")+'//api.mixpanel.com/site_media/js/api/mixpanel.2.js';b=d.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b);c._i=[];c.init=function(a,d,f){var b=c;"undefined"!==typeof f?b=c[f]=[]:f="mixpanel";g="disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
+for(e=0;e<g.length;e++)(function(a){b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,0)))}})(g[e]);c._i.push([a,d,f])};window.mixpanel=c})(document,[]);
+mixpanel.init("f88d8915037fd7766bc28fffdd0823b6");</script>
+<!-- end Mixpanel -->
+	</head>
+	<body>
+		
+		<div class="headerWrapper">
+		<div class="header">
+			
+			<div class="appLogo">
+				
+			</div>
+			
+			<div class="twitterBtn">
+				<a href="https://twitter.com/codenowapp" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @codenowapp</a>	
+				<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+			</div>
+		</div>
+		</div>
+		
+		<div class="mainBody">
+			
+			<h1 class="jumbotron">Build, share & discover</h1>
+			<p class="main">"Live" code snippets for Facebook, Google & other APIs</p>
+			<br/>
+			<div class="continueBtn"></div>
+			<br/><br/>			<br/><br/>
+			<div>"CodeNow.Com Lets You Build And Test Code In Real Time, In Your Browser" - <a target="_blank" href="http://techcrunch.com/2012/05/04/new-start-up-codenow-com-lets-you-build-and-test-code-in-real-time-in-your-browser/">TechCrunch.com</a></div>
+		</div>
+		
+		<br/>
+		<br/>
+
+		<script src="/scripts/bootstrap/js/bootstrap.min.js"></script>
+		<div id="fb-root"></div>
+		<script>
+			window.fbAsyncInit = function() {
+				FB.init({
+					appId : '{facebookId}', // App ID
+					status : true, // check login status
+					cookie : true, // enable cookies to allow the server to access the session
+					xfbml : true  // parse XFBML
+				});
+
+				// Additional initialization code here
+			};
+
+			// Load the SDK Asynchronously
+			( function(d) {
+					var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+					if(d.getElementById(id)) {
+						return;
+					}
+					js = d.createElement('script');
+					js.id = id;
+					js.async = true;
+					js.src = "//connect.facebook.net/en_US/all.js";
+					ref.parentNode.insertBefore(js, ref);
+				}(document));
+		</script>
+	</body>
+</html>

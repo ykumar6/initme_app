@@ -1,4 +1,4 @@
-var express = require("express");
+	var express = require("express");
 var config = require("./config");
 var Project = require("./projects/Project");
 var passport = require('passport');
@@ -38,21 +38,12 @@ var handlePings = function(req, res, next) {
 var betaAccessHandler = function(req, res, next) {
 	var betaCode = req.param("betaCode");
 
-	function grantAccess() {
-		req.user.accessGranted = true;
-		req.user.save(function(err, doc) {
-			next();
-		});
-	};
-
-	if(req.user && betaCode && betaCode === "instant_access_1912" && !req.user.accessGranted) {
-		grantAccess();
-	} else if(req.session & req.session.accessGranted && req.user && !req.user.accessGranted) {
-		grantAccess();
-	} else {
-		req.session.accessGranted = true;
-		next();
+	if (betaCode && betaCode === "beta_1912" && req.session) {
+		req.session.isBetaUser = true;
 	}
+	
+	next();
+
 }
 // configure Express
 app.configure(function() {
@@ -243,8 +234,12 @@ app.get('/', function(req, res, next) {
 		req.session.redirect = redirect;
 	}
 
-	if(req.user && req.user.accessGranted) {
-		res.redirect("/php/hello-world");
+	if(req.session && req.session.isBetaUser) {
+		console.log("access granted");
+		fs.readFile(__dirname + "/view/index_enabled.html", "utf8", function(err, index) {
+			index = index.replace(/{facebookId}/mig, config.facebookId);
+			res.end(index);
+		});
 	} else {
 		fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
 			res.end(index);
@@ -252,12 +247,34 @@ app.get('/', function(req, res, next) {
 	}
 });
 
-app.get('/discover', function(req, res, next) {
+app.get('/choose', function(req, res, next) {
 	//render user portal or ide
-	fs.readFile(__dirname + "/view/discover.html", "utf8", function(err, index) {
-		res.end(index);
-	});
+
+	if(req.session && req.session.isBetaUser) {
+		fs.readFile(__dirname + "/view/choose.html", "utf8", function(err, index) {
+			res.end(index);
+		});
+	} else {
+		fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
+			res.end(index);
+		});
+	}
 });
+
+app.get('/permissions', function(req, res, next) {
+	//render user portal or ide
+
+	if(req.session && req.session.isBetaUser) {
+		fs.readFile(__dirname + "/view/permissions.html", "utf8", function(err, index) {
+			res.end(index);
+		});
+	} else {
+		fs.readFile(__dirname + "/view/index.html", "utf8", function(err, index) {
+			res.end(index);
+		});
+	}
+});
+
 
 //app.all('/?proxy=*', require("./proxy"));
 

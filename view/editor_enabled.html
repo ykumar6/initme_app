@@ -1,0 +1,926 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+	<head profile="http://www.w3.org/2005/10/profile">
+		<title>CodeNow - {title}</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<!-- start Mixpanel -->
+		<script type="text/javascript">
+			(function(d, c) {
+				var a, b, g, e;
+				a = d.createElement("script");
+				a.type = "text/javascript";
+				a.async = !0;
+				a.src = ("https:" === d.location.protocol ? "https:" : "http:") + '//api.mixpanel.com/site_media/js/api/mixpanel.2.js';
+				b = d.getElementsByTagName("script")[0];
+				b.parentNode.insertBefore(a, b);
+				c._i = [];
+				c.init = function(a, d, f) {
+					var b = c;
+					"undefined" !== typeof f ? b = c[f] = [] : f = "mixpanel";
+					g = "disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
+					for( e = 0; e < g.length; e++)
+						(function(a) {
+							b[a] = function() {
+								b.push([a].concat(Array.prototype.slice.call(arguments, 0)))
+							}
+						})(g[e]);
+					c._i.push([a, d, f])
+				};
+				window.mixpanel = c
+			})(document, []);
+			mixpanel.init("bb4cbc776b5dac0262724e2c904d976a");
+		</script><!-- end Mixpanel -->
+		<script src="{static}/socket.io/socket.io.js"></script>
+		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/layout.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/tabs.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/logger.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/projectManagement.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
+		<script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-27720942-1']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		<script type="text/javascript">
+			document.write(unescape("%3Cscript src='" + ((document.location.protocol == "https:") ? "https://snapabug.appspot.com" : "http://www.snapengage.com") + "/snapabug.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		<script type="text/javascript">
+			SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79", "1", "55%");
+		</script>
+		<link href="{static}/scripts/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+		<link href="{static}/scripts/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+		<link href='{static}/scripts/layout.css' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:bold,regular,medium,thin,italic,mediumitalic">
+		<link rel="stylesheet" href="{static}/scripts/codemirror/lib/codemirror.css">
+		<script src="{static}/scripts/codemirror/lib/codemirror.js"></script>
+		<link rel="stylesheet" href="{static}/main.css">
+		<script src="{static}/scripts/URI/src/URI.js"></script>
+
+		<script src="{static}/scripts/codemirror/mode/xml/xml.js"></script>
+		<script src="{static}/scripts/codemirror/mode/php/php.js"></script>
+		<script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
+		<script src="{static}/scripts/codemirror/mode/javascript/javascript.js"></script>
+		<script src="{static}/scripts/codemirror/mode/css/css.js"></script>
+		<script src="{static}/scripts/async/lib/async.js"></script>
+		<script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
+		<script type="text/javascript">
+			io.util.uniqueUri = function(uri) {
+				var protocol = uri.protocol, host = uri.host, port = uri.port;
+				host = host || document.domain;
+				port = port || (protocol == 'https' && document.location.protocol !== 'https:' ? 443 : document.location.port);
+
+				return (protocol || 'http') + '://' + host + "/" + uri.directory;
+			};
+
+			document.projectId = "{projId}";
+			document.appUrl = "{appUrl}";
+			document.tags = "{tags}";
+			document.projOwner = document.isOwner = {isOwner};
+			document.FacebookId = "{facebookId}";
+
+			var parts = document.domain.split(".");
+			if(parts.length === 3) {
+				document.realDomain = parts[parts.length - 2] + "." + parts[parts.length - 1];
+			} else {
+				document.realDomain = document.domain;
+			}
+
+			$(function() {
+
+				//mixpanel.track("Code Snippet Load", {"projId": document.projectId});
+				if(document.projOwner) {
+					$(".theBtn.fork").addClass("disabled");
+				}
+
+				$(".urlBar").val(document.appUrl);
+				document.tags = (document.tags || "").split(",");
+				var tagStr = "";
+				for(var i = 0; i < document.tags.length; i++) {
+					tagStr += '<div class="tag ' + document.tags[i] + '"><h3>' + document.tags[i] + '</h3></div>';
+				}
+				$(".tags").append(tagStr);
+
+				var alertFallback = false;
+				if( typeof console === "undefined" || typeof console.log === "undefined") {
+					console = {};
+					if(alertFallback) {
+						console.log = function(msg) {
+							alert(msg);
+						};
+					} else {
+						console.log = function() {
+						};
+					}
+				}
+
+				function IsIE8Browser() {
+					var rv = -1;
+					var ua = navigator.userAgent;
+					var re = new RegExp("Trident\/([0-9]{1,}[\.0-9]{0,})");
+					if(re.exec(ua) != null) {
+						rv = parseFloat(RegExp.$1);
+					}
+					return (rv == 4);
+				};
+
+				if(IsIE8Browser()) {
+					$("body").addClass("ie8");
+				}
+				var mainLayout = $('body').layout({
+					north__resizable : false,
+					north__closable : false,
+					north__spacing_open : 0,
+					north__spacing_closed : 0,
+					north__slidable : false,
+					east__size : "50%",
+					east__closable : false,
+					center__onresize : function() {
+						positionCommands();
+					}
+				});
+				
+
+
+				var codeArea = $(".codeSpace").layout({
+					north__resizable : false,
+					north__closable : false,
+					north__spacing_open : 0,
+					north__spacing_closed : 0,
+					north__slidable : false,
+					north__paneSelector : ".codearea-tabs",
+
+					center__paneSelector : ".codearea-center",
+					center__onresize : function() {
+						document.CodeCommands.refresh("main");
+					}
+				});
+				
+				$(".codeSpace").hide();
+				$(".commandSpace").show();
+
+				$('.nav a:first').tab('show')
+
+				$(".ui-layout-east").layout({
+					center__paneSelector : ".server-south",
+				})
+
+				var southPane = $(".server-south").layout({
+					center__paneSelector : ".browser-center",
+					south__paneSelector : ".browser-south",
+					center__onresize : function() {
+						if($("body").hasClass("oauth") || $("body").hasClass("inactive")) {
+							positionLoading();
+						}
+						logBar.resizeAll();
+					},
+					onopen : function() {
+						logBar.show();
+					},
+					south__resizable : false,
+					south__closable : false,
+					south__spacing_open : 0,
+					south__spacing_closed : 0,
+					south__slidable : false
+
+				});
+
+				var browserCenter = $(".browser-center").layout({
+					north__paneSelector : ".browserToolbar",
+					north__resizable : false,
+					north__closable : false,
+					center__paneSelector : ".browserWindow",
+					north__spacing_open : 0,
+					north__spacing_closed : 0,
+					north__slidable : false,
+				});
+				
+				browserCenter.hide("north");
+
+				$(".browserToolbar").layout({
+					east__paneSelector : ".browserToolbarRight",
+					east__resizable : false,
+					east__closable : false,
+					east__size : 60,
+					center__paneSelector : ".browserToolbarLeft",
+					east__spacing_open : 0,
+					east__spacing_closed : 0,
+					east__slidable : false,
+				})
+
+				var logBar = $(".logBar").layout({
+					east__paneSelector : ".logTime",
+					east__resizable : false,
+					east__closable : false,
+					east__size : 100,
+					center__paneSelector : ".logText",
+					east__spacing_open : 0,
+					east__spacing_closed : 0,
+					east__slidable : false,
+					west__paneSelector : ".logIcon",
+					west__resizable : false,
+					west__closable : false,
+					west__spacing_open : 0,
+					west__spacing_closed : 0,
+					west__slidable : false,
+					west__size : 40
+				});
+
+				$(".projRight").hide();
+
+				var positionLoading = function() {
+					setTimeout(function() {
+						$(".loading").position({
+							of : $(".browser-center"),
+							my : "center center",
+							at : "center center"
+						});
+					}, 10);
+				};
+				
+				var positionCommands = function() {
+						$(".commandSpace .innerSpace").position({
+							of : $(".commandSpace"),
+							my : "center center",
+							at : "center center"
+						});
+				};
+				positionLoading();
+				positionCommands();
+
+				document.CodeCommands = CodeModule($(".editor"));
+				//load up editor
+				var challengeSession, projectSession;
+
+				document.logHandler = new Logger(southPane);
+
+				var isAuthRequired = true;
+				projectSession = new document.ProjectManagement();
+				projectSession.setState("oauth");
+				
+				var doProjectCreate = function() {
+	
+					if($.inArray("facebook", document.tags) >= 0) {
+						positionLoading();
+	
+						$("body").bind("oauthLogin", function(e, token) {
+							$("#myModal").modal("hide");
+							document.logHandler.show();
+							$(".urlBar").val(document.appUrl + "/?token=" + token);
+							projectSession.setState("active");
+														
+							$(".commandSpace").removeClass("step1").removeClass("step3").addClass("step2");
+							positionCommands();
+						});
+						$("body").bind("oauthLogout", function(e) {
+							$("#appFrame").attr("src", "http://" + document.domain + "/loading");
+							
+							$(".commandSpace").removeClass("step2").removeClass("step3").addClass("step1");
+							projectSession.setState("oauth");
+							positionLoading();
+							
+							$("#myModal").modal({
+								backdrop : false
+							});
+						});
+						
+						challengeSession = new document.FacebookOAuth();
+						
+					} else if($.inArray("twilio", document.tags) >= 0 || $.inArray("dropbox", document.tags) >= 0) {
+						positionLoading();
+	
+						var modName = ($.inArray("twilio", document.tags) >= 0 ? "TwilioChallenge" : "DropboxChallenge");
+						challengeSession = new document[modName](projectSession);
+						$("body").bind("challengeComplete", function(e, token) {
+	
+							document.logHandler.show();
+							projectSession.setState("active");
+							$(".commandSpace").removeClass("step1").removeClass("step3").addClass("step2");
+							positionCommands();
+						});
+						$("body").bind("challengeStart", function(e) {
+							$("#appFrame").attr("src", "http://" + document.domain + "/loading");
+							projectSession.setState("oauth");
+							positionLoading();
+	
+						});
+						
+						$("#myModal").modal({
+							backdrop : false
+						});
+					} else {
+						$(".commandSpace").removeClass("step1").removeClass("step3").addClass("step2");
+						positionCommands();
+						projectSession.setState("active");
+						document.logHandler.clear();
+						
+						$(".saveStatus").removeClass("active");
+						var url = new URI($(".urlBar").val());
+						url.protocol("http");
+						url.addSearch("iframe", "true");
+						$("#appFrame").attr("src", url.toString());
+
+						isAuthRequired = false;
+					}
+				}
+				
+				if($.inArray("twiml", document.tags) >= 0) {
+					$(".urlBar").val($(".urlBar").val().replace("http://", "") + "/?CallerId=123&PhoneNumber=123");
+				}
+
+				projectSession.loadProject();
+
+				$("body").bind("vmConnected", function(e) {
+					projectSession.setState("vmActive");
+				});
+				$("body").bind("vmDisconnected", function(e) {
+					$("#appFrame").attr("src", "http://" + document.domain + "/loading");
+					projectSession.setState("vmInactive");
+					positionLoading();
+				});
+
+				var _save = function() {
+					document.CodeCommands.save(function() {
+						$.ajax({
+							type : "GET",
+							url : "http://" + document.domain + "/save/" + document.projectId + "?ts=" + (new Date()).getTime(),
+							success : function(data) {
+								window.location = "http://" + document.domain + "/" + document.projectId;
+							},
+							error : function(err) {
+								console.log(err);
+								window.location = "/?state=loginEditor";
+							}
+						});
+					});
+				}
+				
+				if (document.projectId === "100003") {
+				 	$("button.mix1").click(function() {
+				 		document.CodeCommands.setLine("javascript", 12, "            htmlString += '<div class=\"picName\">' + friendData.name + ' is a monkey</div>';");
+				 		
+						$(".commandSpace").hide();						
+						$(".projRight").show();
+						
+						$(".codeSpace").show();
+						document.CodeCommands.refresh("main");
+						
+						codeArea.resizeAll();
+						document.CodeCommands.focus();
+						
+						projectSession.createProject(function() {
+								document.CodeCommands.push();
+						});
+				 	});
+				 	$("button.mix2").click(function() {
+				 		document.CodeCommands.setLine("javascript", 12, "            htmlString += '<div class=\"picName\">' + friendData.name + ' is awesome</div>';");
+				 		
+						$(".commandSpace").hide();						
+						$(".projRight").show();
+						
+						$(".codeSpace").show();
+						document.CodeCommands.refresh("main");
+						
+						codeArea.resizeAll();
+						document.CodeCommands.focus();
+						
+						projectSession.createProject(function() {
+								document.CodeCommands.push();
+						});
+				 	});
+				}
+				
+				$("button.continue").click(function() {
+					doProjectCreate();
+				});
+				
+				  $('button.continue').popover({
+						title: "Welcome to CodeNow",
+						content: "Edit, run and share live code. Click continue to start",
+						placement: "top"
+				  });
+				  $('button.continue').popover('show');
+				
+				$("button.shareApp").click(function() {
+			        var obj = {
+			          method: 'feed',
+			          link: document.URL,
+			          picture: 'http://codenow.com/images/logobig.png',
+			          name: $(".title h1").html() + " (on CodeNow)",
+			          caption:  $(".subTitle h2").html(),
+			          description: "Edit and play live code in your browser"
+			        };
+			
+			        function callback(response) {
+						//share complete
+			        }
+			
+			        FB.ui(obj, callback)
+				});
+
+				$("button.changeCode").click(function() {
+					
+					if(document.projectId === "100003") {
+						$(".commandSpace").removeClass("step1").removeClass("step2").addClass("step3");
+						positionCommands();	
+					}
+					else {
+						$(".commandSpace").hide();						
+						$(".projRight").show();
+						
+						$(".codeSpace").show();
+						document.CodeCommands.refresh("main");
+						
+						codeArea.resizeAll();
+						document.CodeCommands.focus();
+
+					}
+				});
+				
+				$("button.seeCode").click(function() {
+						$(".commandSpace").hide();						
+						$(".projRight").show();
+						
+						$(".codeSpace").show();
+						document.CodeCommands.refresh("main");
+						
+						codeArea.resizeAll();
+						document.CodeCommands.focus();
+				});
+
+				$(".theBtn.fork").mouseup(function() {
+					if(!document.projOwner) {
+						if(!document.isOwner) {
+							projectSession.createProject(_save);
+						} else {
+							_save();
+						}
+					}
+				});
+
+				$(".theBtn.Run").click(function() {
+					//mixpanel.track("Run btn clicked", {"projId": document.projectId});
+
+					if(!projectSession.isActive && isAuthRequired) {
+						$("#myModal").modal({
+							backdrop : false
+						});
+					} else {
+						projectSession.setState("active");
+						document.logHandler.clear();
+						if(document.CodeCommands.isChanged()) {
+							if(document.isOwner) {
+								document.CodeCommands.push();
+							} else {
+								projectSession.createProject(function() {
+									document.CodeCommands.push();
+								});
+							}
+						} else {
+							$(".saveStatus").removeClass("active");
+							var url = new URI($(".urlBar").val());
+							url.protocol("http");
+							url.addSearch("iframe", "true");
+							$("#appFrame").attr("src", url.toString());
+						}
+					}
+				});
+
+				$(".button.reset").mouseup(function() {
+					if(!$(".button.reset").hasClass("disabled")) {
+						document.CodeCommands.reset();
+						$(".button.reset").addClass("disabled");
+						if($(".button.save").hasClass("disabled")) {
+							$(".button.save").removeClass("disabled");
+						}
+					}
+				});
+
+				$("body").bind("save", function(e, state) {
+
+				});
+				$("body").bind("push", function(e, state) {
+					var iframe = document.getElementById("appFrame");
+					iframe.src = iframe.src;
+				});
+
+				$("a.LOGOUT").mouseup(function() {
+					window.location = "http://" + document.realDomain + "/";
+				});
+
+				$("a.LOGIN").mouseup(function() {
+					window.location = "http://" + document.realDomain + "/";
+				});
+
+				$(".theBtn.newCode").mouseup(function() {
+					window.location = "/?state=newCode";
+				});
+
+				$(".theBtn.discoverCode").mouseup(function() {
+					window.location = "/?state=discoverCode";
+				});
+
+				$(".theBtn.download").mouseup(function() {
+					window.location = "/?state=downloadCode";
+				});
+
+				$(".theBtn.pop").click(function() {
+					var url = new URI($(".urlBar").val());
+					url.protocol("http");
+					window.open(url.toString());
+				});
+
+				$(".theBtn.share").click(function(e) {
+					//mixpanel.track("Share btn clicked", {"projId": document.projectId});
+			        var obj = {
+			          method: 'feed',
+			          link: document.URL,
+			          picture: 'http://codenow.com/images/logobig.png',
+			          name: $(".title h1").html() + " (on CodeNow)",
+			          caption:  $(".subTitle h2").html(),
+			          description: "Edit and play live code in your browser"
+			        };
+			
+			        function callback(response) {
+						//share complete
+			        }
+			
+			        FB.ui(obj, callback);
+			        
+					/*
+					$("#sourceUrl").val("http://" + document.realDomain + "/" + document.projectId);
+					$("#appUrl").val("http://" + document.appUrl);
+					$(".shareDialog").css("top", "0px");
+					$(".shareDialog").css("left", "0px");
+					$(".shareDialog").position({
+						of : $(".theBtn.share"),
+						offset : "5 5",
+
+						my : "right top",
+						at : "right bottom"
+					});
+					$(".shareDialog").show();
+
+					setTimeout(function() {
+						$("body").bind("click.share", function(e) {
+							var parents = $(e.target).parents("#shareDialog");
+							if(parents.length === 0) {
+								$("#shareDialog").hide();
+								$("body").unbind("click.share");
+							}
+						});
+					}, 10);
+					*/
+				});
+
+				$(".headerWrapper").click(function(e) {
+					if(!$(e.target).hasClass("share"))
+						e.target = $(e.target).parents(".theBtn.share");
+
+					if(!$(e.target).hasClass("share")) {
+						$(".shareDialog").hide();
+					}
+				});
+
+				$(".projAreaWrapper").click(function(e) {
+					if(!$(e.target).hasClass("share"))
+						e.target = $(e.target).parents(".theBtn.share");
+
+					if(!$(e.target).hasClass("share")) {
+						$(".shareDialog").hide();
+					}
+				});
+
+				if(document.isOwner) {
+					$(".title h1").addClass("owner");
+					$(".title h1").inlineEdit({
+						save : function(e, data) {
+							$.post("http://" + document.domain + "/title/" + document.projectId, data);
+							return true;
+						}
+					});
+					$(".subTitle h2").addClass("owner");
+					$(".subTitle h2").inlineEdit({
+						save : function(e, data) {
+							$.post("http://" + document.domain + "/subTitle/" + document.projectId, data);
+							return true;
+						}
+					});
+				}
+				$(".urlBar").change(function(e) {
+					$(".saveStatus").text("Press Run to Reload URL");
+					$(".saveStatus").addClass("active");
+				});
+			});
+
+		</script>
+	</head>
+	<body>
+		<div class="ui-layout-center">
+			
+			<div class="commandSpace step1">
+				
+				<div class="innerSpace">
+						<div class="step step1">
+							<button class="btn btn-primary btn-info continue">Continue</button>						
+						</div>
+						
+						<div class="step step2">
+							<button class="btn btn-large btn-info shareApp">Share</button>	
+							<div class="orDivider"><br/>or
+							<br/><br/>
+							</div>
+							<button class="btn btn-large btn-info changeCode">Want to change code?</button>				
+						</div>
+						<div class="step step3">
+							<button class="btn btn-large btn-info mix1">Remix 1: Say your friends are monkeys</button>	
+							<div class="orDivider"><br/>or
+							<br/><br/>
+							</div>
+							<button class="btn btn-large btn-info mix2">Remix 2: Say your friends are awesome</button>		
+							<div class="orDivider"><br/>or
+							<br/><br/>
+							</div>
+							<button class="btn btn-large btn-info seeCode">See current code</button>			
+						</div>
+				</div>
+				
+			</div>
+			
+			<div class="codeSpace">
+			<div class="codearea-tabs">
+				<div class="saveStatus">
+					Unsaved Changes... Click run
+				</div>
+
+				<div class="floatBar">
+					Live Code
+				</div>
+				<div class="tabHolder">
+					<ul class="nav nav-tabs">
+						<li>
+							<a href="#main" data-toggle="tab">HTML</a>
+						</li>
+						<li>
+							<a href="#javascript" data-toggle="tab" style="{jsStyle}">JavaScript</a>
+						</li>
+						<li>
+							<a href="#additional" data-toggle="tab" style="{additionalStyle}">{additionalName}</a>
+						</li>
+						<li>
+							<a href="#css" data-toggle="tab" style="{cssStyle}">CSS</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="codearea-center">
+				<div class="editor html tab-pane active" fileName="main.php" id="main">
+					<textarea class="code" mode="application/x-httpd-php" name="main">
+{main.php}
+</textarea>
+				</div>
+				<div class="editor javascript tab-pane" fileName="javascript.php" id="javascript">
+					<textarea class="code" mode="javascript" name="javascript">
+{javascript.php}
+</textarea>
+				</div>
+				<div class="editor additional tab-pane" fileName="additional.php" id="additional">
+					<textarea class="code" mode="{additionalMode}" name="additional">
+{additional.php}
+</textarea>
+				</div>
+				<div class="editor css tab-pane" fileName="css.php" id="css">
+					<textarea class="code" mode="css" name="css">
+{css.php}
+</textarea>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="ui-layout-north">
+			<div class="headerWrapper">
+				<div class="header">
+					<div class="logo"></div>
+					<div class="headerOptions">
+						<div class="theBtn newCode">
+							<div class="caption">
+								New Code
+							</div>
+							<div class="subText">
+								Build & share code
+							</div>
+						</div>
+						<div class="theBtn discoverCode">
+							<div class="caption">
+								Discover
+							</div>
+							<div class="subText">
+								Code snippets & apps
+							</div>
+						</div>
+					</div>
+					<div class="toolbar rightBar">
+						<a href="/?state=Blog">BLOG</a>
+						<a class="{login}" href="javascript:void(0)">SIGN UP</a>
+
+					</div>
+				</div>
+			</div>
+			<div class="projAreaWrapper">
+				<div class="projArea">
+					<div class="projLeft">
+						<div class="info">
+							<div class="title">
+								<h1>{title}</h1>
+								<div class="tags">
+
+								</div>
+							</div>
+							<div class="subTitle">
+								<h2>{subTitle}</h2>
+							</div>
+						</div>
+						<div class="author">
+							<img src="/images/ykumar6.jpg"/>
+							<div class="text">
+								{authorName}
+							</div>
+						</div>
+					</div>
+					<div class="projRight">
+
+						<div class="commandBar">
+							<div class="theBtn Run">
+								<div class="img"></div>
+								<div class="caption">
+									Run
+								</div>
+							</div>
+							<div class="theBtn fork">
+								<div class="img"></div>
+								<div class="caption">
+									Save
+								</div>
+							</div>
+							<div class="theBtn share"  data-target="#shareDialog">
+								<div class="img"></div>
+								<div class="caption">
+									Share
+								</div>
+								<div class="dropdown"></div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="ui-layout-east">
+			<div class="server-south">
+				<div class="browser-center">
+					<div class="browserToolbar">
+						<div class="browserToolbarLeft">
+							<div class="toolbarContainer">
+								<div class="URLLabel">
+									<span class="label">URL</span>
+								</div>
+								<input class="urlBar" spellcheck="false" type="text" data-provide="typeahead">
+							</div>
+						</div>
+						<div class="browserToolbarRight">
+							<div class="theBtn pop"></div>
+						</div>
+					</div>
+
+					<div class="browserWindow">
+						<iframe id="appFrame" width="100%" height="100%" src="/loading" frameBorder="0"></iframe>
+					</div>
+				</div>
+				<div class="browser-south">
+					<div class="logBar">
+						<div class="icon check logIcon"></div>
+						<div class="logText">
+							<div class="logTextInner">
+								Your server is running at
+							</div>
+						</div>
+						<div class="logTime">
+							2 minutes ago
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="loading"></div>
+		<div class="modal" id="myModal" style="display:none;">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">X</a>
+				<h3>Run this code in 60 seconds</h3>
+			</div>
+			<div class="modal-body">
+				<div class="challenge {challengeClass}">
+					<div class="twilioVerify">
+						<div class="logo"></div>
+						<div class="box">
+							<div class="big">
+								This code makes outbound calls
+							</div>
+							<div class="small">
+								Please verify your phone number
+							</div>
+							<div class="phoneBox">
+								<div class="code">
+									+1
+								</div>
+								<input type="text" value="" />
+								<div class="button">
+									Call
+								</div>
+							</div>
+						</div>
+						<div class="verifyCode">
+							We're calling you, enter this number on your dialpad
+							<div class="codeBox">
+								<div class="verifyCodeNumber">
+									12324242
+								</div>
+								<div class="button">
+									Done
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="dropboxVerify">
+						<div class="logo"></div>
+						<div class="box">
+							<div class="big">
+								Please login to Dropbox
+							</div>
+							<div class="small">
+								Permission is only requested to an init.me app folder, and not your root folder
+							</div>
+							<button class="btn btn-large">
+								Login
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="shareDialog" class="shareDialog dropdown-menu" style="display:none;">
+			<div class="field source">
+				<div class="text">
+					Share this code
+				</div>
+				<input id="sourceUrl" />
+			</div>
+			<div class="field app">
+				<div class="text">
+					Share this app
+				</div>
+				<input id="appUrl" />
+			</div>
+		</div>
+		<div id="fb-root"></div>
+		<script type="text/javascript">
+			var js, id = 'facebook-jssdk';
+	        var d = document;
+	        
+	        if(d.getElementById(id)) {
+	            return;
+	        }
+	        js = document.createElement('script');
+	        js.id = id;
+	        js.async = true;
+	        js.src = "//connect.facebook.net/en_US/all.js";
+	        document.getElementsByTagName('head')[0].appendChild(js);
+	
+		    window.fbAsyncInit = function() {
+		
+		        FB.init({
+		            appId : document.FacebookId, // App ID
+		            status : true, // check login status
+		            xfbml : true  // parse XFBML
+		        });
+		
+		        // Additional initialization code here
+		    };
+
+		</script>
+		<script src="{static}/scripts/bootstrap/js/bootstrap.min.js"></script>
+	</body>
+
+</html>

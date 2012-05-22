@@ -14,6 +14,9 @@ module.exports = {
 		if(req.url.indexOf("embed") >= 0) {
 			file = "embed.html";
 		}
+		if (req.session && req.session.isBetaUser) {
+			file = "editor_enabled.html";
+		}
 
 		fs.readFile(__dirname + "/view/" + file, "utf8", function(err, index) {
 

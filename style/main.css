@@ -9,6 +9,83 @@ body {
     height: 100%; /* this is the key! */
 }
 
+.codeSpace, .commandSpace {
+	height: 100%;
+	width: 100%;
+	display: none;
+}
+
+.commandSpace {
+	background-color: #F2F2F2;
+}
+
+.commandSpace .step1, .commandSpace .step2, .commandSpace .step3 {
+	display: none;
+}
+
+.commandSpace.step1 .step1 {
+	display: block;
+}
+
+.commandSpace.step2 .step2 {
+	display: block;
+}
+
+.commandSpace.step3 .step3 {
+	display: block;
+}
+
+.commandSpace .innerSpace {
+	width: 200px;
+
+}
+
+.commandSpace.step2 .innerSpace {
+	width: 250px;
+}
+
+
+.commandSpace.step3 .innerSpace {
+	width: 350px;
+}
+
+.commandSpace .orDivider {
+	width: 250px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.commandSpace .step3 .orDivider {
+	width: 350px;
+}
+
+.commandSpace .step2 button {
+	width: 250px;
+	height: 60px;
+	font-size: 20px;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+}
+
+.commandSpace .step3 button {
+	width: 350px;
+	height: 60px;
+	font-size: 16px;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+}
+
+.commandSpace .step1 button {
+				font-size: 20px;
+				font-weight: normal;
+				padding: 44px 54px;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+}
+
 body p {
     text-rendering: optimizelegibility;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -622,6 +699,12 @@ background-color: #D3E5EC;
 .tag.twilio {
 	background-color: #DAD3E3;
 }
+
+.tag.javascript {
+	background-color: #FCD4A5;
+}
+
+
 
 .tag.twiml {
 	background-color: #E6E7E8;

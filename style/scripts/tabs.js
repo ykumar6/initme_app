@@ -55,17 +55,21 @@ var CodeModule  = function(codeBoxes) {
 
    function refresh(area) {
 	if (area === "main") {
-		codeEditorHandles["main.php"].refresh();
+		codeEditorHandles["main"].refresh();
 	}
 	else {
-		codeEditorHandles["additional.php"].refresh();
-		codeEditorHandles["css.php"].refresh();
+		codeEditorHandles["additional"].refresh();
+		codeEditorHandles["css"].refresh();
 
 	}
    };
+   
+   function setLine(editor, lineNumber, lineText) {
+   		codeEditorHandles[editor].setLine(lineNumber, lineText);
+   };
 
    function doFocus() {
-	codeEditorHandles["main"].focus();
+		codeEditorHandles["main"].focus();
    };
 
 
@@ -142,7 +146,8 @@ var CodeModule  = function(codeBoxes) {
 	"reset": reset,
 	"refresh": refresh,
 	"focus": doFocus,
-	"isChanged": isChanged
+	"isChanged": isChanged,
+	"setLine": setLine
    }
    
    

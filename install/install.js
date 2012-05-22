@@ -69,7 +69,32 @@ var projects = [
                 copyFrom: __dirname + "/twiml-php",
                 keepAlive: true
         },
-
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100003,
+                namespace: "facebook",
+                namespaceUrl: "get-friends-js",
+                proposedTitle: "Get your facebook friends",
+                subTitle: "Use Facebook's Javascript API to get your friends",
+                tags: ["javascript", "facebook"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-friends-js",
+                keepAlive: true
+        },
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100004,
+                namespace: "facebook",
+                namespaceUrl: "friends-birthdays-this-week-js",
+                proposedTitle: "Facebook Friends birthdays this week",
+                subTitle: "Use Facebook's Javascript API to get birthdays",
+                tags: ["javascript", "facebook"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-birthdays-js",
+                keepAlive: true
+        },
 ];
 
 async.forEach(projects,
