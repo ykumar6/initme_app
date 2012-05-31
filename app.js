@@ -25,6 +25,8 @@ mongoose.connect(config.mongoURI);
 var _redirect = function(req, res, url) {
 	res.end('<script type="text/javascript">window.location="http://' + config.appDomain + '/' + url + '"</script>');
 };
+
+
 var app = express.createServer();
 
 var handlePings = function(req, res, next) {
@@ -199,6 +201,7 @@ passport.use(new GoogleStrategy({
 }, handleLogin));
 
 app.all("/*", function(req, res, next) {
+		
 	var domainParts = req.headers.host.split(".");
 
 	if(isNaN(domainParts[0])) {
@@ -222,7 +225,7 @@ app.all("/*", function(req, res, next) {
 	});
 });
 
-app.get('/', function(req, res, next) {
+app.all('/', function(req, res, next) {
 	//render user portal or ide
 
 	console.log(req.user);

@@ -216,7 +216,7 @@
 						
 						if (response.status === "connected") {
 							mixpanel.track("Permission Denied - Facebook Login - Success", {}, function() {
-								window.location = '/choose';	
+								window.location = 'http://' + document.domain + "/100003";	
 							});
 						}
 						else {

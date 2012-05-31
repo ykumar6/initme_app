@@ -38,7 +38,6 @@ window.InviteModule = (function() {
 						else {
 							$(".inviteFooter p").html(Math.ceil(curValue) + "%, almost there!");
 						}
-						
 						start+=50;	
 						updateInviteList();
 					}					
@@ -51,7 +50,7 @@ window.InviteModule = (function() {
 		  FB.ui({
 		  		method: 'apprequests',
 		    	message: "I want you to try my sample app",
-		    	to: "12807050"
+		    	to: sendToList.join(",")
 		  }, appRequestCB);
 		  
 	});
