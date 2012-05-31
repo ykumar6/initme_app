@@ -69,7 +69,7 @@ var CodeModule  = function(codeBoxes) {
    };
 
    function doFocus() {
-		codeEditorHandles["main"].focus();
+		codeEditorHandles["javascript"].focus();
    };
 
 

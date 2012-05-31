@@ -3,9 +3,34 @@
     <head profile="http://www.w3.org/2005/10/profile">
     <title>CodeNow - {title}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<!-- start Mixpanel --><script type="text/javascript">(function(d,c){var a,b,g,e;a=d.createElement("script");a.type="text/javascript";a.async=!0;a.src=("https:"===d.location.protocol?"https:":"http:")+'//api.mixpanel.com/site_media/js/api/mixpanel.2.js';b=d.getElementsByTagName("script")[0];b.parentNode.insertBefore(a,b);c._i=[];c.init=function(a,d,f){var b=c;"undefined"!==typeof f?b=c[f]=[]:f="mixpanel";g="disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
-for(e=0;e<g.length;e++)(function(a){b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,0)))}})(g[e]);c._i.push([a,d,f])};window.mixpanel=c})(document,[]);
-mixpanel.init("bb4cbc776b5dac0262724e2c904d976a");</script><!-- end Mixpanel -->
+		<script src="//cdn.optimizely.com/js/{optimizelyId}.js"></script>
+		<!-- start Mixpanel -->
+		<script type="text/javascript">
+			(function(d, c) {
+				var a, b, g, e;
+				a = d.createElement("script");
+				a.type = "text/javascript";
+				a.async = !0;
+				a.src = ("https:" === d.location.protocol ? "https:" : "http:") + '//api.mixpanel.com/site_media/js/api/mixpanel.2.js';
+				b = d.getElementsByTagName("script")[0];
+				b.parentNode.insertBefore(a, b);
+				c._i = [];
+				c.init = function(a, d, f) {
+					var b = c;
+					"undefined" !== typeof f ? b = c[f] = [] : f = "mixpanel";
+					g = "disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
+					for( e = 0; e < g.length; e++)
+						(function(a) {
+							b[a] = function() {
+								b.push([a].concat(Array.prototype.slice.call(arguments, 0)))
+							}
+						})(g[e]);
+					c._i.push([a, d, f])
+				};
+				window.mixpanel = c
+			})(document, []);
+			mixpanel.init("{mixpanelToken}");
+		</script><!-- end Mixpanel -->
 	 <script src="{static}/socket.io/socket.io.js"></script>
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
         <script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
@@ -16,6 +41,8 @@ mixpanel.init("bb4cbc776b5dac0262724e2c904d976a");</script><!-- end Mixpanel -->
         <script  type="text/javascript" src="{static}/scripts/facebook_oauth.js"></script>
         <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
         <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
+        <script  type="text/javascript" src="{static}/scripts/invite.js"></script>
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -73,7 +100,19 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 	     }
 		                  
             $(function() {
-		 
+            	
+            	mixpanel.track("Code Snippet Load", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+            	window.InviteModule();
+            	
+// Create IE + others compatible event handler
+var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+var eventer = window[eventMethod];
+var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+
+// Listen to message from child window
+eventer(messageEvent,function(e) {
+  console.log('parent received message!:  ',e.data);
+},false);
 				//mixpanel.track("Code Snippet Load", {"projId": document.projectId});
 		  if (document.projOwner) {
 			$(".theBtn.fork").addClass("disabled");
@@ -83,7 +122,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 		  document.tags = (document.tags || "").split(",");
 		  var tagStr = "";
 		  for (var i=0; i<document.tags.length; i++) {
-			tagStr += '<div class="tag ' + document.tags[i] + '"><h3>' + document.tags[i] + '</h3></div>';
+			tagStr += '<div class="tag ' + document.tags[i].replace(/ /g, "_").replace(".", "").toLowerCase() + '"><h3>' + document.tags[i] + '</h3></div>';
 		  }
 		  $(".tags").append(tagStr);
 		  
@@ -165,7 +204,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 			
                 });
 
-                $(".browser-center").layout({
+                var browserCenter = $(".browser-center").layout({
                     north__paneSelector : ".browserToolbar",
                     north__resizable : false,
                     north__closable : false,
@@ -186,6 +225,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     east__slidable : false,
                 })
 
+				browserCenter.hide("north");
 
                 var logBar = $(".logBar").layout({
                     east__paneSelector : ".logTime",
@@ -205,13 +245,11 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     west__size : 40
                 });
 
-		  $('.theBtn.Run').popover({
+		  $('button.Run').popover({
 				title: "Run and edit code",
 				content: "You can edit and re-run live code by clicking this button",
 				placement: "bottom"
 		  });
-		  $('.theBtn.Run').popover('show');
-
 
                 var positionLoading = function() {
                     setTimeout(function() {
@@ -234,7 +272,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                 projectSession = new document.ProjectManagement();
                 projectSession.setState("oauth");
        
-	         if ($.inArray("facebook", document.tags) >= 0 ) {
+	         if ($.inArray("Facebook JavaScript SDK", document.tags) >= 0 ) {
                     positionLoading();
 
                     challengeSession = new document.FacebookOAuth();
@@ -320,8 +358,8 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                     }
                 });
 
-                $(".theBtn.Run").click(function() {
-                	//mixpanel.track("Run btn clicked", {"projId": document.projectId});
+                $("button.Run").click(function() {
+			  		mixpanel.track("Code Snippet - Run Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
                 	
                     if (!projectSession.isActive && isAuthRequired) {
 				$("#myModal").modal({backdrop: false});
@@ -455,10 +493,17 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                         }
                     });
                 }
-		  $(".urlBar").change(function(e) {
-			$(".saveStatus").text("Press Run to Reload URL");
-			$(".saveStatus").addClass("active");
-		  });
+			  $(".urlBar").change(function(e) {
+				$(".saveStatus").text("Press Run to Reload URL");
+				$(".saveStatus").addClass("active");
+			  });
+			  
+			  $(document).delegate(".nextExample", "click", function() {
+			  		mixpanel.track("Code Snippet - Next Example Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+					window.createInviteDialog();
+			  });
+			  
+		 
 	   });
 
         </script>
@@ -466,27 +511,30 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
     <body>
         <div class="ui-layout-center">
 	     <div class="codearea-tabs">
-				<div class="saveStatus">Unsaved Changes... Click run</div>
 
 				<div class="floatBar">
-					Live Code
+					<button class="btn btn-large btn-success Run">Run Code</button>
 				</div>	
+			<div class="imports">
+				<div class="importLabel"><b>Includes</b>: These libraries have been imported for you</div>
+				<div class="tags"></div>
+			</div>
 			<div class="tabHolder">
 			<ul class="nav nav-tabs">
-  				<li><a href="#main" data-toggle="tab">HTML</a></li>
  				<li><a href="#javascript" data-toggle="tab" style="{jsStyle}">JavaScript</a></li>
+  				<li><a href="#main" data-toggle="tab">HTML</a></li>
   				<li><a href="#additional" data-toggle="tab" style="{additionalStyle}">{additionalName}</a></li>
   				<li><a href="#css" data-toggle="tab" style="{cssStyle}">CSS</a></li>
 			</ul>
 			</div>
 	     </div>
             <div class="codearea-center">
-                    <div class="editor html tab-pane active" fileName="main.php" id="main">
+                    <div class="editor html tab-pane" fileName="main.php" id="main">
                         <textarea class="code" mode="application/x-httpd-php" name="main">
 {main.php}
 </textarea>
                     </div>
-                    <div class="editor javascript tab-pane" fileName="javascript.php" id="javascript">
+                    <div class="editor javascript tab-pane active" fileName="javascript.php" id="javascript">
                         <textarea class="code" mode="javascript" name="javascript">
 {javascript.php}
 </textarea>
@@ -508,27 +556,9 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
                         <div class="header">
                             <div class="logo"></div>
 				<div class="headerOptions">
-					<div class="theBtn newCode">
-						<div class="caption">
-							New Code
-						</div>
-						<div class="subText">
-							Build & share code
-						</div>
-					</div>
-					<div class="theBtn discoverCode">
-						<div class="caption">
-							Discover
-						</div>
-						<div class="subText">
-							Code snippets & apps
-						</div>
-					</div>
+	
 				</div>
                             <div class="toolbar rightBar">
-					<a href="/?state=Blog">BLOG</a>
-					<a class="{login}" href="javascript:void(0)">SIGN UP</a>
-
                             </div>
                         </div>
 			   </div>	
@@ -538,9 +568,6 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 					<div class="info">
 						<div class="title">
 							<h1>{title}</h1>
-							<div class="tags">
-
-							</div>
 						</div>
 						<div class="subTitle">
 						<h2>{subTitle}</h2>
@@ -552,22 +579,7 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 					</div>
 				</div>
 				<div class="projRight">
-
-					<div class="commandBar">
-						<div class="theBtn Run">
-							<div class="img"></div>
-							<div class="caption">Run</div>
-						</div>
-						<div class="theBtn fork">
-							<div class="img"></div>
-							<div class="caption">Save</div>
-						</div>
-						<div class="theBtn share"  data-target="#shareDialog">
-							<div class="img"></div>
-							<div class="caption">Share</div>
-							<div class="dropdown"></div>
-
-						</div>					</div>
+					<button class="btn btn-large btn-info nextExample">See Next Example</button>
 				</div>
                         </div>
 			   </div>
@@ -645,6 +657,41 @@ SnapABug.addButton("999e73ce-b3cf-4d91-9ae9-8dd3af994d79","1","55%");
 				</div>
   </div>
 </div>
+
+<div class="modal" id="inviteModal" style="display:none;">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">X</a>
+    <h3>Get access to Dropbox, Gmail & Facebook APIs</h3>
+  </div>
+  <div class="modal-body">
+		<div class="inviteHeader">
+			
+			<div class="inviteHeaderLeft">
+				<div class="inviteTitle">Unlock Gmail, Dropbox & YouTube Examples</div>
+				<div class="inviteSubtitle">Invite your friends to continue</div>
+			</div>
+			
+			<div class="inviteHeaderRight">
+			</div>
+		</div>
+		
+		<div class="inviteBody">
+			
+		</div>
+		<div class="inviteFooter">
+			<div class="left">
+					<div class="progress progress-success active">
+  						<div class="bar" style="width: 5%;"><p class="progressText"></p></div>
+					</div>
+			</div>
+			<div class="right">
+				<button class="btn btn-primary btn-large invite">Invite to unlock</button>
+			</div>
+		</div>
+  </div>
+</div>
+
+
 
 			<div id="shareDialog" class="shareDialog dropdown-menu" style="display:none;">
 				<div class="field source">
