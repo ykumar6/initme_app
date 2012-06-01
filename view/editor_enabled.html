@@ -253,9 +253,10 @@
 
 				$('button.Run').popover({
 					title : "Run and edit code",
-					content : "You can edit and re-run live code by clicking this button",
+					content : "Click Run to begin",
 					placement : "bottom"
 				});
+				$('button.Run').popover('show')
 
 				var positionLoading = function() {
 					setTimeout(function() {

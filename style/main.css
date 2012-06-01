@@ -1413,3 +1413,7 @@ button.nextExample {
 	font-size: 18px;
 }
 
+body.oauth .nextExample, body.inactive .nextExample {
+	display: none;	
+}
+
