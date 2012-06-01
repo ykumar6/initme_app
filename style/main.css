@@ -336,8 +336,7 @@ body.inactive .theBtn.pop, body.oauth  .theBtn.pop {
 }
 
 .projRight {
-	padding-top: 6px;
-	height: 100%;
+	margin-top: 5px;
 	float: right;
 }
 
@@ -1371,21 +1370,21 @@ box-shadow: inset rgba(0,0,0,0.2) 0px 2px 5px;
 }
 
 .inviteFooter .left {
-	width: 470px;
-	margin-top: 5px;
+	width: 460px;
+	margin-top: 2px;
 }
 
 #inviteModal .progress {
-	height: 30px;
+	height: 40px;
 }
 
 #inviteModal .progress .bar {
-	height: 30px;
+	height: 40px;
 }
 
 .bar p {
     color: white;
-    padding-top: 5px;
+    padding-top: 8px;
     font-size: 16px;
     font-weight: 700;
     text-align: center;
@@ -1401,6 +1400,16 @@ box-shadow: inset rgba(0,0,0,0.2) 0px 2px 5px;
 }
 
 button.nextExample {
-	margin-top: 15px;	
+	margin-top: 10px;
+	font-size: 21px;	
+}
+
+#inviteModal a.close {
+	font-size: 12px;
+	margin-top: -50px;
+}
+
+#inviteModal .btn.invite {
+	font-size: 18px;
 }
 

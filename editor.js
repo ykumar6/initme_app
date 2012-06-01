@@ -10,6 +10,7 @@ module.exports = {
 
 	servePage : function(pageName, res) {
 		fs.readFile(__dirname + "/view/" + pageName, "utf8", function(err, index) {
+			index = index.replace(/{googleAnalyticsId}/mig, config.googleAnalyticsId);
 			index = index.replace(/{facebookId}/mig, config.facebookId);
 			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
 			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
@@ -36,6 +37,7 @@ module.exports = {
 			}
 
 			index = index.toString();
+			index = index.replace(/{googleAnalyticsId}/mig, config.googleAnalyticsId);
 			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
 			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
 

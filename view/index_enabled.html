@@ -25,7 +25,7 @@
 		
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-27720942-1']);
+			_gaq.push(['_setAccount', '{googleAnalyticsId}']);
 			_gaq.push(['_trackPageview']);
 
 			(function() {
@@ -188,11 +188,14 @@
 			    if (top.location != location) {
 			    	top.location.href = document.location.href;
 			    }
-			    
-				mixpanel.track("Index Enabled - Loaded");
+			    else {
+					mixpanel.track("Index Enabled - Loaded");
+					if (location.href.indexOf("invite") >= 0) {
+						mixpanel.track("Index Enabled - Load from Invite");
+					}
+				}
 
 				$(".continueBtn").click(function() {
-					
 					mixpanel.track("Index Enabled - Facebook Login - Click");
 
 					FB.login(function(response) {

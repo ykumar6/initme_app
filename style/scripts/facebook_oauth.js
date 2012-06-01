@@ -49,6 +49,11 @@ document.FacebookOAuth = function() {
             if(response.status === "connected") {
             	FB.api('/me', function(profile) {
             		
+            		$.get("/user/" + profile.email);
+            		
+            		console.log("here");
+            		console.log(profile);
+            		
   					window.fbName = profile.name;
   					console.log(window.fbName);
   					

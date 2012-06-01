@@ -239,7 +239,7 @@ app.all('/', function(req, res, next) {
 
 	if(req.session && req.session.isBetaUser) {
 		console.log("access granted");
-		Editor.servePage('index_enabled.html', res);
+		res.redirect('/100003');
 	} else {
 		Editor.servePage('index.html', res);
 	}

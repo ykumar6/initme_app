@@ -11,7 +11,7 @@ window.InviteModule = (function() {
 		}
 	}
 
-	$(".btn.invite").click(function() {
+	$(document).delegate(".btn.invite, div.pic", "click", function() {
 		  console.log("button clicked");
 	  						
 	  		mixpanel.track("Code Snippet - Invited Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
@@ -50,7 +50,8 @@ window.InviteModule = (function() {
 		  FB.ui({
 		  		method: 'apprequests',
 		    	message: "I want you to try my sample app",
-		    	to: sendToList.join(",")
+		    	title: "I want you to try my sample app",
+		    	to: "100003913785239"
 		  }, appRequestCB);
 		  
 	});
