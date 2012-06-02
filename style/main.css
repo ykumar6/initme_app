@@ -11,7 +11,6 @@ body {
 
 button.Run {
 	
-	font-size: 24px;
 	font-weight: 700;
 	
 }
@@ -1417,3 +1416,58 @@ body.oauth .nextExample, body.inactive .nextExample {
 	display: none;	
 }
 
+#welcomeModal h1 {
+	font-size: 36px;
+	font-weight:400;
+	color: #414042;
+    letter-spacing:2px
+}
+          
+#welcomeModal h2 {
+	margin-top: 7px;
+	font-size: 18px;
+	font-weight:400;
+	color: #414042;
+    letter-spacing:2px
+}  
+            
+
+
+            
+#welcomeModal .logoWelcome {
+	background-image: url("images/logobig.png");
+	height: 83px;
+	width: 251px;
+	margin: 0 auto;
+}
+
+#welcomeModal.modal {
+	opacity: 0.9;
+	text-align: center;
+	
+}
+
+#welcomeModal .privateBeta .img {
+	background-image: url("images/lock.png");
+	height: 18px;
+	width: 12px;
+}
+
+#welcomeModal	.fbContinue {
+				background-image: url("images/continue_btn.png");
+				width: 195px;
+				height: 55px;
+				background-repeat: no-repeat;	
+				opacity: 0.95;
+				margin: 0 auto;
+				cursor: pointer;
+			}
+			
+#welcomeModal	.fbContinue:hover {
+				opacity: 1;
+			}
+			
+body .modal-backdrop.in {
+	background-color: #FFF;
+	opacity: 0.98;
+}

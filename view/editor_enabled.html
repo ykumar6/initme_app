@@ -100,9 +100,24 @@
 			}
 
 			$(function() {
+				
+				$("#welcomeModal").modal({backdrop: true,  keyboard: false, backdrop: "static"});
+				$(document).click(function() {
+						FB.login(function(response) {
+							if (!response.status === "connected") {	
+								mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
+									window.location = "/permissions"							
+								});
+							} else {
+								mixpanel.track("Code Snippet - Facebook Login - Success");
+								$(document).unbind("click");
+								$("#welcomeModal").modal("hide");
+							}
+						}, {scope: 'email'});
+				});
+				
 
-
-				mixpanel.track("Test Series 2", {
+				mixpanel.track("Test Series 3", {
 					"projectId" : document.projectId,
 					"projectTitle" : $(".title h1").html()
 				});
@@ -256,7 +271,6 @@
 					content : "Click Run to begin",
 					placement : "bottom"
 				});
-				$('button.Run').popover('show')
 
 				var positionLoading = function() {
 					setTimeout(function() {
@@ -374,6 +388,8 @@
 								mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
 									window.location = "/permissions"							
 								});
+							} else {
+								mixpanel.track("Code Snippet - Facebook Login - Success");
 							}
 						}, {scope: 'email'});
 					} else {
@@ -526,7 +542,7 @@
 			<div class="codearea-tabs">
 
 				<div class="floatBar">
-					<button class="btn btn-large btn-success Run">
+					<button class="btn btn-large Run">
 						Run Code
 					</button>
 				</div>
@@ -605,7 +621,7 @@
 						</div>
 					</div>
 					<div class="projRight">
-						<button class="btn btn-large btn-info nextExample disabled">
+						<button class="btn btn-large btn-primary nextExample disabled">
 							See Next Example
 						</button>
 					</div>
@@ -739,6 +755,33 @@
 						</button>
 					</div>
 				</div>
+			</div>
+		</div>
+		<div class="modal" id="welcomeModal" style="display:none;">
+			<div class="modal-body">
+		        <div class="main">
+		        		<br/>
+		                <div class="logoWelcome">
+		                </div>
+		            
+		                <div class="landing">
+		                    <div class="title">
+		                        <h1>Build, share & discover</h1>
+		                        <h2>"Live" code snippets for Facebook, Google & more</h2>
+		                    </div>
+		                </div>
+		                
+		                <br/>
+				        		<br/>
+						<div class="fbContinue">
+						</div>
+						<br/>
+
+
+		            </div>
+		  
+		  
+		        </div>
 			</div>
 		</div>
 
