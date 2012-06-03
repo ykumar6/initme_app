@@ -20,6 +20,8 @@ var fs = require('fs');
 var AppChecker = require("./checkapps");
 var User = mongoose.model("User");
 
+var visitCount = Math.floor(Math.random()*2);
+
 mongoose.connect(config.mongoURI);
 
 var _redirect = function(req, res, url) {
@@ -42,6 +44,11 @@ var betaAccessHandler = function(req, res, next) {
 
 	if (betaCode && betaCode === "beta_1912" && req.session) {
 		req.session.isBetaUser = true;
+	}
+	
+	if (typeof(req.session.bucket) !== "number" && req.session.isBetaUser) {
+		req.session.bucket = visitCount++ % 2;
+		console.log("setting bucket at " + req.session.bucket);
 	}
 	
 	next();
@@ -239,9 +246,14 @@ app.all('/', function(req, res, next) {
 
 	if(req.session && req.session.isBetaUser) {
 		console.log("access granted");
-		res.redirect('/100003');
+		if (req.session.bucket === 0) {
+			res.redirect('/100003');		
+		}
+		else {
+			Editor.servePage('index_enabled.html', req, res);
+		}
 	} else {
-		Editor.servePage('index.html', res);
+		Editor.servePage('index.html', req, res);
 	}
 });
 
@@ -249,9 +261,9 @@ app.get('/choose', function(req, res, next) {
 	//render user portal or ide
 
 	if(req.session && req.session.isBetaUser) {
-		Editor.servePage('choose.html', res);
+		Editor.servePage('choose.html', req, res);
 	} else {
-		Editor.servePage('index.html', res);
+		Editor.servePage('index.html', req, res);
 	}
 });
 
@@ -259,10 +271,10 @@ app.get('/permissions', function(req, res, next) {
 	//render user portal or ide
 
 	if(req.session && req.session.isBetaUser) {
-		Editor.servePage('permissions.html', res);
+		Editor.servePage('permissions.html', req, res);
 
 	} else {
-		Editor.servePage('index.html', res);
+		Editor.servePage('index.html', req, res);
 	}
 });
 

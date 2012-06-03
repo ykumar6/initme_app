@@ -77,7 +77,7 @@
 			if(top.location != location) {
 				top.location.href = document.location.href;
 			}
-
+			
 			io.util.uniqueUri = function(uri) {
 				var protocol = uri.protocol, host = uri.host, port = uri.port;
 				host = host || document.domain;
@@ -102,28 +102,27 @@
 			$(function() {
 				
 				$("#welcomeModal").modal({backdrop: true,  keyboard: false, backdrop: "static"});
-				$(document).click(function() {
+				$(document).bind("click.login", function() {
+						mixpanel.track("Code Snippet - Facebook Login - Clicked");
+
 						FB.login(function(response) {
-							if (!response.status === "connected") {	
-								mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
+							if (response.status !== "connected") {	
+									mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
 									window.location = "/permissions"							
 								});
 							} else {
 								mixpanel.track("Code Snippet - Facebook Login - Success");
-								$(document).unbind("click");
+								$(document).unbind("click.login");
 								$("#welcomeModal").modal("hide");
 							}
 						}, {scope: 'email'});
 				});
 				
-
-				mixpanel.track("Test Series 3", {
-					"projectId" : document.projectId,
-					"projectTitle" : $(".title h1").html()
-				});
 				mixpanel.track("Code Snippet Load", {
 					"projectId" : document.projectId,
-					"projectTitle" : $(".title h1").html()
+					"projectTitle" : $(".title h1").html(),
+					"testBucket": "{userBucket}",
+					"testSeries": 4
 				});
 				window.InviteModule();
 
@@ -384,8 +383,8 @@
 
 					if(!projectSession.isActive && isAuthRequired) {
 						FB.login(function(response) {
-							if (!response.status === "connected") {	
-								mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
+							if (response.status !== "connected") {	
+									mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
 									window.location = "/permissions"							
 								});
 							} else {

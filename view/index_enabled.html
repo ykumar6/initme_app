@@ -184,16 +184,10 @@
 
 		</style>
 		<script type="text/javascript">
+			
 			$(function() {
-			    if (top.location != location) {
-			    	top.location.href = document.location.href;
-			    }
-			    else {
-					mixpanel.track("Index Enabled - Loaded");
-					if (location.href.indexOf("invite") >= 0) {
-						mixpanel.track("Index Enabled - Load from Invite");
-					}
-				}
+				
+				mixpanel.track("Index Enabled - Loaded", {"testBucket": "{userBucket}", testSeries: 4});
 
 				$(".continueBtn").click(function() {
 					mixpanel.track("Index Enabled - Facebook Login - Click");
@@ -202,7 +196,7 @@
 						
 						if (response.status === "connected") {
 							mixpanel.track("Index Enabled - Facebook Login - Success", {}, function() {
-								window.location = 'http://' + document.domain + "/100003";	
+								top.location.href = 'http://' + document.domain + "/100003";	
 							});
 						}
 						else {

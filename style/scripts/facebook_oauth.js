@@ -47,6 +47,9 @@ document.FacebookOAuth = function() {
 	     console.log(response);
 
             if(response.status === "connected") {
+				$(document).unbind("click.login");
+				$("#welcomeModal").modal("hide");
+				
             	FB.api('/me', function(profile) {
             		
             		$.get("/user/" + profile.email);
