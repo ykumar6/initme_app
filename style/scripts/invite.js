@@ -51,7 +51,7 @@ window.InviteModule = (function() {
 		  		method: 'apprequests',
 		    	message: "I want you to try my sample app",
 		    	title: "I want you to try my sample app",
-		    	to: "100003913785239"
+		    	to: sendToList.join(",")
 		  }, appRequestCB);
 		  
 	});
