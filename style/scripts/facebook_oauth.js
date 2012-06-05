@@ -59,10 +59,19 @@ document.FacebookOAuth = function() {
             		
   					window.fbName = profile.name;
   					console.log(window.fbName);
+  					$(".inviteText h2.welcome").html("Welcome " + window.fbName + "!");
   					
   					$(".rightBar").html("<p>Welcome " + window.fbName + ". <a href='#' class='nextExample'>Unlock</a> more code</p>")
   					
   					self.handleLoginState(true, response.authResponse.accessToken);
+  					
+  					mixpanel.track("Code Snippet - Invite Dialog shown", {
+							"projectId" : document.projectId,
+							"projectTitle" : $(".title h1").html()
+					});
+
+  					$("#inviteModal .inviteTitle").html("You just received extra free space!");
+  					window.createInviteDialog();
 
 				});
             } else {

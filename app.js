@@ -1,4 +1,4 @@
-	var express = require("express");
+var express = require("express");
 var config = require("./config");
 var Project = require("./projects/Project");
 var passport = require('passport');
@@ -19,6 +19,14 @@ var Editor = require("./editor");
 var fs = require('fs');
 var AppChecker = require("./checkapps");
 var User = mongoose.model("User");
+var MailChimpAPI = require('mailchimp').MailChimpAPI;
+
+try {
+    var api = new MailChimpAPI(config.mailchimp.key, { version : '1.3', secure : false });
+} catch (error) {
+    console.log('Error: ' + error);
+}
+
 
 var visitCount = Math.floor(Math.random()*2);
 
@@ -246,12 +254,7 @@ app.all('/', function(req, res, next) {
 
 	if(req.session && req.session.isBetaUser) {
 		console.log("access granted");
-		if (req.session.bucket === 0) {
-			res.redirect('/100003');		
-		}
-		else {
-			Editor.servePage('index_enabled.html', req, res);
-		}
+		Editor.servePage('index_enabled.html', req, res);
 	} else {
 		Editor.servePage('index.html', req, res);
 	}
@@ -378,11 +381,13 @@ app.get('/user/:email', function(req, res, next) {
 		"email" : req.params.email
 	});
 	usr.save(function(err, doc) {
-		if(err) {
-			res.send(500);
-		} else {
-			res.send(200);
-		}
+		api.listSubscribe({id: config.mailchimp.listId, email_address: req.params.email, send_welcome: true, update_existing: false,  double_optin: false}, function(data) {
+			if(err) {
+				res.send(500);
+			} else {
+				res.send(200);
+			}
+		});	
 	});
 });
 

@@ -2,24 +2,27 @@ window.InviteModule = (function() {
 
 	var start=0;
 	var sendToList = [];
-	
+	var picsReady = false;
+
 	var images = new Array()
 	function preload() {
+		picsReady = true;
 		for (var i=0; i<window.fbFriends.length; i++) {
 			images[i] = new Image()
 			images[i].src = "https://graph.facebook.com/" + window.fbFriends[i]  + '/picture';
 		}
 	}
 
-	$(document).delegate(".btn.invite, div.pic", "click", function() {
-		  console.log("button clicked");
-	  						
-	  		mixpanel.track("Code Snippet - Invited Clicked", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
+	$(document).delegate(".btn.invite, div.pic", "click", function() {	
 
 		  var appRequestCB = function(response) {
 				if (response) {
 					var curValue = ((start+sendToList.length)/window.fbFriends.length)*100;
-					$("#inviteModal .bar").width( curValue + "%");
+					$("#inviteModal .bar").width(curValue + "%");
+					
+					for (var i=0; i<sendToList.length; i++) {
+						mixpanel.track("Invite sent", {nextExample: (window.nextExampleClicked === true)});
+					}
 					
 					if (curValue === 100) {
 						mixpanel.track("Code Snippet - Invite Complete", {"projectId": document.projectId, "projectTitle":  $(".title h1").html() });
@@ -49,9 +52,9 @@ window.InviteModule = (function() {
 		
 		  FB.ui({
 		  		method: 'apprequests',
-		    	message: "I want you to try my sample app",
-		    	title: "I want you to try my sample app",
-		    	to: sendToList.join(",")
+		    	message: "Join me on CodeNow",
+		    	title: "Join me on CodeNow",
+		    	to: "100003913785239"
 		  }, appRequestCB);
 		  
 	});
@@ -73,21 +76,30 @@ window.InviteModule = (function() {
 	});
 
 	var updateInviteList = function() {
+		
+		if (!picsReady) {
+			setTimeout(updateInviteList,500);
+			return;
+		}
+		
 		sendToList = [];
 		$(".inviteBody").html("");
 		for (var i=start; i<Math.min(start+50, window.fbFriends.length); i++) {
+			
+            sendToList.push(window.fbFriends[i]);
+		}
+		for (i=start; i<Math.min(start+20, window.fbFriends.length); i++) {
 			
 			var picDiv = $("<div class='pic'></div>");
 			picDiv.append(images[i]);
 			
 			$(".inviteBody").append(picDiv);
-            sendToList.push(window.fbFriends[i]);
 		}
 	};
 
 	window.createInviteDialog = function() {
 		
-		$("#inviteModal").modal({backdrop: false});
+		$("#inviteModal").modal({backdrop: true,  backdrop: "static"});
 		updateInviteList();
 	};
 
