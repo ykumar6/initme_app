@@ -1,10 +1,15 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
 	<head profile="http://www.w3.org/2005/10/profile" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# cloudcosmos: http://ogp.me/ns/fb/cloudcosmos#">
-  		<meta property="fb:app_id" content="307201729318712" /> 
+  		<meta property="fb:app_id" content="{facebookId}" /> 
   		<meta property="og:type"   content="{namespace}:code_sample" /> 
   		<meta property="og:url"    content="{projectUrl}" /> 
   		<meta property="og:title"  content="{title}" /> 
+    	<meta property="og:title"  content="{title}" /> 
+        <meta property="og:image"  content="http://{projDomain}/images/codeNowLogoWall.png" /> 
+    	<meta property="og:site_name"    content="CodeNow" /> 
+        <meta property="og:description"  content="Run this code sample in your browser" /> 
+
   		
 		<title>CodeNow - {title}</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -37,6 +42,7 @@
 			mixpanel.init("{mixpanelToken}");
 		</script><!-- end Mixpanel -->
 		<script src="{static}/socket.io/socket.io.js"></script>
+		<script language="JavaScript" src="http://j.maxmind.com/app/geoip.js"></script>
 		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js"></script>
 		<script  type="text/javascript" src="{static}/scripts/layout.js"></script>

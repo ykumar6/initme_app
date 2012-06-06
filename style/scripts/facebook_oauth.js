@@ -41,8 +41,11 @@ document.FacebookOAuth = function() {
 	  					$("h2.welcome").html("Welcome " + profile.name);			
 	  					$(".rightBar").html("<p>Welcome " + window.fbName);
 	  					
-	  					window.InviteModule();
-	        			window.createInviteDialog();		
+	  					if (geoip_country_code() !== "US") {
+	  						mixpanel.track("Code Snippet - Invite Dialog Shown");
+	  						window.InviteModule();
+	        				window.createInviteDialog();
+	        			}			
             		}, 1000);
 				});
 			}
