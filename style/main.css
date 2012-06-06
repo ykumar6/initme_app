@@ -11,6 +11,7 @@ body {
 
 button.Run {
 	
+	font-size: 28px;
 	font-weight: 700;
 	
 }
@@ -1416,7 +1417,7 @@ box-shadow: inset rgba(0,0,0,0.2) 0px 2px 5px;
 
 button.nextExample {
 	margin-top: 10px;
-	font-size: 21px;	
+	font-size: 18px;	
 }
 
 .headerOptions {

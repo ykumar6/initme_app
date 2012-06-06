@@ -71,6 +71,9 @@
 		<script src="{static}/scripts/codemirror/mode/clike/clike.js"></script>
 		<script src="{static}/scripts/codemirror/mode/javascript/javascript.js"></script>
 		<script src="{static}/scripts/codemirror/mode/css/css.js"></script>
+		
+		<script src="{static}/scripts/codemirror/lib/util/searchcursor.js"></script>
+		
 		<script src="{static}/scripts/async/lib/async.js"></script>
 		<script src="{static}/scripts/inlineedit/jquery.inlineedit.js"></script>
 		<script type="text/javascript">
@@ -100,6 +103,7 @@
 			}
 
 			$(function() {
+								
 				
 				mixpanel.track_links("a.browse", "Browse Link Clicked");
 								
@@ -109,7 +113,6 @@
 					"testBucket": "{userBucket}",
 					"testSeries": 4
 				});
-				window.InviteModule();
 
 				// Create IE + others compatible event handler
 				var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
@@ -367,15 +370,7 @@
 					});
 
 					if(!projectSession.isActive && isAuthRequired) {
-						FB.login(function(response) {
-							if (response.status !== "connected") {	
-									mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
-									window.location = "/permissions"							
-								});
-							} else {
-								mixpanel.track("Code Snippet - Facebook Login - Success");
-							}
-						}, {scope: 'email'});
+						challengeSession.activate();
 					} else {
 						projectSession.setState("active");
 						document.logHandler.clear();
@@ -513,12 +508,7 @@
 							"projectId" : document.projectId,
 							"projectTitle" : $(".title h1").html()
 						});
-						
-						window.nextExampleClicked = true;
-
-						$(".block1").hide();
-						$("#inviteModal .inviteTitle").html("Get more space!");
-						window.createInviteDialog();
+						window.location = "/choose";
 					}
 				});
 
@@ -531,7 +521,7 @@
 			<div class="codearea-tabs">
 
 				<div class="floatBar">
-					<button class="btn btn-large Run">
+					<button class="btn btn-large btn-success Run">
 						Run Code
 					</button>
 				</div>
@@ -610,8 +600,8 @@
 						</div>
 					</div>
 					<div class="projRight">
-						<button class="btn btn-large btn-primary nextExample disabled">
-							Get more space
+						<button class="btn btn-large btn-info nextExample disabled">
+							Next Example
 						</button>
 					</div>
 				</div>

@@ -95,6 +95,45 @@ var projects = [
                 copyFrom: __dirname + "/facebook-birthdays-js",
                 keepAlive: true
         },
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100005,
+                namespace: "facebook",
+                namespaceUrl: "friends-relationship-status",
+                proposedTitle: "Single or Married",
+                subTitle: "Use Facebook's Javascript API to know if your friends are single",
+                tags: ["Facebook JavaScript SDK", "JQuery"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-relationship",
+                keepAlive: true
+        },
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100006,
+                namespace: "facebook",
+                namespaceUrl: "friends-locations",
+                proposedTitle: "Where do your friends live",
+                subTitle: "Use Facebook's Javascript API to see where your friends live",
+                tags: ["Facebook JavaScript SDK", "JQuery"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-locations",
+                keepAlive: true
+        },
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100007,
+                namespace: "facebook",
+                namespaceUrl: "friends-hometowns",
+                proposedTitle: "Where were your friends born",
+                subTitle: "Use Facebook's Javascript API to see your friends hometown",
+                tags: ["Facebook JavaScript SDK", "JQuery"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-hometown",
+                keepAlive: true
+        },
 ];
 
 async.forEach(projects,

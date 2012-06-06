@@ -205,6 +205,13 @@
 				mixpanel.track("Choose Page - Loaded");
 				mixpanel.track_links('.seeFriends', 'Choose Page - See Friends - Click');
 				mixpanel.track_links('.seeBirthdays', 'Choose Page - See Birthdays - Click');
+				mixpanel.track_links('.relationshipStatus', 'Choose Page - See Friends Relationship Status - Click');
+				mixpanel.track_links('.hometowns', 'Choose Page - Hometowns - Click');
+				mixpanel.track_links('.whereDoTheyLive', 'Choose Page - Where Do They Live - Click');
+				mixpanel.track_links('.fbLogo', 'Big FB Logo - Click');
+				mixpanel.track_links('.instagram', 'instagram Logo - Click');
+				mixpanel.track_links('.youtube', 'youtube Logo - Click');
+				mixpanel.track_links('.twitter', 'twitter FB Logo - Click');
 			});
 		</script>
 	</head>
@@ -229,23 +236,55 @@
 				<div class="span12">
 					<div class="row">
 					  	<div class="span4">
-					  		<img src="/images/fb_big.png" alt="">
+					  		<a href="/100005" class="fbLogo"><img src="/images/fb_big.png" alt=""></a>
 					  		<div style="font-size: 20px; margin-left: 120px; color: #909090; margin-top: 10px;">Facebook</div>
 					  	</div>
 					  	<div></div>
+					  		<div class="span1" style="width:10px; margin-top: -10px; margin-left: 0px;">
+					  		<ul class="" style="list-style-type:none; margin-bottom: 0; font-size: 14px;  ">
+						  		<li style="line-height: 80px; color:#FF9900;">New!</li>
+						  		<li style="line-height: 80px; color:#FF9900;">New!</li>
+								<li style="line-height: 80px; color:#FF9900;">New!</li>
+
+
+					  		</ul>
+					  	</div>
 					  	<div class="span4">
 					  		<ul class="" style="list-style-type:none; margin-bottom: 0;font-size: 40px;">
+					  			<li style="line-height: 80px;"><a href="/100005" class="relationshipStatus">Single or Married?</a></li>
+					  			<li style="line-height: 80px;"><a href="/100007" class="hometowns">Hometowns</a></li>
+					  			<li style="line-height: 80px;"><a href="/100006" class="whereDoTheyLive">Where they live?</a></li>
 					  			<li style="line-height: 80px;"><a href="/100003" class="seeFriends">See list of friends</a> </li>
 					  			<li style="line-height: 80px;"><a href="/100004" class="seeBirthdays">Birthdays this week</a></li>
 					  		</ul>
 					  	</div>
-					  	<div class="span4">
+					  	<div class="span1">
 					  			<ul class="" style="list-style-type:none; margin-top: 5px;font-size: 40px;">
-					  			<li style="line-height: 80px;"><a href="/100003"class="seeFriends arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
-					  			<li style="line-height: 80px;"><a href="/100004" class="seeBirthdays arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
+						  			<li style="line-height: 80px;"><a href="/100005" class="relationshipStatus arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
+						  			<li style="line-height: 80px;"><a href="/100007" class="hometowns arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
+						  			<li style="line-height: 80px;"><a href="/100006" class="whereDoTheyLive arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
+						  			<li style="line-height: 80px;"><a href="/100003"class="seeFriends arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
+						  			<li style="line-height: 80px;"><a href="/100004" class="seeBirthdays arrow"><img src="/images/continue_arrow.png" alt=""></a></li>
 					  		</ul>
 					  	</div>
 					</div>  	
+				</div>
+
+
+				<div class="row">
+				<br>
+				<br>
+				<div class="" style="margin-bottom: 70px; margin-left: 60px; color: green; font-size: 40px;" style="line-height: 80px;">
+					What should we support next?</div>
+					  	<div class="span3">
+					  		<a href="#" class="instagram"><img src="/images/browse/instagram.png" style="margin-top:15px; margin-left: 20px;" alt=""></a>
+					  	</div>
+					  	<div class="span3">
+					  		<a href="#" class="youtube"><img src="/images/browse/youtube.png" alt=""></a>
+					  	</div>
+					  	<div class="span3">
+					  		<a href="#" class="twitter"><img src="/images/browse/twitter.png" style="margin-top:25px;" alt=""></a>
+					  	</div>
 				</div>
 
 

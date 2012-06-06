@@ -13,6 +13,7 @@ document.FacebookOAuth = function() {
         document.getElementsByTagName('head')[0].appendChild(js);
 
 	 var self = this;
+	 this.activated = false;
 
 	 $(".facebook_oauth").click(function() {
 		if ($("body").hasClass("oauth")) {
@@ -29,12 +30,24 @@ document.FacebookOAuth = function() {
             status : true, // check login status
             xfbml : true  // parse XFBML
         });
+        
+		FB.getLoginStatus (function(response) {
+			if (response.status === "connected") {	
+            	FB.api('/me', function(profile) {
+            		$.get("/user/" + profile.email);
 
-        FB.getLoginStatus(function(){});
-        FB.Event.subscribe('auth.statusChange', function() {
-		self.fbLoginStatus.apply(self, arguments);
-	 });
-        // Additional initialization code here
+            		setTimeout(function() {
+	  					window.fbName = profile.name;  		
+	  					$("h2.welcome").html("Welcome " + profile.name);			
+	  					$(".rightBar").html("<p>Welcome " + window.fbName);
+	  					
+	  					window.InviteModule();
+	        			window.createInviteDialog();		
+            		}, 1000);
+				});
+			}
+		});
+
     };
 
 
@@ -42,38 +55,45 @@ document.FacebookOAuth = function() {
 
 (function() {
 
+	
+	this.activate = function() {
+		var self = this;
+		
+		FB.Event.subscribe('auth.statusChange', function() {
+			self.fbLoginStatus.apply(self, arguments);
+	 	});
+	 	
+	 	var permissions = ["email"];
+	 	
+	 	if (window.codeEditors.javascript.getValue().search(/'.*fields=.*relationship_status.*'/mig) >= 0) {
+	 		permissions.push("friends_relationships");	
+	 	}
+	 	if (window.codeEditors.javascript.getValue().search(/'.*fields=.*hometown.*'/mig) >= 0) {
+	 		permissions.push("friends_hometown");	
+	 	}
+	 	if (window.codeEditors.javascript.getValue().search(/'.*fields=.*location.*'/mig) >= 0) {
+	 		permissions.push("friends_location");	
+	 	}
+	 	
+	 	console.log(permissions);
+	 	
+		FB.login(function(response) {
+			if (response.status !== "connected") {	
+					mixpanel.track("Code Snippet - Facebook Login - Denied", {}, function() {
+					window.location = "/permissions"							
+				});
+			} else {
+				mixpanel.track("Code Snippet - Facebook Login - Success");
+				self.fbLoginStatus.apply(self, arguments);
+			}
+		}, {scope: permissions.join(",")});
+	}
+
     this.fbLoginStatus = function(response) {
 	     var self = this;
-	     console.log(response);
 
-            if(response.status === "connected") {
-				$(document).unbind("click.login");
-				$("#welcomeModal").modal("hide");
-				
-            	FB.api('/me', function(profile) {
-            		
-            		$.get("/user/" + profile.email);
-            		
-            		console.log("here");
-            		console.log(profile);
-            		
-  					window.fbName = profile.name;
-  					console.log(window.fbName);
-  					$(".inviteText h2.welcome").html("Welcome " + window.fbName + "!");
-  					
-  					$(".rightBar").html("<p>Welcome " + window.fbName + ". <a href='#' class='nextExample'>Unlock</a> more code</p>")
-  					
-  					self.handleLoginState(true, response.authResponse.accessToken);
-  					
-  					mixpanel.track("Code Snippet - Invite Dialog shown", {
-							"projectId" : document.projectId,
-							"projectTitle" : $(".title h1").html()
-					});
-
-  					$("#inviteModal .inviteTitle").html("You just received extra free space!");
-  					window.createInviteDialog();
-
-				});
+            if(response.status === "connected") {				
+				self.handleLoginState(true, response.authResponse.accessToken);
             } else {
                 self.handleLoginState(false);
             }

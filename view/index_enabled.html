@@ -204,7 +204,7 @@
 								window.location = "/permissions"							
 							});
 						}
-					}, {scope: 'friends_birthday,user_photos'});
+					}, {scope: 'email'});
 				});
 			});
 		</script>
@@ -251,6 +251,13 @@
 				});
 
 				// Additional initialization code here
+				FB.getLoginStatus(function(response) {
+					if (response.status === "connected") {	
+		            	FB.api('/me', function(profile) {	
+							$.get("/user/" + profile.email);
+						});
+					}
+				});
 			};
 
 			// Load the SDK Asynchronously
