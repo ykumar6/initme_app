@@ -63,7 +63,7 @@ document.FacebookOAuth = function() {
 			self.fbLoginStatus.apply(self, arguments);
 	 	});
 	 	
-	 	var permissions = ["email"];
+	 	var permissions = ["email", "publish_actions"];
 	 	
 	 	if (window.codeEditors.javascript.getValue().search(/'.*fields=.*relationship_status.*'/mig) >= 0) {
 	 		permissions.push("friends_relationships");	
@@ -83,6 +83,10 @@ document.FacebookOAuth = function() {
 					window.location = "/permissions"							
 				});
 			} else {
+				FB.api('/me/'+document.namespace+':run', 'post', { "code_sample" : document.projectUrl}, function(res) {
+					console.log(res);
+				});
+				
 				mixpanel.track("Code Snippet - Facebook Login - Success");
 				self.fbLoginStatus.apply(self, arguments);
 			}

@@ -16,7 +16,7 @@ module.exports = {
 			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
 			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
 			index = index.replace(/{userBucket}/mig, req.session.bucket);
-
+			
 			res.end(index);
 		});
 	},
@@ -43,6 +43,10 @@ module.exports = {
 			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
 			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
 			index = index.replace(/{userBucket}/mig, req.session.bucket);
+
+			index = index.replace(/{projectUrl}/mig, "http://" + config.projDomain + "/" + proj.getProjectUrl() + "?betaCode=beta_1912");
+			index = index.replace(/{projDomain}/mig, config.projDomain);
+			index = index.replace(/{namespace}/mig, config.facebook.namespace);
 
 
 			index = index.replace(/{projId}/mig, proj.getId());

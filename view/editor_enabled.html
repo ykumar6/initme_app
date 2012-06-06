@@ -1,6 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
-	<head profile="http://www.w3.org/2005/10/profile">
+	<head profile="http://www.w3.org/2005/10/profile" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# cloudcosmos: http://ogp.me/ns/fb/cloudcosmos#">
+  		<meta property="fb:app_id" content="307201729318712" /> 
+  		<meta property="og:type"   content="{namespace}:code_sample" /> 
+  		<meta property="og:url"    content="{projectUrl}" /> 
+  		<meta property="og:title"  content="{title}" /> 
+  		
 		<title>CodeNow - {title}</title>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<script src="//cdn.optimizely.com/js/{optimizelyId}.js"></script>
@@ -94,6 +99,8 @@
 			document.tags = "{tags}";
 			document.projOwner = document.isOwner = {isOwner};
 			document.FacebookId = "{facebookId}";
+			document.projectUrl = "{projectUrl}";
+			document.namespace = "{namespace}";
 
 			var parts = document.domain.split(".");
 			if(parts.length === 3) {
