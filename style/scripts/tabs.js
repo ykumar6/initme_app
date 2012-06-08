@@ -86,8 +86,16 @@ var CodeModule = function(codeBoxes) {
 
 	function codeChanged(index) {
 		codeEditors[index].changed = true;
+		
+		if (!isCodeChanged) {
+			mixpanel.track("Code Snippet Edit", {
+				"projectId" : document.projectId,
+				"projectTitle" : $(".title h1").html()
+			});
+		}
 		isCodeChanged = true;
-		$(".reloadCode .btn").removeClass("disabled");
+
+
 		if(!$(".saveStatus").hasClass("active")) {
 			$(".saveStatus").text("Unsaved Changes... Click run");
 			$(".saveStatus").addClass("active");

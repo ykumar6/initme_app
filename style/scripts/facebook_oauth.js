@@ -30,17 +30,17 @@ document.FacebookOAuth = function() {
             status : true, // check login status
             xfbml : true  // parse XFBML
         });
-        
+  
+
 		FB.getLoginStatus (function(response) {
 			if (response.status === "connected") {	
             	FB.api('/me', function(profile) {
             		$.get("/user/" + profile.email);
 
+
             		setTimeout(function() {
 	  					window.fbName = profile.name;  		
-	  					$("h2.welcome").html("Welcome " + profile.name);			
-	  					$(".rightBar").html("<p>Welcome " + window.fbName);
-	  					
+	  					$("h2.welcome").html("Welcome " + profile.name);					
 	  					if (geoip_country_code() !== "US") {
 	  						mixpanel.track("Code Snippet - Invite Dialog Shown");
 	  						window.InviteModule();

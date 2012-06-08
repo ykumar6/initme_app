@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
-	<head profile="http://www.w3.org/2005/10/profile" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# cloudcosmos: http://ogp.me/ns/fb/cloudcosmos#">
+	<head profile="http://www.w3.org/2005/10/profile" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# codenow: http://ogp.me/ns/fb/codenow#">
   		<meta property="fb:app_id" content="{facebookId}" /> 
   		<meta property="og:type"   content="{namespace}:code_sample" /> 
   		<meta property="og:url"    content="{projectUrl}" /> 
@@ -271,6 +271,7 @@
 					content : "Click Run to begin",
 					placement : "bottom"
 				});
+				$('button.Run').popover('show')
 
 				var positionLoading = function() {
 					setTimeout(function() {
@@ -589,9 +590,14 @@
 				<div class="header">
 					<div class="logo"></div>
 					<div class="headerOptions">
-						<a href="/choose" class="browse">Browse Code</a>
+						<div class="fb-like" data-href="http://codenow.com" data-send="false" data-width="450" data-show-faces="false"></div>
 					</div>
-					<div class="toolbar rightBar"></div>
+					<div class="toolbar rightBar">
+						<div class="twitterBtn">
+							<a href="https://twitter.com/codenowapp" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @codenowapp</a>	
+							<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="projAreaWrapper">

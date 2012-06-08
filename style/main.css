@@ -121,6 +121,14 @@ body p {
     color: #58595B;
 }
 
+.twitterBtn {
+	padding-top: 8px;
+}
+
+.headerOptions {
+	z-index: 1000;
+}
+
 .headerOptions .subText {
 	color: #6D6E71;
 }

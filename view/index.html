@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
-    <head profile="http://www.w3.org/2005/10/profile">
+    <head profile="http://www.w3.org/2005/10/profile" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# codenow: http://ogp.me/ns/fb/codenow#">
+        <meta property="og:image"  content="http://codenow.com/images/codeNowLogoWall.png" /> 
     	<title>Live Projects. Start coding now</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
@@ -87,15 +88,15 @@
 	     }
 	     
 	     a:hover {
-              text-decoration: underline;
-		color: #939598;	
+            text-decoration: underline;
+			color: #939598;	
 	     }
 
 
-            .header {
-                width: 900px;
-                margin: 0 auto;
-            }
+        .header {
+            width: 1100px;
+            margin: 0 auto;
+        }
 	
 	     .header > * {
 		  float: right;
@@ -329,8 +330,11 @@
     </head>
     <body>
 	 <div class="header">
-<a href="https://twitter.com/codenowapp" class="twitter-follow-button" data-show-count="false">Follow @codenowapp</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+<div class="fb-like" data-href="http://codenow.com" data-send="true" data-width="450" data-show-faces="false"></div>
+		<div class="twitterBtn">
+			<a href="https://twitter.com/codenowapp" class="twitter-follow-button" data-show-count="true" data-lang="en">Follow @codenowapp</a>	
+			<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+		</div>
 	 	</div>
         <div class="main">
             <div class="left">
@@ -390,6 +394,13 @@
   			
   		</div>      
         
-        
+        <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=386633451379680";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
     </body>
 </html>

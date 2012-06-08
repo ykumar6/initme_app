@@ -58,7 +58,7 @@ window.InviteModule = (function() {
 			method : 'apprequests',
 			message : "Join me on CodeNow",
 			title : "Join me on CodeNow",
-			to : "100003913785239"
+			to : sendToList.join(",")
 		}, appRequestCB);
 
 	});
