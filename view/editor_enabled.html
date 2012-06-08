@@ -304,8 +304,11 @@
 						$("#myModal").modal("hide");
 						document.logHandler.show();
 						$(".urlBar").val(document.appUrl + "/?token=" + token);
+						var iframe = $("#appFrame")[0];
+   			 			iframe.contentWindow.focus();
+   			 		
 						projectSession.setState("active");
-						document.CodeCommands.focus();
+						//document.CodeCommands.focus();
 					});
 					$("body").bind("oauthLogout", function(e) {
 						$("#appFrame").attr("src", "http://" + document.domain + "/loading");
@@ -343,6 +346,8 @@
 
 				$("body").bind("vmConnected", function(e) {
 					projectSession.setState("vmActive");
+					var iframe = $("#appFrame")[0];
+   			 		iframe.contentWindow.focus();
 				});
 				$("body").bind("vmDisconnected", function(e) {
 					$("#appFrame").attr("src", "http://" + document.domain + "/loading");

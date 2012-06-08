@@ -714,6 +714,8 @@ border-radius: 2px;
 	margin-left: 3px;
 	display: inline-block;
 	border-radius: 3px;
+	background-color: #E6EDF8;
+
 }
 
 .tag.facebook_javascript_sdk {

@@ -79,6 +79,11 @@ document.FacebookOAuth = function() {
 	 	if (window.codeEditors.javascript.getValue().search(/'.*fields=.*location.*'/mig) >= 0) {
 	 		permissions.push("friends_location");	
 	 	}
+        if (window.codeEditors.javascript.getValue().search(/'.*albums.*'/mig) >= 0) {
+                permissions.push("user_photos");
+        }
+
+
 	 	
 	 	console.log(permissions);
 	 	
@@ -88,7 +93,16 @@ document.FacebookOAuth = function() {
 					window.location = "/permissions"							
 				});
 			} else {
-				FB.api('/me/'+document.namespace+':run', 'post', { "code_sample" : document.projectUrl}, function(res) {
+				
+				var action = "run";
+				if (document.projectId == "114802") {
+					action = "decode";
+				}
+				if (document.projectId == "198106") {
+					action = "hack";
+				}
+				
+				FB.api('/me/'+document.namespace+':' + action, 'post', { "code_sample" : document.projectUrl}, function(res) {
 					console.log(res);
 				});
 				
