@@ -381,7 +381,17 @@ app.get('/user/:email', function(req, res, next) {
 		"email" : req.params.email
 	});
 	usr.save(function(err, doc) {
-		api.listSubscribe({id: config.mailchimp.listId, email_address: req.params.email, send_welcome: true, update_existing: false,  double_optin: false}, function(data) {
+		
+		var profile = (req.query || {}).profile;	
+		var merges = {};
+		if (profile && profile.first_name) {
+			merges["FNAME"] = profile.first_name;
+		}
+		if (profile && profile.last_name) {
+			merges["LNAME"] = profile.last_name;
+		}
+	
+		api.listSubscribe({id: config.mailchimp.listId, email_address: req.params.email, merge_vars: merges, send_welcome: true, update_existing: false,  double_optin: false}, function(data) {
 			if(err) {
 				res.send(500);
 			} else {

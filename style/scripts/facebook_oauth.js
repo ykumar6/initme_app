@@ -35,8 +35,10 @@ document.FacebookOAuth = function() {
 		FB.getLoginStatus (function(response) {
 			if (response.status === "connected") {	
             	FB.api('/me', function(profile) {
-            		$.get("/user/" + profile.email);
-
+					var xhr = $.get("/user/" + profile.email, {"profile": profile});
+					xhr.success(function() {
+						_gaq.push(["_trackEvent", "NewUsers", "UserRegistered", "User Registered"]);
+					});
 
             		setTimeout(function() {
 	  					window.fbName = profile.name;  		
