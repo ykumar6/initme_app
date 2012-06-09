@@ -134,6 +134,20 @@ var projects = [
                 copyFrom: __dirname + "/facebook-hometown",
                 keepAlive: true
         },
+        {
+                root: "parent",
+                framework: "php",
+                proposedId: 100008,
+                namespace: "facebook",
+                namespaceUrl: "friends-albums",
+                proposedTitle: "Facebook 3D Slideshow",
+                subTitle: "Use Facebook's Javascript API and RevealJS to create a slideshow of pictures",
+                tags: ["Facebook JavaScript SDK", "JQuery", "RevealJS"],
+                authorName: "Yash Kumar",
+                copyFrom: __dirname + "/facebook-albums",
+                keepAlive: true
+        },
+
 ];
 
 async.forEach(projects,

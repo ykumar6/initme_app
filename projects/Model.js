@@ -18,7 +18,7 @@ function randomString(string_length, chars) {
 
 Project = new Schema({
   'projectId': {type: String, index: { unique: true }}, 
-  'projectTitle': {type: String, validate: /^([a-z][\w]*[\s]?)+$/i}, 
+  'projectTitle': {type: String}, 
   'subTitle': {type: String}, 
   'root': String, //where was this project cloned from?
   'namespace': String, //either null or userId

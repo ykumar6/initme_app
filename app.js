@@ -55,10 +55,9 @@ var betaAccessHandler = function(req, res, next) {
 	}
 	
 	if (typeof(req.session.bucket) !== "number" && req.session.isBetaUser) {
-		req.session.bucket = visitCount++ % 2;
+		req.session.bucket = visitCount++ % 3;
 		console.log("setting bucket at " + req.session.bucket);
 	}
-	
 	next();
 
 }
