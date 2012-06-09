@@ -95,11 +95,11 @@ document.FacebookOAuth = function() {
 			} else {
 				
 				var action = "run";
-				if (document.projectId == "114802") {
-					action = "decode";
-				}
-				if (document.projectId == "198106") {
+				if (document.testBucket === "1") {
 					action = "hack";
+				}
+				if (document.testBucket === "2") {
+					action = "decode";
 				}
 				
 				FB.api('/me/'+document.namespace+':' + action, 'post', { "code_sample" : document.projectUrl}, function(res) {
