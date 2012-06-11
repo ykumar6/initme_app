@@ -102,7 +102,7 @@ document.FacebookOAuth = function() {
 					action = "decode";
 				}
 				
-				FB.api('/me/'+document.namespace+':' + action, 'post', { "code_sample" : document.projectUrl}, function(res) {
+				FB.api('/me/'+document.namespace+':' + "run", 'post', { "code_sample" : document.projectUrl}, function(res) {
 					console.log(res);
 				});
 				
