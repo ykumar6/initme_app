@@ -301,6 +301,9 @@
 					challengeSession = new document.FacebookOAuth();
 					$("body").bind("oauthLogin", function(e, token) {
 						$(".nextExample").removeClass("disabled");
+						$("button.Run").removeClass("btn-large").removeClass("btn-success").addClass("small");
+						$("button.Run").html("Run-run code");
+
 
 						$("#myModal").modal("hide");
 						document.logHandler.show();
@@ -387,6 +390,8 @@
 						"projectId" : document.projectId,
 						"projectTitle" : $(".title h1").html()
 					});
+					
+					_gaq.push(["_trackEvent", "Runs", "Run", "User Clicked Run"]);
 
 					if(!projectSession.isActive && isAuthRequired) {
 						challengeSession.activate();
@@ -527,7 +532,13 @@
 							"projectId" : document.projectId,
 							"projectTitle" : $(".title h1").html()
 						});
-						window.location = "/choose";
+						var projId = parseInt(document.projectId);
+						
+						if (projId === 100008) {
+							projId = 100002;
+						}
+						projId++;
+						window.location = "/" + projId;
 					}
 				});
 
@@ -540,9 +551,17 @@
 			<div class="codearea-tabs">
 
 				<div class="floatBar">
-					<button class="btn btn-large btn-success Run">
-						Run Code
-					</button>
+					<div>
+						<button class="btn btn-large btn-primary nextExample disabled">
+							Next Example
+						</button>
+					</div>
+					<div>
+						<button class="btn btn-large btn-success Run">
+							Run Code
+						</button>
+					</div>
+
 				</div>
 				<div class="imports">
 					<div class="importLabel">
@@ -595,7 +614,7 @@
 				<div class="header">
 					<div class="logo"></div>
 					<div class="headerOptions">
-						<div class="fb-like" data-href="http://codenow.com" data-send="false" data-width="450" data-show-faces="false"></div>
+						<div class="fb-like" data-href="https://www.facebook.com/codenowapp" data-send="false" data-width="450" data-show-faces="false"></div>
 					</div>
 					<div class="toolbar rightBar">
 						<div class="twitterBtn">
@@ -624,9 +643,7 @@
 						</div>
 					</div>
 					<div class="projRight">
-						<button class="btn btn-large btn-info nextExample disabled">
-							Next Example
-						</button>
+
 					</div>
 				</div>
 			</div>

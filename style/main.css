@@ -9,11 +9,15 @@ body {
     height: 100%; /* this is the key! */
 }
 
-button.Run {
-	
+button.Run {	
 	font-size: 28px;
 	font-weight: 700;
-	
+}
+
+button.Run.small {
+	margin-top: 10px;
+	font-weight: 400;
+	font-size: 14px;
 }
 
 .imports {
@@ -611,7 +615,6 @@ body.ie8.inactive .loading {
 	top: 10px;
 	z-index: 100;	
 text-align: center;
-height: 20px;
 border-radius: 2px;
 }
 
@@ -1426,8 +1429,8 @@ box-shadow: inset rgba(0,0,0,0.2) 0px 2px 5px;
 }
 
 button.nextExample {
-	margin-top: 10px;
-	font-size: 18px;	
+	margin-top: 5px;
+	font-size: 24px;	
 }
 
 .headerOptions {

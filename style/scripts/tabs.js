@@ -92,6 +92,8 @@ var CodeModule = function(codeBoxes) {
 				"projectId" : document.projectId,
 				"projectTitle" : $(".title h1").html()
 			});
+			
+			_gaq.push(["_trackEvent", "CodeEdits", "CodeEdit", "User Edited Code"]);
 		}
 		isCodeChanged = true;
 
