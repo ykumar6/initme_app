@@ -110,7 +110,7 @@ document.FacebookOAuth = function() {
 				for (var i=0; i<badgeTypes.length; i++) {
 					if (document.badges.indexOf(badgeTypes[i]) < 0) {
 						console.log("posting " + badgeTypes[i]  +" badge");
-						FB.api('/me/'+document.namespace+':' + "achieve", 'post', { "badge" : "http://" + document.domain + "/badge/"+ badgeTypes[i] +"?betaCode=beta_1912"}, function(res) {
+						FB.api('/me/'+document.namespace+':' + "achieve", 'post', { "badge" : "http://" + document.domain + "/badge/"+ badgeTypes[i] +"?betaCode=beta_1912", "code_sample" : document.projectUrl}, function(res) {
 							console.log(res);
 							var xhr = $.post("/badge/" +  badgeTypes[i]);
 						});	
