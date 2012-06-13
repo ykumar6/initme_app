@@ -6,7 +6,46 @@ var frameworkFiles = {
 	"php" : ["main.php", "css.php", "javascript.php"]
 }
 
+var badgeMeta = {
+	"newbie": {
+		"title": "Newbie Programmer",
+		"description": "Running and editing code is easy!",
+		"image": "images/badges/newUser.png"
+	},
+	"facebook": {
+		"title": "Facebook Developer",
+		"description": "Running and editing facebook code is easy!",
+		"image": "images/badges/fb.png"
+	},
+	"jquery": {
+		"title": "JQuery Developer",
+		"description": "Running and editing jquery code is easy!",
+		"image": "images/badges/jquery.png"
+	}
+}
+
 module.exports = {
+	
+	serveBadge: function(badgeName, req, res) {
+		fs.readFile(__dirname + "/view/badge.html", "utf8", function(err, index) {
+			index = index.replace(/{googleAnalyticsId}/mig, config.googleAnalyticsId);
+			index = index.replace(/{facebookId}/mig, config.facebookId);
+			index = index.replace(/{mixpanelToken}/mig, config.mixpanelToken);
+			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
+			index = index.replace(/{optimizelyId}/mig, config.optimizelyId);
+			index = index.replace(/{userBucket}/mig, req.session.bucket);
+			
+			index = index.replace(/{projDomain}/mig, config.projDomain);
+			index = index.replace(/{namespace}/mig, config.facebook.namespace);
+			
+			index = index.replace(/{badgeTitle}/mig, (badgeMeta[badgeName] || {}).title);
+			index = index.replace(/{badgeDescription}/mig, (badgeMeta[badgeName] || {} ).description);
+			index = index.replace(/{badgeUrl}/mig, "http://" + config.projDomain + "/badge/" + badgeName + "?betaCode=beta_1912");
+			index = index.replace(/{badgeImage}/mig, "http://" + config.projDomain + "/" + (badgeMeta[badgeName] || {}).image + "?betaCode=beta_1912");
+			
+			res.end(index);
+		});
+	},
 
 	servePage : function(pageName, req, res) {
 		fs.readFile(__dirname + "/view/" + pageName, "utf8", function(err, index) {
@@ -56,6 +95,17 @@ module.exports = {
 			index = index.replace(/{title}/mig, proj.getTitle());
 			index = index.replace(/{subTitle}/mig, proj.model.subTitle || "");
 			index = index.replace(/{authorName}/mig, proj.getAuthorName());
+				
+			var badges = [];
+			console.log(req.session);
+			try {
+				badges = JSON.parse(req.session.badges);
+			}
+			catch (e) {
+				req.session.badges = JSON.stringify([]);
+			}
+			index = index.replace(/{badges}/mig, (badges || []).join(","));
+			
 			index = index.replace(/{tags}/mig, (proj.model.tags || []).join(","));
 			index = index.replace(/{login}/mig, req.session.user ? "LOGOUT" : "LOGIN");
 			index = index.replace(/{facebookId}/mig, config.facebookId);

@@ -102,6 +102,8 @@
 			document.projectId = "{projId}";
 			document.appUrl = "{appUrl}";
 			document.tags = "{tags}";
+			document.badges = "{badges}";
+
 			document.projOwner = document.isOwner = {isOwner};
 			document.FacebookId = "{facebookId}";
 			document.projectUrl = "{projectUrl}";
@@ -143,6 +145,8 @@
 
 				$(".urlBar").val(document.appUrl);
 				document.tags = (document.tags || "").split(",");
+				document.badges = (document.badges || "").split(",");
+
 				var tagStr = "";
 				for(var i = 0; i < document.tags.length; i++) {
 					tagStr += '<div class="tag ' + document.tags[i].replace(/ /g, "_").replace(".", "").toLowerCase() + '"><h3>' + document.tags[i] + '</h3></div>';

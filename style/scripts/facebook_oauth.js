@@ -42,12 +42,14 @@ document.FacebookOAuth = function() {
 
             		setTimeout(function() {
 	  					window.fbName = profile.name;  		
-	  					$("h2.welcome").html("Welcome " + profile.name);					
+	  					$("h2.welcome").html("Welcome " + profile.name);	
+	  					/*				
 	  					if (geoip_country_code() !== "US") {
 	  						mixpanel.track("Code Snippet - Invite Dialog Shown");
 	  						window.InviteModule();
 	        				window.createInviteDialog();
-	        			}			
+	        			}	
+	        			*/		
             		}, 1000);
 				});
 			}
@@ -83,8 +85,6 @@ document.FacebookOAuth = function() {
                 permissions.push("user_photos");
         }
 
-
-	 	
 	 	console.log(permissions);
 	 	
 		FB.login(function(response) {
@@ -93,7 +93,7 @@ document.FacebookOAuth = function() {
 					window.location = "/permissions"							
 				});
 			} else {
-				
+					
 				var action = "run";
 				if (document.testBucket === "1") {
 					action = "hack";
@@ -102,10 +102,29 @@ document.FacebookOAuth = function() {
 					action = "decode";
 				}
 				
-				FB.api('/me/'+document.namespace+':' + "run", 'post', { "code_sample" : document.projectUrl}, function(res) {
-					console.log(res);
-				});
 				
+				
+				var badgeTypes = ["newbie", "facebook", "jquery"];
+				var isPublished = false;
+				
+				for (var i=0; i<badgeTypes.length; i++) {
+					if (document.badges.indexOf(badgeTypes[i]) < 0) {
+						console.log("posting " + badgeTypes[i]  +" badge");
+						FB.api('/me/'+document.namespace+':' + "achieve", 'post', { "badge" : "http://" + document.domain + "/badge/"+ badgeTypes[i] +"?betaCode=beta_1912"}, function(res) {
+							console.log(res);
+							var xhr = $.post("/badge/" +  badgeTypes[i]);
+						});	
+						isPublished = true;
+						break;
+					}
+				}				
+	
+				if (!isPublished) {
+					FB.api('/me/'+document.namespace+':' + "run", 'post', { "code_sample" : document.projectUrl}, function(res) {
+						console.log(res);
+					});
+				}
+	
 				mixpanel.track("Code Snippet - Facebook Login - Success");
 				self.fbLoginStatus.apply(self, arguments);
 			}

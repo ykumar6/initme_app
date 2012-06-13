@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:a="http://ajax.org/2005/aml" >
+	<head profile="http://www.w3.org/2005/10/profile" prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# codenow: http://ogp.me/ns/fb/codenow#">
+  		<meta property="fb:app_id" content="{facebookId}" /> 
+  		<meta property="og:type"   content="{namespace}:badge" /> 
+  		<meta property="og:url"    content="{badgeUrl}" /> 
+  		<meta property="og:title"  content="{badgeTitle}" /> 
+        <meta property="og:image"  content="{badgeImage}" /> 
+    	<meta property="og:site_name"    content="CodeNow" /> 
+        <meta property="og:description"  content="{badgeDescription}" /> 
+        
+		<script src="//cdn.optimizely.com/js/{optimizelyId}.js"></script>
+		<title>{badgeTitle}</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+		<link href='http://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+
+		<script type="text/javascript">
+		    (function(d,c){var a,b,g,e;a=d.createElement("script");a.type="text/javascript";
+		    a.async=!0;a.src=("https:"===d.location.protocol?"https:":"http:")+
+		    '//api.mixpanel.com/site_media/js/api/mixpanel.2.js';b=d.getElementsByTagName("script")[0];
+		    b.parentNode.insertBefore(a,b);c._i=[];c.init=function(a,d,f){var b=c;
+		    "undefined"!==typeof f?b=c[f]=[]:f="mixpanel";g=['disable','track','track_pageview',
+		    'track_links','track_forms','register','register_once','unregister','identify',
+		    'name_tag','set_config'];
+		    for(e=0;e<g.length;e++)(function(a){b[a]=function(){b.push([a].concat(
+		    Array.prototype.slice.call(arguments,0)))}})(g[e]);c._i.push([a,d,f])};window.mixpanel=c}
+		    )(document,[]);
+		    mixpanel.init("{mixpanelToken}");
+		</script>
+		<script type="text/javascript">
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', '{googleAnalyticsId}']);
+			_gaq.push(['_trackPageview']);
+
+			(function() {
+				var ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			})();
+		</script>
+		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<style>
+			body {
+				background-color: #F8F8F8;
+				margin: 0px;
+				font-family: "LatoWebSymbol", Lato, Verdana, sans-serif;
+				font-size: 16px;
+			}			
+		</style>
+		<script type="text/javascript">
+		</script>
+	</head>
+<body>
+	<img src="{badgeImage}" />
+</body>
+</html>

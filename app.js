@@ -269,6 +269,37 @@ app.get('/choose', function(req, res, next) {
 	}
 });
 
+app.get('/badge/:badgeName', function(req, res, next) {
+	//render user portal or ide
+
+	if(req.session && req.session.isBetaUser) {
+		Editor.serveBadge(req.params.badgeName, req, res);
+	} else {
+		Editor.servePage('index.html', req, res);
+	}
+});
+
+app.post('/badge/:badgeName', function(req, res, next) {
+	//render user portal or ide
+
+	if(req.session && req.session.isBetaUser) {
+		console.log("adding a new badge!!!!");
+		
+		var badges = [];
+		if (req.session.badges) {
+			badges = JSON.parse(req.session.badges);
+		}
+		badges.push(req.params.badgeName);
+		
+		req.session.badges = JSON.stringify(badges);
+			
+		res.send(200);
+	} else {
+		res.send(500);
+	}
+});
+
+
 app.get('/permissions', function(req, res, next) {
 	//render user portal or ide
 
