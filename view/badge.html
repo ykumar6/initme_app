@@ -28,6 +28,7 @@
 		    )(document,[]);
 		    mixpanel.init("{mixpanelToken}");
 		</script>
+		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript">
 			var _gaq = _gaq || [];
 			_gaq.push(['_setAccount', '{googleAnalyticsId}']);
@@ -41,8 +42,11 @@
 				var s = document.getElementsByTagName('script')[0];
 				s.parentNode.insertBefore(ga, s);
 			})();
+			
+			$(function() {
+				window.location = "http://" + document.domain + "/?betaCode=beta_1912";
+			});
 		</script>
-		<script  type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<style>
 			body {
 				background-color: #F8F8F8;
