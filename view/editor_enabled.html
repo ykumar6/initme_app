@@ -535,14 +535,15 @@
 						mixpanel.track("Code Snippet - Next Example Clicked", {
 							"projectId" : document.projectId,
 							"projectTitle" : $(".title h1").html()
+						}, function() {
+							var projId = parseInt(document.projectId);
+							
+							if (projId === 100008) {
+								projId = 100002;
+							}
+							projId++;
+							window.location = "/" + projId;
 						});
-						var projId = parseInt(document.projectId);
-						
-						if (projId === 100008) {
-							projId = 100002;
-						}
-						projId++;
-						window.location = "/" + projId;
 					}
 				});
 
