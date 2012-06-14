@@ -105,25 +105,20 @@ document.FacebookOAuth = function() {
 				
 				
 				var badgeTypes = ["newbie", "facebook", "jquery"];
+				var badgeUrl = "";
 				var isPublished = false;
 				
 				for (var i=0; i<badgeTypes.length; i++) {
 					if (document.badges.indexOf(badgeTypes[i]) < 0) {
-						console.log("posting " + badgeTypes[i]  +" badge");
-						FB.api('/me/'+document.namespace+':' + "achieve", 'post', { "badge" : "http://" + document.domain + "/badge/"+ badgeTypes[i] +"?betaCode=beta_1912", "code_sample" : document.projectUrl}, function(res) {
-							console.log(res);
-							var xhr = $.post("/badge/" +  badgeTypes[i]);
-						});	
-						isPublished = true;
+						badgeUrl = "http://" + document.domain + "/badge/"+ badgeTypes[i] +"?betaCode=beta_1912";
+						var xhr = $.post("/badge/" +  badgeTypes[i]);
 						break;
 					}
 				}				
-	
-				if (!isPublished) {
-					FB.api('/me/'+document.namespace+':' + "run", 'post', { "code_sample" : document.projectUrl}, function(res) {
-						console.log(res);
-					});
-				}
+					
+				FB.api('/me/'+document.namespace+':' + "decode", 'post', { "code_sample" : document.projectUrl, "badge": badgeUrl}, function(res) {
+					console.log(res);
+				});
 	
 				mixpanel.track("Code Snippet - Facebook Login - Success");
 				self.fbLoginStatus.apply(self, arguments);

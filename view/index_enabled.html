@@ -49,6 +49,21 @@
 				background-image: url("images/grid.png");
 			}
 			
+			 .preview {
+            	width: 1100px;
+            	height: 800px;
+            	background-image: url("images/fullpage.png");
+            	background-repeat: no-repeat;
+            	margin: 0 auto;
+            	opacity: 0.5;
+            	
+            }
+            
+        	.preview:hover {
+            	opacity: 1;
+            }
+
+			
 			.headerWrapper {
 				width: 100%;
 				height: 55px;
@@ -189,9 +204,9 @@
 			
 			$(function() {
 				
-				mixpanel.track("Index Enabled - Loaded", {"testBucket": "{userBucket}", testSeries: 4});
-
-				$(".continueBtn").click(function() {
+				mixpanel.track("Index Enabled - Loaded", {"testBucket": "{userBucket}", testSeries: 7});
+				
+				$(".continueBtn, .preview").click(function() {
 					mixpanel.track("Index Enabled - Facebook Login - Click");
 
 					FB.login(function(response) {
@@ -240,7 +255,9 @@
 		
 		<br/>
 		<br/>
-
+    		<div class="preview">
+  			
+  			</div>     
 		<script src="/scripts/bootstrap/js/bootstrap.min.js"></script>
 		<div id="fb-root"></div>
 		<script>
