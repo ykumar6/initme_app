@@ -609,15 +609,20 @@ body.ie8.inactive .loading {
 }
 
 .floatBar {
-	padding-top: 2px;
+
 	position: absolute;
 	right: 10px;
 	top: 10px;
-	z-index: 100;	
+	z-index: 100;
+	-ms-filter: "alpha(opacity=50)";
+	opacity: 0.5;	
 text-align: center;
+width: 70px;
+height: 20px;
 border-radius: 2px;
+border: 1px solid #D3E5EC;
+background-color: #D3E5EC;
 }
-
 
 .mainText {
     margin-left: 15px;
@@ -721,32 +726,6 @@ border-radius: 2px;
 
 }
 
-.tag.facebook_javascript_sdk {
-	background-color: #E6EDF8;
-}
-
-.tag.dropbox {
-	background-color: #D0E5F0;
-}
-
-.tag.twilio {
-	background-color: #DAD3E3;
-}
-
-.tag.jquery {
-	background-color: #E6EDF8;
-}
-
-
-
-.tag.twiml {
-	background-color: #E6E7E8;
-}
-
-
-.tag.php {
-	background-color: #FFE6CB;
-}
 
 .projLeft .subTitle {
 	position: relative;

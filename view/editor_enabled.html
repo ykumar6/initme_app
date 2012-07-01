@@ -270,12 +270,12 @@
 					west__size : 40
 				});
 
-				$('button.Run').popover({
+				$('.theBtn.Run').popover({
 					title : "Run and edit code",
 					content : "Click Run to begin",
 					placement : "bottom"
 				});
-				$('button.Run').popover('show')
+				$('.theBtn.Run').popover('show')
 
 				var positionLoading = function() {
 					setTimeout(function() {
@@ -304,9 +304,6 @@
 
 					challengeSession = new document.FacebookOAuth();
 					$("body").bind("oauthLogin", function(e, token) {
-						$(".nextExample").removeClass("disabled");
-						$("button.Run").removeClass("btn-large").removeClass("btn-success").addClass("small");
-						$("button.Run").html("Run-run code");
 
 
 						$("#myModal").modal("hide");
@@ -389,7 +386,7 @@
 					}
 				});
 
-				$("button.Run").click(function() {
+				$(".theBtn.Run").click(function() {
 					mixpanel.track("Code Snippet - Run Clicked", {
 						"projectId" : document.projectId,
 						"projectTitle" : $(".title h1").html()
@@ -397,7 +394,7 @@
 					
 					_gaq.push(["_trackEvent", "Runs", "Run", "User Clicked Run"]);
 
-					if(!projectSession.isActive && isAuthRequired) {
+					if(!projectSession.isActive && isAuthRequired && $.inArray("twilio", document.tags) < 0) {
 						challengeSession.activate();
 					} else {
 						projectSession.setState("active");
@@ -556,17 +553,7 @@
 			<div class="codearea-tabs">
 
 				<div class="floatBar">
-					<div>
-						<button class="btn btn-large btn-primary nextExample disabled">
-							Next Example
-						</button>
-					</div>
-					<div>
-						<button class="btn btn-large btn-success Run">
-							Run Code
-						</button>
-					</div>
-
+					Live Code
 				</div>
 				<div class="imports">
 					<div class="importLabel">
@@ -648,7 +635,21 @@
 						</div>
 					</div>
 					<div class="projRight">
+					<div class="commandBar">
+						<div class="theBtn Run">
+							<div class="img"></div>
+							<div class="caption">Run</div>
+						</div>
+						<div class="theBtn fork">
+							<div class="img"></div>
+							<div class="caption">Save</div>
+						</div>
+						<div class="theBtn share"  data-target="#shareDialog">
+							<div class="img"></div>
+							<div class="caption">Share</div>
+							<div class="dropdown"></div>
 
+						</div>					</div>
 					</div>
 				</div>
 			</div>
