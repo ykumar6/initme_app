@@ -14,6 +14,33 @@
         <script  type="text/javascript" src="{static}/scripts/TwilioChallenge.js"></script>
         <script  type="text/javascript" src="{static}/scripts/DropboxChallenge.js"></script>
         <script src="{static}/scripts/URI/src/URI.js"></script>
+		<!-- start Mixpanel -->
+		<script type="text/javascript">
+			(function(d, c) {
+				var a, b, g, e;
+				a = d.createElement("script");
+				a.type = "text/javascript";
+				a.async = !0;
+				a.src = ("https:" === d.location.protocol ? "https:" : "http:") + '//api.mixpanel.com/site_media/js/api/mixpanel.2.js';
+				b = d.getElementsByTagName("script")[0];
+				b.parentNode.insertBefore(a, b);
+				c._i = [];
+				c.init = function(a, d, f) {
+					var b = c;
+					"undefined" !== typeof f ? b = c[f] = [] : f = "mixpanel";
+					g = "disable track track_pageview track_links track_forms register register_once unregister identify name_tag set_config".split(" ");
+					for( e = 0; e < g.length; e++)
+						(function(a) {
+							b[a] = function() {
+								b.push([a].concat(Array.prototype.slice.call(arguments, 0)))
+							}
+						})(g[e]);
+					c._i.push([a, d, f])
+				};
+				window.mixpanel = c
+			})(document, []);
+			mixpanel.init("bb4cbc776b5dac0262724e2c904d976a");
+		</script><!-- end Mixpanel -->
         <script type="text/javascript">
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-27720942-1']);
@@ -286,7 +313,7 @@
                                 });
                             }
                         } else {
-                            frame.src = iframe.src;
+                            iframe.src = iframe.src;
                         }
                     }
                 });
@@ -564,7 +591,7 @@
     <div>
                     <div class="editor html active main" fileName="main.php" id="main">
 	<div class="reloadCode main">
-		<button class="btn disabled"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
+		<button class="btn"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
 	</div>
                         <textarea class="code" mode="application/x-httpd-php" name="main">
 {main.php}
@@ -602,7 +629,7 @@
     <div>
                     <div class="editor javascript" fileName="javascript.php" id="javascript">
 	<div class="reloadCode javascript">
-		<button class="btn disabled"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
+		<button class="btn"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
 	</div>
                         <textarea class="code" mode="javascript" name="javascript">
 {javascript.php}
@@ -645,7 +672,7 @@
     <div>
                     <div class="editor additional tab-pane" fileName="additional.php" id="additional">
 	<div class="reloadCode additional">
-		<button class="btn disabled"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
+		<button class="btn"><img src="{static}/images/greenplay.png"/><div>Reload App</div></button> 
 	</div>
                         <textarea class="code" mode="{additionalMode}" name="additional">
 {additional.php}
